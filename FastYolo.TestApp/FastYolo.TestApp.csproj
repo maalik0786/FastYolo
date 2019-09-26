@@ -3,6 +3,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <StartupObject></StartupObject>
+		<Platforms>x64</Platforms>
+		<Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace FastYolo.Tests
 		private const string YoloServerDirectory = "/home/malik/Documents/yolo-v3-tiny/";
 #endif
 		private const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
-		private const string YoloWeightsFilename = YoloServerDirectory + @"yolov3-tiny_walnut.weights";
+		private const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny_walnut.weights";
 		private const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny_walnut.cfg";
 		private const string YoloClassesFilename = YoloServerDirectory + "classes.names";
 

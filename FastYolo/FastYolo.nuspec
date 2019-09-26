@@ -8,14 +8,14 @@
 		<owners>FastYolo</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">Apache-2.0</license>
-		<projectUrl>https://github.com/AlturosDestinations/FastYolo</projectUrl>
-		<iconUrl>https://raw.githubusercontent.com/AlturosDestinations/FastYolo/master/doc/logo.png</iconUrl>
+		<projectUrl>https://github.com/maalik0786/FastYolo</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/maalik0786/FastYolo/master/doc/logo.png</iconUrl>
 		<description>
 			Improved version of FastYolo library, that requires Cuda 10.1 to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version that is disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 1.0.5 also supports OpenCV for more advanced features like tracking, shape detection, etc.
 
 			Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet)
 		</description>
-		<repository url="https://github.com/AlturosDestinations/FastYolo" />
+		<repository url="https://github.com/maalik0786/FastYolo" />
 		<dependencies>
 			<group targetFramework=".NETCoreApp2.2">
 				<dependency id="System.Drawing.Common" version="4.5.1" exclude="Build,Analyzers" />
