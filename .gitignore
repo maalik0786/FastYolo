@@ -41,3 +41,4 @@ bin/*
 *.user
 *.filters
 *.pdb
+publish/*
