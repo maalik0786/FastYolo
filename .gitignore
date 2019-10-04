@@ -44,10 +44,4 @@ bin/*
 *.user
 *.filters
 *.pdb
-FastYolo.TestApp/bin/Debug/netcoreapp3.0/publish/FastYolo.TestApp
-FastYolo.TestApp/bin/Debug/netcoreapp3.0/publish/FastYolo.TestApp.deps.json
-FastYolo.TestApp/bin/Debug/netcoreapp3.0/publish/FastYolo.TestApp.runtimeconfig.json
-FastYolo.TestApp/obj/Debug/netcoreapp3.0/FastYolo.TestApp.csproj.FileListAbsolute.txt
-FastYolo.TestApp/obj/Debug/netcoreapp3.0/FastYolo.TestApp.csproj.FileListAbsolute.txt
-FastYolo.TestApp/obj/Debug/netcoreapp3.0/FastYolo.TestApp.csprojAssemblyReference.cache
-FastYolo.Tests/obj/Debug/netcoreapp3.0/FastYolo.Tests.csprojAssemblyReference.cache
+publish/*
