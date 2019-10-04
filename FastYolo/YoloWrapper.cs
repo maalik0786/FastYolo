@@ -28,7 +28,7 @@ namespace FastYolo
 
 #elif _ARCHITECTURE
 		private const string YoloGpuDllFilename = "libdarknet.so";
-		private const string YoloPThreadDllFilename = "libpthread.so";
+		private const string YoloPThreadDllFilename = "libpthread.so.0";
 #else
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
 		private const string YoloPThreadDllFilename = "libpthread_amd.so";

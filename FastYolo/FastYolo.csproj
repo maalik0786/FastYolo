@@ -15,7 +15,7 @@
 		<DefineConstants>_WINDOWS</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(PROCESSOR_ARCHITECTURE)' == 'ARM64' ">
+	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
 		<DefineConstants>_ARCHITECTURE</DefineConstants>
 	</PropertyGroup>
 
@@ -55,24 +55,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$(PROCESSOR_ARCHITECTURE)' != 'ARM64' ">
+		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$(ProcessorArchitecture)' == 'amd64' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_amd.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$(PROCESSOR_ARCHITECTURE)' != 'ARM64' ">
+		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$(ProcessorArchitecture)' == 'amd64' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_amd.so</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
-<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet.so" Condition=" '$(PROCESSOR_ARCHITECTURE)' == 'ARM64' ">
+	<ItemGroup>
+		<ContentWithTargetPath Include="libdarknet.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libdarknet_amd.so</TargetPath>
+			<TargetPath>libdarknet.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread.so" Condition=" '$(PROCESSOR_ARCHITECTURE)' == 'ARM64' ">
+		<ContentWithTargetPath Include="libpthread.so.0" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libpthread_amd.so</TargetPath>
+			<TargetPath>libpthread.so.0</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
