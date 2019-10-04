@@ -204,5 +204,3 @@
 /home/malik/Documents/Jetson/FastYolo/FastYolo.Tests/bin/Debug/netcoreapp3.0/libdarknet.so
 /home/dev/Documents/FastYolo/FastYolo.Tests/bin/Debug/netcoreapp3.0/libdarknet_amd.so
 /home/dev/Documents/FastYolo/FastYolo.Tests/bin/Debug/netcoreapp3.0/libpthread_amd.so
-/home/dev/Documents/FastYolo/FastYolo.Tests/bin/Debug/netcoreapp3.0/libdarknet_arm.so
-/home/dev/Documents/FastYolo/FastYolo.Tests/bin/Debug/netcoreapp3.0/libpthread_arm.so

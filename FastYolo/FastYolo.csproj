@@ -12,11 +12,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-		<DefineConstants>_WINDOWS</DefineConstants>
+		<DefineConstants>WIN64</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
-		<DefineConstants>_ARCHITECTURE</DefineConstants>
+	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64' ">
+		<DefineConstants>LINUX64</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -55,22 +55,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'"> 
+		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'"> 
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_amd.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" >
+		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'" >
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_amd.so</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		<ContentWithTargetPath Include="libdarknet_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_arm.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		<ContentWithTargetPath Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_arm.so</TargetPath>
 		</ContentWithTargetPath>

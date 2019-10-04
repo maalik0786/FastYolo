@@ -22,11 +22,11 @@ namespace FastYolo
 		private readonly ImageAnalyzer imageAnalyzer = new ImageAnalyzer();
 		public const int MaxObjects = 100;
 
-#if _WINDOWS
+#if WIN64
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
 
-#elif _ARCHITECTURE
+#elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
 		private const string YoloPThreadDllFilename = "libpthread_amd.so";
 #else
