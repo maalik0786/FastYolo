@@ -206,3 +206,7 @@
 /home/dev/Documents/FastYolo/FastYolo.TestApp/obj/Debug/netcoreapp3.0/FastYolo.TestApp.csproj.CopyComplete
 /home/dev/Documents/FastYolo/FastYolo.TestApp/obj/Debug/netcoreapp3.0/FastYolo.TestApp.dll
 /home/dev/Documents/FastYolo/FastYolo.TestApp/obj/Debug/netcoreapp3.0/FastYolo.TestApp.pdb
+/home/dev/Documents/FastYolo/FastYolo.TestApp/bin/Debug/netcoreapp3.0/FastYolo.dll
+/home/dev/Documents/FastYolo/FastYolo.TestApp/bin/Debug/netcoreapp3.0/FastYolo.Tests.dll
+/home/dev/Documents/FastYolo/FastYolo.TestApp/bin/Debug/netcoreapp3.0/FastYolo.Tests.pdb
+/home/dev/Documents/FastYolo/FastYolo.TestApp/bin/Debug/netcoreapp3.0/FastYolo.pdb
