@@ -44,8 +44,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="libdarknet.so" />
-		<None Remove="libpthread.so.0" />
+		<None Remove="libdarknet_arm.so" />
+		<None Remove="libpthread_arm.so" />
 		<None Remove="libdarknet_amd.so" />
 		<None Remove="libpthread_amd.so" />
 		<None Remove="nuget.exe" />
@@ -55,24 +55,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$(ProcessorArchitecture)' == 'amd64' ">
+		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'"> 
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_amd.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$(ProcessorArchitecture)' == 'amd64' ">
+		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" >
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_amd.so</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		<ContentWithTargetPath Include="libdarknet_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libdarknet.so</TargetPath>
+			<TargetPath>libdarknet_arm.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread.so.0" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		<ContentWithTargetPath Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libpthread.so.0</TargetPath>
+			<TargetPath>libpthread_arm.so</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
