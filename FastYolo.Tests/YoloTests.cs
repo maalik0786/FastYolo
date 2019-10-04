@@ -19,7 +19,7 @@ namespace FastYolo.Tests
 #if _WINDOWS
 		private const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\";
 #else
-		private const string YoloServerDirectory = "/home/malik/Documents/yolo-v3-tiny/";
+		private const string YoloServerDirectory = "/home/dev/Documents/yolo-v3-tiny/";
 #endif
 		private const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
 		private const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny_walnut.weights";
@@ -79,7 +79,7 @@ namespace FastYolo.Tests
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
-				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
+				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);		
 		}
 
 		[Test]

@@ -6052,19 +6052,19 @@
     ]
   },
   "packageFolders": {
-    "/home/malik/.nuget/packages/": {}
+    "/home/dev/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/malik/Documents/Jetson/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj",
+      "projectUniqueName": "/home/dev/Documents/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj",
       "projectName": "FastYolo.TestApp",
-      "projectPath": "/home/malik/Documents/Jetson/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj",
-      "packagesPath": "/home/malik/.nuget/packages/",
-      "outputPath": "/home/malik/Documents/Jetson/FastYolo/FastYolo.TestApp/obj/",
+      "projectPath": "/home/dev/Documents/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj",
+      "packagesPath": "/home/dev/.nuget/packages/",
+      "outputPath": "/home/dev/Documents/FastYolo/FastYolo.TestApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/malik/.nuget/NuGet/NuGet.Config"
+        "/home/dev/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.0"
@@ -6075,8 +6075,8 @@
       "frameworks": {
         "netcoreapp3.0": {
           "projectReferences": {
-            "/home/malik/Documents/Jetson/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj": {
-              "projectPath": "/home/malik/Documents/Jetson/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj"
+            "/home/dev/Documents/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj": {
+              "projectPath": "/home/dev/Documents/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj"
             }
           }
         }
@@ -6104,7 +6104,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/malik/dotnet/sdk/3.0.100-rc1-014190/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/home/dev/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
       }
     }
   }

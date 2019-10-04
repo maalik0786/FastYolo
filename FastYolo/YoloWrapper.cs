@@ -25,11 +25,14 @@ namespace FastYolo
 #if _WINDOWS
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
-#else
-		private const string YoloGpuDllFilename = "libdarknet.so";
-		private const string YoloPThreadDllFilename = "libpthread.so.0";
-#endif
 
+#elif _ARCHITECTURE
+		private const string YoloGpuDllFilename = "libdarknet.so";
+		private const string YoloPThreadDllFilename = "libpthread.so";
+#else
+		private const string YoloGpuDllFilename = "libdarknet_amd.so";
+		private const string YoloPThreadDllFilename = "libpthread_amd.so";
+#endif
 		private YoloObjectTypeResolver objectTypeResolver;
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
@@ -110,8 +113,8 @@ namespace FastYolo
 			else
 				throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(YoloGpuDllFilename))
-				throw new DllMissing(YoloGpuDllFilename);
+			if (!File.Exists(YoloGpuDllFilename1))
+				throw new DllMissing(YoloGpuDllFilename1);
 			if (!File.Exists(YoloPThreadDllFilename))
 				throw new DllMissing(YoloPThreadDllFilename);
 
@@ -155,7 +158,11 @@ namespace FastYolo
 
 		public string GraphicDeviceName { get; private set; }
 
-		public IEnumerable<YoloItem> Detect(string filepath)
+        public static string YoloGpuDllFilename1 => YoloGpuDllFilename;
+
+        public static string YoloGpuDllFilename2 => YoloGpuDllFilename;
+
+        public IEnumerable<YoloItem> Detect(string filepath)
 		{
 			if (!File.Exists(filepath))
 				throw new FileNotFoundException("Cannot find the file", filepath);
