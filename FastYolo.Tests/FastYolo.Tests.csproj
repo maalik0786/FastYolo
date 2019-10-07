@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-		<DefineConstants>_WINDOWS</DefineConstants>
+		<DefineConstants>WIN64</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

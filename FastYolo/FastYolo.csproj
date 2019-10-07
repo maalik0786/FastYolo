@@ -30,11 +30,11 @@
 		<DebugSymbols>false</DebugSymbols>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|x64'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFrameworks)|$(Platform)'=='Debug|netcoreapp3.0|x64'">
 		<Optimize>true</Optimize>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.0|x64'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFrameworks)|$(Platform)'=='Release|netcoreapp3.0|x64'">
 		<Optimize>false</Optimize>
 	</PropertyGroup>
 
@@ -51,7 +51,12 @@
 		<None Remove="nuget.exe" />
 		<None Remove="pthreadVC2.dll" />
 		<None Remove="x64\yolo_cpp_dll.dll" />
-		<None Remove="yolo_cpp_dll.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="pthreadVC2.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -59,7 +64,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_amd.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'" >
+		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_amd.so</TargetPath>
 		</ContentWithTargetPath>
@@ -78,13 +83,9 @@
 
 
 	<ItemGroup>
-		<ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>pthreadVC2.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="x64\yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>yolo_cpp_dll.dll</TargetPath>
+			<TargetPath>x64\yolo_cpp_dll.dll</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 

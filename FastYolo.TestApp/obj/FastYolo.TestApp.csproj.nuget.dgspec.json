@@ -1,32 +1,38 @@
 {
   "format": 1,
   "restore": {
-    "/home/dev/Documents/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj": {}
+    "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.TestApp\\FastYolo.TestApp.csproj": {}
   },
   "projects": {
-    "/home/dev/Documents/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj": {
+    "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.TestApp\\FastYolo.TestApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/dev/Documents/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj",
+        "projectUniqueName": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.TestApp\\FastYolo.TestApp.csproj",
         "projectName": "FastYolo.TestApp",
-        "projectPath": "/home/dev/Documents/FastYolo/FastYolo.TestApp/FastYolo.TestApp.csproj",
-        "packagesPath": "/home/dev/.nuget/packages/",
-        "outputPath": "/home/dev/Documents/FastYolo/FastYolo.TestApp/obj/",
+        "projectPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.TestApp\\FastYolo.TestApp.csproj",
+        "packagesPath": "C:\\Users\\Name\\.nuget\\packages\\",
+        "outputPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.TestApp\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "/home/dev/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Name\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "\\\\DeltaServer\\Shared\\NuGet": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.0": {
             "projectReferences": {
-              "/home/dev/Documents/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj": {
-                "projectPath": "/home/dev/Documents/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj"
+              "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.Tests\\FastYolo.Tests.csproj": {
+                "projectPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.Tests\\FastYolo.Tests.csproj"
               }
             }
           }
@@ -54,41 +60,45 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/dev/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/dev/Documents/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj": {
+    "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.Tests\\FastYolo.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/dev/Documents/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj",
+        "projectUniqueName": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.Tests\\FastYolo.Tests.csproj",
         "projectName": "FastYolo.Tests",
-        "projectPath": "/home/dev/Documents/FastYolo/FastYolo.Tests/FastYolo.Tests.csproj",
-        "packagesPath": "/home/dev/.nuget/packages/",
-        "outputPath": "/home/dev/Documents/FastYolo/FastYolo.Tests/obj/",
+        "projectPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.Tests\\FastYolo.Tests.csproj",
+        "packagesPath": "C:\\Users\\Name\\.nuget\\packages\\",
+        "outputPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo.Tests\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "/home/dev/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Name\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "\\\\DeltaServer\\Shared\\NuGet": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.0": {
             "projectReferences": {
-              "/home/dev/Documents/FastYolo/FastYolo/FastYolo.csproj": {
-                "projectPath": "/home/dev/Documents/FastYolo/FastYolo/FastYolo.csproj"
+              "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo\\FastYolo.csproj": {
+                "projectPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo\\FastYolo.csproj"
               }
             }
           }
         },
         "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
+          "allWarningsAsErrors": true
         }
       },
       "frameworks": {
@@ -122,27 +132,33 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/dev/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/dev/Documents/FastYolo/FastYolo/FastYolo.csproj": {
+    "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo\\FastYolo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/dev/Documents/FastYolo/FastYolo/FastYolo.csproj",
+        "projectUniqueName": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo\\FastYolo.csproj",
         "projectName": "FastYolo",
-        "projectPath": "/home/dev/Documents/FastYolo/FastYolo/FastYolo.csproj",
-        "packagesPath": "/home/dev/.nuget/packages/",
-        "outputPath": "/home/dev/Documents/FastYolo/FastYolo/obj/",
+        "projectPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo\\FastYolo.csproj",
+        "packagesPath": "C:\\Users\\Name\\.nuget\\packages\\",
+        "outputPath": "C:\\Code\\AiInvestResearch\\External\\FastYolo\\FastYolo\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "/home/dev/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Name\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "\\\\DeltaServer\\Shared\\NuGet": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -183,7 +199,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/dev/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

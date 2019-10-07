@@ -91,7 +91,7 @@ namespace FastYolo
 				"An Nvidia GPU and CUDA 10.1 need to be installed! Please install CUDA " +
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
 
-#if _WINDOWS
+#if WIN64
 			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
 				throw new DllNotFoundException(cudaError +
 				                               "CUDA_PATH environment variable is not available!");
@@ -105,17 +105,17 @@ namespace FastYolo
 				throw new DllNotFoundException(cudaError +
 				                               "NVCUDA.DLL wasn't found in the windows system directory, " +
 				                               "is CUDA and your Nvidia graphics driver correctly installed?");
-#else
+#elif LINUX64
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 			{
 				if (!Directory.Exists("/usr/local/cuda"))
 					throw new DllNotFoundException(cudaError + "CUDA is not available!");
 			}
-			else
+#else
 				throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(YoloGpuDllFilename1))
-				throw new DllMissing(YoloGpuDllFilename1);
+			if (!File.Exists(YoloGpuDllFilename))
+				throw new DllMissing(YoloGpuDllFilename);
 			if (!File.Exists(YoloPThreadDllFilename))
 				throw new DllMissing(YoloPThreadDllFilename);
 
@@ -159,11 +159,7 @@ namespace FastYolo
 
 		public string GraphicDeviceName { get; private set; }
 
-        public static string YoloGpuDllFilename1 => YoloGpuDllFilename;
-
-        public static string YoloGpuDllFilename2 => YoloGpuDllFilename;
-
-        public IEnumerable<YoloItem> Detect(string filepath)
+		public IEnumerable<YoloItem> Detect(string filepath)
 		{
 			if (!File.Exists(filepath))
 				throw new FileNotFoundException("Cannot find the file", filepath);
