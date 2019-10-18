@@ -2,9 +2,8 @@
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
-using FastYolo.Extensions;
 
-namespace FastYolo.Datatypes
+namespace FastYolo
 {
 	/// <summary>
 	///   Color with a byte per component (red, green, blue, alpha), also provides float properties.
@@ -12,7 +11,7 @@ namespace FastYolo.Datatypes
 	[DebuggerDisplay("Color(r={R}, g={G}, b={B}, a={A})")]
 	[StructLayout(LayoutKind.Sequential)]
 	[Serializable]
-	public struct Color : IEquatable<Color>, LerpWithParent<Color>
+	public struct Color : IEquatable<Color>
 	{
 		public Color(byte r, byte g, byte b, byte a = 255)
 		{
@@ -37,30 +36,6 @@ namespace FastYolo.Datatypes
 			G = (byte) g;
 			B = (byte) b;
 			A = (byte) a;
-		}
-
-		public Color(float redValue, float greenValue, float blueValue, float alphaValue = 1.0f)
-		{
-			R = (byte) (redValue.Clamp(0.0f, 1.0f) * 255.5f);
-			G = (byte) (greenValue.Clamp(0.0f, 1.0f) * 255.5f);
-			B = (byte) (blueValue.Clamp(0.0f, 1.0f) * 255.5f);
-			A = (byte) (alphaValue.Clamp(0.0f, 1.0f) * 255.5f);
-		}
-
-		public Color(string colorAsString)
-		{
-			var components = colorAsString.SplitAndTrim(',');
-			if (components.Length != 4)
-				throw new InvalidNumberOfDatatypeComponents<Color>();
-			R = components[0].Convert<byte>();
-			G = components[1].Convert<byte>();
-			B = components[2].Convert<byte>();
-			A = components[3].Convert<byte>();
-		}
-
-		public Color(Color color, float alphaValue)
-			: this(color.RedValue, color.GreenValue, color.BlueValue, alphaValue)
-		{
 		}
 
 		public Color(Color color, byte a)
@@ -88,7 +63,6 @@ namespace FastYolo.Datatypes
 		public static readonly Color Yellow = new Color(255, 255, 0);
 		public static readonly Color Brown = new Color(128, 64, 0);
 		public static readonly Color CornflowerBlue = new Color(100, 149, 237);
-		public static readonly Color LightBlue = new Color(0.65f, 0.795f, 1f);
 		public static readonly Color VeryLightGray = new Color(200, 200, 200);
 		public static readonly Color LightGray = new Color(165, 165, 165);
 		public static readonly Color DarkGray = new Color(89, 89, 89);
@@ -115,44 +89,6 @@ namespace FastYolo.Datatypes
 		/// </summary>
 		[Pure]
 		public bool IsWhite => R == 255 && G == 255 && B == 255 && A == 255;
-
-		/// <summary>
-		///   Might be more useful in HSV space (but slower):
-		///   http://stackoverflow.com/questions/13488957/interpolate-from-one-color-to-another
-		/// </summary>
-		[Pure]
-		public Color Lerp(Color other, float interpolation)
-		{
-			return new Color((byte) (MathExtensions.Lerp(R, other.R, interpolation) + 0.25f),
-				(byte) (MathExtensions.Lerp(G, other.G, interpolation) + 0.25f),
-				(byte) (MathExtensions.Lerp(B, other.B, interpolation) + 0.25f),
-				(byte) (MathExtensions.Lerp(A, other.A, interpolation) + 0.25f));
-		}
-
-		[Pure]
-		public Color Lerp(Color other, float interpolation, Color parentColor)
-		{
-			return Lerp(other, interpolation) * parentColor;
-		}
-
-		/// <summary>
-		///   Converts a percentage (0.0 to 1.0) into a color of the rainbow. Used to automatically
-		///   assign unique colors to graph lines or for fancy fractal colors.
-		/// </summary>
-		public static Color CreateHeatmapColor(float percent)
-		{
-			if (0.0f <= percent && percent <= 0.125f)
-				return new Color(0.0f, 0.0f, 4.0f * percent + .5f);
-			if (0.125f < percent && percent <= 0.375f)
-				return new Color(0.0f, 4.0f * percent - .5f, 0.0f);
-			if (0.375f < percent && percent <= 0.625f)
-				return new Color(4.0f * percent - 1.5f, 1.0f, -4.0f * percent + 2.5f);
-			if (0.625f < percent && percent <= 0.875f)
-				return new Color(1.0f, -4.0f * percent + 3.5f, 0.0f);
-			return 0.875f < percent && percent <= 1.0f
-				? new Color(-4.0f * percent + 4.5f, 0.0f, 0.0f)
-				: White;
-		}
 
 		[Pure]
 		public static bool operator !=(Color c1, Color c2)
@@ -182,25 +118,6 @@ namespace FastYolo.Datatypes
 		public override int GetHashCode()
 		{
 			return PackedRgba;
-		}
-
-		[Pure]
-		public static Color operator *(Color c, float multiplier)
-		{
-			return new Color(c.RedValue * multiplier, c.GreenValue * multiplier, c.BlueValue * multiplier,
-				c.AlphaValue * multiplier);
-		}
-
-		[Pure]
-		public static Color operator *(Color c1, Color c2)
-		{
-			return new Color(c1.RedValue * c2.RedValue, c1.GreenValue * c2.GreenValue,
-				c1.BlueValue * c2.BlueValue, c1.AlphaValue * c2.AlphaValue);
-		}
-
-		public static implicit operator System.Drawing.Color(Color v)
-		{
-			throw new NotImplementedException();
 		}
 
 		public static byte[] CreateRgbaBytesFromArray(Color[] colors)

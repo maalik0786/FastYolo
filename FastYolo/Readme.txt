@@ -7,15 +7,10 @@ CUDART64_101.DLL, CURAND64_10.DLL, CUBLAS64_10.DLL should be in CUDA_PATH/bin (C
 PATH should contain CUDA_PATH/bin
 Finally we will also check if NVCUDA.DLL is installed on %SYSTEM32% (C:\windows\system32).
 
-
 About nuget, its not easy to get the native files copied, we are using this solution now, it must be done via .target file and both managed and native dlls must be included correctly:
 https://stackoverflow.com/questions/10198428/where-to-place-dlls-for-unmanaged-libraries
 
 also useful tips, but didn't work well for us:
 https://stackoverflow.com/questions/19478775/add-native-files-from-nuget-package-to-project-output-directory/30316946
 
-TODO: still have to release .net framework 4.6.1+ compatibility
-	    <group targetFramework=".NETFramework4.6.1">
-	    </group>
-
-    <file src="bin\Release\net46\FastYolo.dll" target="lib/net461"/>
+also has .net core 2.2 and net framework 4.6.1+ compatibility now via: <group targetFramework=".NETFramework4.6.1">...

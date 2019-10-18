@@ -1,6 +1,4 @@
-﻿using FastYolo.Datatypes;
-
-namespace FastYolo.Model
+﻿namespace FastYolo.Model
 {
 	/// <summary>
 	///   Provides width and height and colors as a plain array [y * width + x], each color is 4 bytes
@@ -9,9 +7,7 @@ namespace FastYolo.Model
 	/// </summary>
 	public class ColorData
 	{
-		public Color[]
-			Colors; //TODO: we need a discussion on rgba vs bgra, which is the default for webcam, streams input and forms and wpf output, we need to convert 2 times, not sure if this is worth it if we can just swap r and b in code
-
+		public Color[] Colors;
 		public int Height;
 
 		public int Width;

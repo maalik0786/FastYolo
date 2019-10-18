@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using FastYolo.Model;
-using Color = FastYolo.Datatypes.Color;
 
 namespace FastYolo
 {

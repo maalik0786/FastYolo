@@ -2,24 +2,35 @@
 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'"> 
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libdarknet.so</TargetPath>
+			<TargetPath>libdarknet_amd.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread.so.0" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'" >
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libpthread.so.0</TargetPath>
+			<TargetPath>libpthread_amd.so</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ContentWithTargetPath Include="libdarknet_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libdarknet_arm.so</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libpthread_arm.so</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>
 		<ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>pthreadVC2.dll</TargetPath>
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<TargetPath>pthreadVC2.dll</TargetPath>
 		</ContentWithTargetPath>
 		<ContentWithTargetPath Include="x64\yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>yolo_cpp_dll.dll</TargetPath>
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<TargetPath>yolo_cpp_dll.dll</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 </Project>
