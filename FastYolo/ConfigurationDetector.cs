@@ -18,9 +18,9 @@ namespace FastYolo
 			var configValid = AreValidYoloFiles(yoloConfiguration);
 
 			if (configValid) return yoloConfiguration;
-
+			//ncrunch: no coverage start
 			throw new FileNotFoundException(
-				"Cannot found pre-trained model, check all config files available (.cfg, .weights, .names)");
+				"Cannot found pre-trained model, check all config files available (.cfg, .weights, .names)"); //ncrunch: no coverage end
 		}
 
 		private string[] GetYoloFiles(string path)
@@ -38,14 +38,7 @@ namespace FastYolo
 			return new YoloConfiguration(configurationFile, weightsFile, namesFile);
 		}
 
-		private bool AreValidYoloFiles(YoloConfiguration config)
-		{
-			if (string.IsNullOrEmpty(config.ConfigFile) ||
-			    string.IsNullOrEmpty(config.WeightsFile) ||
-			    string.IsNullOrEmpty(config.NamesFile))
-				return false;
-
-			return true;
-		}
+		private bool AreValidYoloFiles(YoloConfiguration config) =>
+			!string.IsNullOrEmpty(config.ConfigFile) && !string.IsNullOrEmpty(config.WeightsFile) && !string.IsNullOrEmpty(config.NamesFile);
 	}
 }

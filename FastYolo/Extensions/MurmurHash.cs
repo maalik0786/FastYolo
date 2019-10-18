@@ -30,10 +30,8 @@ namespace FastYolo.Extensions
 
 		public int ComputeHash(byte[] data)
 		{
-			using (var stream = new MemoryStream(data))
-			{
-				return ComputeHash(stream);
-			}
+			using var stream = new MemoryStream(data);
+			return ComputeHash(stream);
 		}
 
 		public int ComputeHash(Stream stream)

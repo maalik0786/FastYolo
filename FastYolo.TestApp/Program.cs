@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks.Sources;
-using System.Security.Cryptography;
-using System.Globalization;
 using FastYolo.Tests;
 
 namespace FastYolo.TestApp
 {
 	public class Program
 	{
+		//ncrunch: no coverage start
 		public static void Main()
 		{
 			var tests = new YoloTests();
@@ -20,6 +18,6 @@ namespace FastYolo.TestApp
 			Console.WriteLine("PassIntPtrForObjectTracking() Done\n");
 			tests.LoadColorDataForObjectDetection();
 			Console.WriteLine("LoadColorDataForObjectDetection() Done\n");
-		}
+		} //ncrunch: no coverage end
 	}
 }

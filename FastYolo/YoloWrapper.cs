@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using FastYolo.Model;
-using Color = FastYolo.Datatypes.Color;
 
 namespace FastYolo
 {
 	public class YoloWrapper : IDisposable
 	{
+		private readonly ImageAnalyzer imageAnalyzer;
+		private readonly ImageConverter imageConverter;
+
+		public string GraphicDeviceName { get; private set; }
+		public const int MaxObjects = 100;
+
 		public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename,
 			int gpu = 0)
 		{
-			Initialize(configurationFilename, weightsFilename, namesFilename, gpu);
+			imageAnalyzer = new ImageAnalyzer();
+			imageConverter = new ImageConverter(new YoloObjectTypeResolver(namesFilename));
+			Initialize(configurationFilename, weightsFilename, gpu);
 		}
-
-		private readonly ImageAnalyzer imageAnalyzer = new ImageAnalyzer();
-		public const int MaxObjects = 100;
 
 #if WIN64
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
@@ -34,14 +36,13 @@ namespace FastYolo
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
 		
 #endif
-		private YoloObjectTypeResolver objectTypeResolver;
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
-		internal static extern int InitializeYoloGpu(string configurationFilename,
+		public static extern int InitializeYoloGpu(string configurationFilename,
 			string weightsFilename, int gpu);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "detect_image")]
-		internal static extern int DetectImageGpu(string filename, ref BboxContainer container);
+		public static extern int DetectImageGpu(string filename, ref BboxContainer container);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "get_image")]
 		public static extern IntPtr
@@ -50,43 +51,33 @@ namespace FastYolo
 				int frameRate, int flip);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "detect_objects")]
-		internal static extern int
+		public static extern int
 			// ReSharper disable once TooManyArguments
 			DetectObjectsGpu(IntPtr pArray, int width, int height, int channel,
 				ref BboxContainer container);
 
-		[DllImport(YoloGpuDllFilename, EntryPoint = "detect_mat")]
-		internal static extern int
-			// ReSharper disable once TooManyArguments
-			DetectObjects(IntPtr pArray, int width, int height, int channel, ref BboxContainer container);
-
 		[DllImport(YoloGpuDllFilename, EntryPoint = "track_objects")]
-		internal static extern int
+		public static extern int
 			// ReSharper disable once TooManyArguments
 			TrackObjectsGpu(IntPtr pArray, int width, int height, int channel,
 				ref BboxContainer container);
 
-		public void Dispose()
-		{
-			DisposeYoloGpu();
-		}
+		public void Dispose() => DisposeYoloGpu();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "dispose")]
-		internal static extern int DisposeYoloGpu();
+		public static extern int DisposeYoloGpu();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "get_device_count")]
-		internal static extern int GetDeviceCount();
+		public static extern int GetDeviceCount();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "get_device_name")]
-		internal static extern int GetDeviceName(int gpu, StringBuilder deviceName);
+		public static extern int GetDeviceName(int gpu, StringBuilder deviceName);
 
-		private void Initialize(string configurationFilename, string weightsFilename,
-			string namesFilename, int gpu = 0)
+		private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0)
 		{
 			if (IntPtr.Size != 8)
 				throw new NotSupportedException("Only 64-bit processes are supported");
 
-			// See readme.txt for all the steps we need to check here if CUDA 10.1 and CudNN64_7.dll are installed
 			var cudaError =
 				"An Nvidia GPU and CUDA 10.1 need to be installed! Please install CUDA " +
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
@@ -114,21 +105,11 @@ namespace FastYolo
 #else
 				throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(YoloGpuDllFilename))
-				throw new DllMissing(YoloGpuDllFilename);
-			if (!File.Exists(YoloPThreadDllFilename))
-				throw new DllMissing(YoloPThreadDllFilename);
-
-			int deviceCount;
-			try
-			{
-				deviceCount = GetDeviceCount();
-			}
-			catch (DllNotFoundException ex)
-			{
-				throw new DllNotFoundException(ex.Message +
-				                               " This means wrong dlls are used, not exactly CUDA 10.1 as needed and linked here");
-			}
+			//ncrunch: no coverage start
+			if (!File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename))
+				throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " or " + YoloPThreadDllFilename);
+			//ncrunch: no coverage end
+			var deviceCount = GetDeviceCount();
 
 			if (deviceCount == 0)
 				throw new NotSupportedException("No graphic device is available");
@@ -138,26 +119,14 @@ namespace FastYolo
 			GetDeviceName(gpu, deviceName);
 			GraphicDeviceName = deviceName.ToString();
 			InitializeYoloGpu(configurationFilename, weightsFilename, gpu);
-			objectTypeResolver = new YoloObjectTypeResolver(namesFilename);
 		}
 
 		// ReSharper disable once TooManyArguments
-		public IntPtr GetRaspberryCameraImage(int capWidth = 1280, int capHeight = 720,
-			int disWidth = 1280, int disHeight = 720, int frameRate = 30, int flip = 0)
+		public IntPtr GetRaspberryCameraImage(int capWidth, int capHeight,
+			int disWidth, int disHeight, int frameRate, int flip = 0)
 		{
 			return GetRaspberryCameraJpegImage(capWidth, capHeight, disWidth, disHeight, frameRate, flip);
 		}
-
-		private class DllMissing : DllNotFoundException
-		{
-			public DllMissing(string dllFilename) : base(
-				dllFilename +
-				" wasn't found in the local path, it should have been automatically copied and installed, make sure to use the nuget package with the native binaries!")
-			{
-			}
-		}
-
-		public string GraphicDeviceName { get; private set; }
 
 		public IEnumerable<YoloItem> Detect(string filepath)
 		{
@@ -165,13 +134,13 @@ namespace FastYolo
 				throw new FileNotFoundException("Cannot find the file", filepath);
 			var container = new BboxContainer();
 			DetectImageGpu(filepath, ref container);
-			return Convert(container);
+			return imageConverter.Convert(container);
 		}
 
 		public IEnumerable<YoloItem> Detect(ColorData imageData,
 			int channels = 3, bool track = false)
 		{
-			return track ? Track(ToYoloRgbFormat(imageData)) : Detect(ToYoloRgbFormat(imageData));
+			return track ? Track(imageConverter.ToYoloRgbFormat(imageData)) : Detect(imageConverter.ToYoloRgbFormat(imageData));
 		}
 
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int width, int height,
@@ -180,11 +149,11 @@ namespace FastYolo
 			if (!imageAnalyzer.IsValidImageFormat(byteData))
 				throw new Exception("Invalid image data, wrong image format");
 
-			var imageData = BitmapToColorData((Bitmap) Image.FromStream(new MemoryStream(byteData)));
+			var imageData = imageConverter.BitmapToColorData((Bitmap) Image.FromStream(new MemoryStream(byteData)));
 			return track
-				? Track(ColorDataToYoloRgbFormat(imageData, channels), imageData.Width, imageData.Height,
+				? Track(imageConverter.ColorDataToYoloRgbFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels)
-				: Detect(ColorDataToYoloRgbFormat(imageData, channels), imageData.Width, imageData.Height,
+				: Detect(imageConverter.ColorDataToYoloRgbFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels);
 		}
 
@@ -202,7 +171,7 @@ namespace FastYolo
 				Marshal.FreeHGlobal(floatArrayPointer);
 			}
 
-			return Convert(container);
+			return imageConverter.Convert(container);
 		}
 
 		// ReSharper disable once TooManyArguments
@@ -219,110 +188,7 @@ namespace FastYolo
 				Marshal.FreeHGlobal(floatArrayPointer);
 			}
 
-			return Convert(container);
-		}
-
-		private IEnumerable<YoloItem> Convert(BboxContainer container)
-		{
-			return container.candidates.Where(o => o.h > 0 || o.w > 0)
-				.Select(item => new YoloItem
-				{
-					X = (int) item.x,
-					Y = (int) item.y,
-					Height = (int) item.h,
-					Width = (int) item.w,
-					Confidence = item.prob,
-					FrameId = (int) item.frames_counter,
-					TrackId = (int) item.track_id,
-					Shape = (YoloItem.ShapeType) item.shape,
-					Type = objectTypeResolver.Resolve((int) item.obj_id)
-				}).ToList();
-		}
-
-		public ColorData BitmapToColorData(Bitmap image)
-		{
-			var colorData = new ColorData
-			{
-				Width = image.Width,
-				Height = image.Height,
-				Colors = new Color[image.Width * image.Height]
-			};
-
-			var bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
-				ImageLockMode.ReadWrite, image.PixelFormat);
-			unsafe
-			{
-				var p = (byte*) bmpData.Scan0.ToPointer();
-				for (var x = 0; x < image.Width * image.Height; x++)
-				{
-					var r = *p++;
-					var g = *p++;
-					var b = *p++;
-					var a = *p++;
-					colorData.Colors[x] = new Color(r, g, b, a);
-				}
-
-				image.UnlockBits(bmpData);
-			}
-
-			return colorData;
-		}
-
-		// ReSharper disable once TooManyDeclarations
-		public unsafe IntPtr ColorDataToYoloRgbFormat(ColorData imageData, int channels)
-		{
-			var sizeInBytes = imageData.Width * imageData.Height * channels * sizeof(float);
-			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);
-			var destination = (float*) floatArrayPointer.ToPointer();
-			// yolo needs the data in format like red all, green all, blue all.
-			for (var channel = 0; channel < channels; channel++)
-			for (var y = 0; y < imageData.Height; y++)
-			for (var x = 0; x < imageData.Width; x++)
-			{
-				var color = imageData.Colors[x + y * imageData.Width];
-
-				*destination++ = channel switch
-				{
-					0 => color.RedValue,
-					1 => color.GreenValue,
-					2 => color.BlueValue,
-					_ => color.AlphaValue
-				};
-			}
-
-			return floatArrayPointer;
-		}
-
-		public static unsafe IntPtr ToYoloRgbFormat(ColorData colorData, int yoloWidth = 416,
-			int yoloHeight = 416, int channels = 3)
-		{
-			var sizeInBytes = yoloWidth * yoloHeight * channels * sizeof(float);
-			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);
-			var destination = (float*) floatArrayPointer.ToPointer();
-
-			for (var channel = 0; channel < channels; channel++)
-			for (var y = 0; y < yoloHeight; y++)
-			for (var x = 0; x < yoloWidth; x++)
-			{
-				var imageX = x * colorData.Width / yoloWidth;
-				var imageY = y * colorData.Height / yoloHeight;
-				var color = colorData.Colors[imageX + imageY * colorData.Width];
-				*destination++ = channel switch
-				{
-					0 => color.RedValue,
-					1 => color.GreenValue,
-					_ => color.BlueValue
-				};
-			}
-
-			return floatArrayPointer;
-		}
-
-		public byte[] ToByteArray(Image image, ImageFormat format)
-		{
-			using var ms = new MemoryStream();
-			image.Save(ms, format);
-			return ms.ToArray();
+			return imageConverter.Convert(container);
 		}
 	}
 }

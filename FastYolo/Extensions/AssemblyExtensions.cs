@@ -133,12 +133,10 @@ namespace FastYolo.Extensions
 		/// </summary>
 		public static bool IsManagedAssembly(string fileName)
 		{
-			using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-			{
-				var reader = new BinaryReader(fs);
-				GoToDataDictionaryOfPeOptionalHeaders(fs, reader);
-				return GetDataDictionaryRva(reader)[14] != 0;
-			}
+			using Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+			var reader = new BinaryReader(fs);
+			GoToDataDictionaryOfPeOptionalHeaders(fs, reader);
+			return GetDataDictionaryRva(reader)[14] != 0;
 		}
 
 		private static uint[] GetDataDictionaryRva(BinaryReader reader)

@@ -1,14 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using FastYolo.Model;
-using Color = FastYolo.Datatypes.Color;
-
 using NUnit.Framework;
 
 namespace FastYolo.Tests
@@ -28,10 +22,12 @@ namespace FastYolo.Tests
 
 		// ReSharper disable once InconsistentNaming
 		private YoloWrapper yoloWrapper;
+		private ImageConverter imageConverter;
 
-		[SetUp]
+			[SetUp]
 		public void Setup()
 		{
+			imageConverter = new ImageConverter(new YoloObjectTypeResolver(YoloClassesFilename));
 			yoloWrapper = new YoloWrapper(YoloConfigFilename, YoloWeightsFilename, YoloClassesFilename);
 		}
 
@@ -49,7 +45,7 @@ namespace FastYolo.Tests
 		public void ByteArrayForObjectDetection()
 		{
 			var image = Image.FromFile(DummyImageFilename);
-			var array = yoloWrapper.ToByteArray(image , ImageFormat.Png);
+			var array = imageConverter.Image2Byte(image);
 			var items = yoloWrapper.Detect(array, image.Width, image.Height, 4,true);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
@@ -60,9 +56,9 @@ namespace FastYolo.Tests
 		[Test]
 		public void PassIntPtrForObjectTracking()
 		{
-			var colorData = yoloWrapper.BitmapToColorData(new Bitmap(DummyImageFilename));
+			var colorData = imageConverter.BitmapToColorData(new Bitmap(DummyImageFilename));
 			const int Channels = 4;
-			var items = yoloWrapper.Track(yoloWrapper.ColorDataToYoloRgbFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
+			var items = yoloWrapper.Track(imageConverter.ColorDataToYoloRgbFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -74,7 +70,7 @@ namespace FastYolo.Tests
 		[Test]
 		public void LoadColorDataForObjectDetection()
 		{
-			var colorData = yoloWrapper.BitmapToColorData(new Bitmap(DummyImageFilename));
+			var colorData = imageConverter.BitmapToColorData(new Bitmap(DummyImageFilename));
 			var items = yoloWrapper.Detect(colorData, 4);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);

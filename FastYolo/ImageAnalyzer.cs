@@ -22,14 +22,7 @@ namespace FastYolo
 		public bool IsValidImageFormat(byte[] imageData)
 		{
 			if (imageData == null) return false;
-
-			if (imageData.Length <= 3) return false;
-
-			foreach (var imageFormat in imageFormats)
-				if (imageData.Take(imageFormat.Value.Length).SequenceEqual(imageFormat.Value))
-					return true;
-
-			return false;
+			return imageData.Length > 3 && imageFormats.Any(imageFormat => imageData.Take(imageFormat.Value.Length).SequenceEqual(imageFormat.Value));
 		}
 	}
 }
