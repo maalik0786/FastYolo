@@ -5,28 +5,26 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using FastYolo.Model;
+using static FastYolo.ImageAnalyzer;
+using static FastYolo.ImageConverter;
 
 namespace FastYolo
 {
 	public class YoloWrapper : IDisposable
 	{
-		private readonly ImageAnalyzer imageAnalyzer;
-		private readonly ImageConverter imageConverter;
-
+		private readonly YoloObjectTypeResolver _objectTypeResolver;
 		public string GraphicDeviceName { get; private set; }
 		public const int MaxObjects = 100;
 
 		public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0)
 		{
-			imageAnalyzer = new ImageAnalyzer();
-			imageConverter = new ImageConverter(new YoloObjectTypeResolver(namesFilename));
+			_objectTypeResolver = new YoloObjectTypeResolver(namesFilename);
 			Initialize(configurationFilename, weightsFilename, gpu);
 		}
 
 #if WIN64
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
-
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
 		private const string YoloPThreadDllFilename = "libpthread_amd.so";
@@ -37,26 +35,26 @@ namespace FastYolo
 #endif
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
-		public static extern int InitializeYoloGpu(string configurationFilename,
+		private static extern int InitializeYoloGpu(string configurationFilename,
 			string weightsFilename, int gpu);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "detect_image")]
-		public static extern int DetectImageGpu(string filename, ref BboxContainer container);
+		private static extern int DetectImageGpu(string filename, ref BboxContainer container);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "get_image")]
-		public static extern IntPtr
+		private static extern IntPtr
 			// ReSharper disable once TooManyArguments
 			GetRaspberryCameraJpegImage(int capWidth, int capHeight, int disWidth, int disHeight,
 				int frameRate, int flip);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "detect_objects")]
-		public static extern int
+		private static extern int
 			// ReSharper disable once TooManyArguments
 			DetectObjectsGpu(IntPtr pArray, int width, int height, int channel,
 				ref BboxContainer container);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "track_objects")]
-		public static extern int
+		private static extern int
 			// ReSharper disable once TooManyArguments
 			TrackObjectsGpu(IntPtr pArray, int width, int height, int channel,
 				ref BboxContainer container);
@@ -64,13 +62,13 @@ namespace FastYolo
 		public void Dispose() => DisposeYoloGpu();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "dispose")]
-		public static extern int DisposeYoloGpu();
+		private static extern int DisposeYoloGpu();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "get_device_count")]
-		public static extern int GetDeviceCount();
+		private static extern int GetDeviceCount();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "get_device_name")]
-		public static extern int GetDeviceName(int gpu, StringBuilder deviceName);
+		private static extern int GetDeviceName(int gpu, StringBuilder deviceName);
 
 		private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0)
 		{
@@ -132,24 +130,24 @@ namespace FastYolo
 			if (!File.Exists(filepath)) throw new FileNotFoundException("Cannot find the file", filepath);
 			var container = new BboxContainer();
 			DetectImageGpu(filepath, ref container);
-			return imageConverter.Convert(container);
+			return Convert(container, _objectTypeResolver);
 		}
 
 		public IEnumerable<YoloItem> Detect(ColorData imageData,
 			int channels = 3, bool track = false)
 		{
-			return track ? Track(imageConverter.ColorData2YoloFormat(imageData,  channels), imageData.Width, imageData.Height, channels) : Detect(imageConverter.ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height, channels);
+			return track ? Track(ColorData2YoloFormat(imageData,  channels), imageData.Width, imageData.Height, channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height, channels);
 		}
 
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
 		{
-			if (!imageAnalyzer.IsValidImageFormat(byteData)) throw new Exception("Invalid image data, wrong image format");
+			if (!IsValidImageFormat(byteData)) throw new Exception("Invalid image data, wrong image format");
 
-			var imageData = imageConverter.BitmapToColorData((Bitmap) imageConverter.Byte2Image(byteData));
+			var imageData = BitmapToColorData((Bitmap) Byte2Image(byteData));
 			return track
-				? Track(imageConverter.ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
+				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels)
-				: Detect(imageConverter.ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
+				: Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels);
 		}
 
@@ -159,7 +157,7 @@ namespace FastYolo
 			var container = new BboxContainer();
 			try { DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container); }
 			finally { Marshal.FreeHGlobal(floatArrayPointer); }
-			return imageConverter.Convert(container);
+			return Convert(container, _objectTypeResolver);
 		}
 
 		// ReSharper disable once TooManyArguments
@@ -168,7 +166,7 @@ namespace FastYolo
 			var container = new BboxContainer();
 			try { TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container); }
 			finally { Marshal.FreeHGlobal(floatArrayPointer); }
-			return imageConverter.Convert(container);
+			return Convert(container, _objectTypeResolver);
 		}
 	}
 }

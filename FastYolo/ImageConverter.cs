@@ -10,12 +10,9 @@ using Color = FastYolo.Model.Color;
 
 namespace FastYolo
 {
-	public class ImageConverter
+	public static class ImageConverter
 	{
-		private readonly YoloObjectTypeResolver objectTypeResolver;
-		public ImageConverter(YoloObjectTypeResolver yoloObjectTypeResolver) => objectTypeResolver = yoloObjectTypeResolver;
-
-		public IEnumerable<YoloItem> Convert(BboxContainer container) => container.candidates.Where(o => o.h > 0 || o.w > 0)
+		public static IEnumerable<YoloItem> Convert(BboxContainer container, YoloObjectTypeResolver objectTypeResolver) => container.candidates.Where(o => o.h > 0 || o.w > 0)
 				.Select(item => new YoloItem
 				{
 					X = (int) item.x,
@@ -29,7 +26,7 @@ namespace FastYolo
 					Type = objectTypeResolver.Resolve((int) item.obj_id)
 				}).ToList();
 
-		public ColorData BitmapToColorData(Bitmap image)
+		public static ColorData BitmapToColorData(Bitmap image)
 		{
 			var colorData = new ColorData
 			{
@@ -58,7 +55,7 @@ namespace FastYolo
 			return colorData;
 		}
 
-		public unsafe IntPtr ColorData2YoloFormat(ColorData colorData, int channels = 3)
+		public static unsafe IntPtr ColorData2YoloFormat(ColorData colorData, int channels = 3)
 		{
 			var sizeInBytes = colorData.Width * colorData.Height * channels * sizeof(float);
 			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);
@@ -80,16 +77,16 @@ namespace FastYolo
 			return floatArrayPointer;
 		}
 
-		public byte[] Image2Byte(Image image)
+		public static byte[] Image2Byte(Image image)
 		{
 			using var memoryStream = new MemoryStream();
 			image.Save(memoryStream, ImageFormat.Bmp);
 			return memoryStream.ToArray();
 		}
 
-		public Image Byte2Image(byte[] byteData) => Image.FromStream(new MemoryStream(byteData));
+		public static Image Byte2Image(byte[] byteData) => Image.FromStream(new MemoryStream(byteData));
 
-		public unsafe Bitmap AsBitmap(ColorData data)
+		public static unsafe Bitmap SaveAsBitmap(ColorData data)
 		{
 			var bitmap = new Bitmap(data.Width, data.Height);
 			var bitmapData = bitmap.LockBits(new Rectangle(0, 0, data.Width, data.Height), ImageLockMode.WriteOnly,

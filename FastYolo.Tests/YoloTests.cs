@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using FastYolo.Model;
 using NUnit.Framework;
+using static FastYolo.ImageConverter;
 
 namespace FastYolo.Tests
 {
@@ -21,12 +22,12 @@ namespace FastYolo.Tests
 
 		// ReSharper disable once InconsistentNaming
 		private YoloWrapper yoloWrapper;
-		private ImageConverter imageConverter;
+		//private ImageConverter imageConverter;
 
 		[SetUp]
 		public void Setup()
 		{
-			imageConverter = new ImageConverter(new YoloObjectTypeResolver(YoloClassesFilename));
+			//imageConverter = new ImageConverter(new YoloObjectTypeResolver(YoloClassesFilename));
 			yoloWrapper = new YoloWrapper(YoloConfigFilename, YoloWeightsFilename, YoloClassesFilename);
 		}
 
@@ -44,7 +45,7 @@ namespace FastYolo.Tests
 		public void ByteArrayForObjectDetection()
 		{
 			var image = Image.FromFile(DummyImageFilename);
-			var array = imageConverter.Image2Byte(image);
+			var array = Image2Byte(image);
 			var items = yoloWrapper.Detect(array, 4,true);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
@@ -55,9 +56,9 @@ namespace FastYolo.Tests
 		[Test]
 		public void PassIntPtrForObjectTracking()
 		{
-			var colorData = imageConverter.BitmapToColorData(new Bitmap(DummyImageFilename));
+			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
 			const int Channels = 4;
-			var items = yoloWrapper.Track(imageConverter.ColorData2YoloFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
+			var items = yoloWrapper.Track(ColorData2YoloFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -69,14 +70,14 @@ namespace FastYolo.Tests
 		[Test]
 		public void LoadColorDataForObjectDetection()
 		{
-			var colorData = imageConverter.BitmapToColorData(new Bitmap(DummyImageFilename));
+			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
 			var items = yoloWrapper.Detect(colorData, 4);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
 				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
 			new DrawSquare().DrawBoundingBox(colorData, yoloItems);
-			imageConverter.AsBitmap(colorData).Save(DummyImageOutputFilename);
+			SaveAsBitmap(colorData).Save(DummyImageOutputFilename);
 		}
 
 		[Test]
