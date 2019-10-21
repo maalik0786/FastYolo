@@ -66,26 +66,20 @@ namespace FastYolo
 
 		private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0)
 		{
-			//ncrunch: no coverage start
-			if (IntPtr.Size != 8)
-				throw new NotSupportedException("Only 64-bit processes are supported");
+			if (IntPtr.Size != 8) throw new NotSupportedException("Only 64-bit processes are supported");
 
 			var cudaError =
 				"An Nvidia GPU and CUDA 10.1 need to be installed! Please install CUDA " +
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
 
 #if WIN64
-			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
-				throw new DllNotFoundException(cudaError +
+			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH"))) throw new DllNotFoundException(cudaError +
 				                               "CUDA_PATH environment variable is not available!");
-			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH"), "bin",
-				"CUDART64_101.DLL")))
-				throw new DllNotFoundException(cudaError +
+			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH"), "bin", "CUDART64_101.DLL"))) throw new DllNotFoundException(cudaError +
 				                               @"cudart64_101.dll wasn't found in the CUDA_PATH\bin folder " +
 				                               "(did you maybe install CUDA 10.0 last and not CUDA 10.1, " +
 				                               "please install it again or fix your CUDA_PATH)");
-			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
-				throw new DllNotFoundException(cudaError +
+			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL"))) throw new DllNotFoundException(cudaError +
 				                               "NVCUDA.DLL wasn't found in the windows system directory, " +
 				                               "is CUDA and your Nvidia graphics driver correctly installed?");
 #elif LINUX64
@@ -97,14 +91,11 @@ namespace FastYolo
 #else
 				throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename))
-				throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " or " + YoloPThreadDllFilename);
+			if (!File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename)) throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " or " + YoloPThreadDllFilename);
 			var deviceCount = GetDeviceCount();
 
-			if (deviceCount == 0)
-				throw new NotSupportedException("No graphic device is available");
-			if (gpu > deviceCount - 1)
-				throw new IndexOutOfRangeException("Graphic device index is out of range"); //ncrunch: no coverage end
+			if (deviceCount == 0) throw new NotSupportedException("No graphic device is available");
+			if (gpu > deviceCount - 1) throw new IndexOutOfRangeException("Graphic device index is out of range");
 
 			var deviceName = new StringBuilder();
 			GetDeviceName(gpu, deviceName);
