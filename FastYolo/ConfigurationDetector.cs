@@ -5,12 +5,6 @@ namespace FastYolo
 {
 	public static class ConfigurationDetector
 	{
-		/// <summary>
-		///   Automatict detect the yolo configuration on the given path
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
-		/// <exception cref="FileNotFoundException">Thrown when cannot found one of the required yolo files</exception>
 		public static YoloConfiguration CheckConfiguration(string path = ".")
 		{
 			var files = GetYoloFiles(path);

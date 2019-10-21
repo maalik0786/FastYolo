@@ -42,21 +42,15 @@ namespace FastYolo
 		private static extern int DetectImageGpu(string filename, ref BboxContainer container);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "get_image")]
-		private static extern IntPtr
-			// ReSharper disable once TooManyArguments
-			GetRaspberryCameraJpegImage(int capWidth, int capHeight, int disWidth, int disHeight,
+		private static extern IntPtr GetRaspberryCameraJpegImage(int capWidth, int capHeight, int disWidth, int disHeight,
 				int frameRate, int flip);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "detect_objects")]
-		private static extern int
-			// ReSharper disable once TooManyArguments
-			DetectObjectsGpu(IntPtr pArray, int width, int height, int channel,
+		private static extern int DetectObjectsGpu(IntPtr pArray, int width, int height, int channel,
 				ref BboxContainer container);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "track_objects")]
-		private static extern int
-			// ReSharper disable once TooManyArguments
-			TrackObjectsGpu(IntPtr pArray, int width, int height, int channel,
+		private static extern int TrackObjectsGpu(IntPtr pArray, int width, int height, int channel,
 				ref BboxContainer container);
 
 		public void Dispose() => DisposeYoloGpu();
@@ -112,13 +106,12 @@ namespace FastYolo
 			if (gpu > deviceCount - 1)
 				throw new IndexOutOfRangeException("Graphic device index is out of range"); //ncrunch: no coverage end
 
-			var deviceName = new StringBuilder(); //allocate memory for string
+			var deviceName = new StringBuilder();
 			GetDeviceName(gpu, deviceName);
 			GraphicDeviceName = deviceName.ToString();
 			InitializeYoloGpu(configurationFilename, weightsFilename, gpu);
 		}
 
-		// ReSharper disable once TooManyArguments
 		public IntPtr GetRaspberryCameraImage(int capWidth, int capHeight,
 			int disWidth, int disHeight, int frameRate, int flip = 0)
 		{
@@ -151,7 +144,6 @@ namespace FastYolo
 					channels);
 		}
 
-		// ReSharper disable once TooManyArguments
 		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height, int channels = 3)
 		{
 			var container = new BboxContainer();
@@ -160,7 +152,6 @@ namespace FastYolo
 			return Convert(container, _objectTypeResolver);
 		}
 
-		// ReSharper disable once TooManyArguments
 		public IEnumerable<YoloItem> Track(IntPtr floatArrayPointer, int width, int height, int channel = 3)
 		{
 			var container = new BboxContainer();
