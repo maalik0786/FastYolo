@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using FastYolo.Model;
 using NUnit.Framework;
 
@@ -16,6 +15,7 @@ namespace FastYolo.Tests
 		private const string YoloServerDirectory = "/home/dev/Documents/yolo-v3-tiny/";
 #endif
 		private const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
+		private const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.jpg";
 		private const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny_walnut.weights";
 		private const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny_walnut.cfg";
 		private const string YoloClassesFilename = YoloServerDirectory + "classes.names";
@@ -46,7 +46,7 @@ namespace FastYolo.Tests
 		{
 			var image = Image.FromFile(DummyImageFilename);
 			var array = imageConverter.Image2Byte(image);
-			var items = yoloWrapper.Detect(array, image.Width, image.Height, 4,true);
+			var items = yoloWrapper.Detect(array, 4,true);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -58,7 +58,7 @@ namespace FastYolo.Tests
 		{
 			var colorData = imageConverter.BitmapToColorData(new Bitmap(DummyImageFilename));
 			const int Channels = 4;
-			var items = yoloWrapper.Track(imageConverter.ColorDataToYoloRgbFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
+			var items = yoloWrapper.Track(imageConverter.ColorData2YoloFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -75,7 +75,15 @@ namespace FastYolo.Tests
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
-				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);		
+				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
+			new DrawSquare().DrawBoundingBox(colorData, yoloItems);
+			imageConverter.AsBitmap(colorData).Save(DummyImageOutputFilename);
+		}
+
+		[Test]
+		public void DisposeYoloWrapper()
+		{
+			yoloWrapper.Dispose();
 		}
 
 		[Test]
@@ -87,12 +95,13 @@ namespace FastYolo.Tests
 			const int DisHeight = 720;
 			const int FrameRate = 30;
 			var ptr = yoloWrapper.GetRaspberryCameraImage(Width,Height,DisWidth,DisHeight, FrameRate);
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-				Assert.That(ptr, Is.EqualTo((IntPtr) 0));
-			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-				Assert.That(ptr, Is.Not.EqualTo(0));
-			else
-				throw new PlatformNotSupportedException();
+#if WIN64
+			Assert.That(ptr, Is.EqualTo((IntPtr) 0));
+#elif LINUX64
+			Assert.That(ptr, Is.Not.EqualTo(0));
+#else
+			throw new PlatformNotSupportedException();
+#endif
 		}
 	}
 }

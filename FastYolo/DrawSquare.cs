@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FastYolo.Model;
-using Color = FastYolo.Datatypes.Color;
+using Color = FastYolo.Model.Color;
 using ColorData = FastYolo.Model.ColorData;
 
 namespace FastYolo

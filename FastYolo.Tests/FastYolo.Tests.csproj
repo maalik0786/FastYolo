@@ -13,6 +13,10 @@
 		<DefineConstants>WIN64</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64' ">
+		<DefineConstants>LINUX64</DefineConstants>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<PlatformTarget>x64</PlatformTarget>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -25,6 +29,15 @@
 		<WarningsAsErrors />
 		<Optimize>false</Optimize>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\FastYolo\pthreadVC2.dll" Link="pthreadVC2.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="..\FastYolo\yolo_cpp_dll.dll" Link="yolo_cpp_dll.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />

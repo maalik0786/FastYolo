@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using FastYolo.Model;
-using Color = FastYolo.Datatypes.Color;
+using Color = FastYolo.Model.Color;
 
 namespace FastYolo
 {
@@ -15,9 +15,7 @@ namespace FastYolo
 		private readonly YoloObjectTypeResolver objectTypeResolver;
 		public ImageConverter(YoloObjectTypeResolver yoloObjectTypeResolver) => objectTypeResolver = yoloObjectTypeResolver;
 
-		public IEnumerable<YoloItem> Convert(BboxContainer container)
-		{
-			return container.candidates.Where(o => o.h > 0 || o.w > 0)
+		public IEnumerable<YoloItem> Convert(BboxContainer container) => container.candidates.Where(o => o.h > 0 || o.w > 0)
 				.Select(item => new YoloItem
 				{
 					X = (int) item.x,
@@ -30,7 +28,6 @@ namespace FastYolo
 					Shape = (YoloItem.ShapeType) item.shape,
 					Type = objectTypeResolver.Resolve((int) item.obj_id)
 				}).ToList();
-		}
 
 		public ColorData BitmapToColorData(Bitmap image)
 		{
@@ -61,19 +58,17 @@ namespace FastYolo
 			return colorData;
 		}
 
-		// ReSharper disable once TooManyDeclarations
-		public unsafe IntPtr ColorDataToYoloRgbFormat(ColorData imageData, int channels)
+		public unsafe IntPtr ColorData2YoloFormat(ColorData colorData, int channels = 3)
 		{
-			var sizeInBytes = imageData.Width * imageData.Height * channels * sizeof(float);
+			var sizeInBytes = colorData.Width * colorData.Height * channels * sizeof(float);
 			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);
 			var destination = (float*) floatArrayPointer.ToPointer();
-			// yolo needs the data in format like red all, green all, blue all.
-			for (var channel = 0; channel < channels; channel++)
-			for (var y = 0; y < imageData.Height; y++)
-			for (var x = 0; x < imageData.Width; x++)
-			{
-				var color = imageData.Colors[x + y * imageData.Width];
 
+			for (var channel = 0; channel < channels; channel++)
+			for (var y = 0; y < colorData.Height; y++)
+			for (var x = 0; x < colorData.Width; x++)
+			{
+				var color = colorData.Colors[x + y * colorData.Width];
 				*destination++ = channel switch
 				{
 					0 => color.RedValue,
@@ -82,38 +77,7 @@ namespace FastYolo
 					_ => color.AlphaValue
 				};
 			}
-
 			return floatArrayPointer;
-		}
-
-		public unsafe IntPtr ToYoloRgbFormat(ColorData colorData, int yoloWidth = 416,
-			int yoloHeight = 416, int channels = 3)
-		{
-			var sizeInBytes = yoloWidth * yoloHeight * channels * sizeof(float);
-			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);
-			var destination = (float*) floatArrayPointer.ToPointer();
-
-			for (var channel = 0; channel < channels; channel++)
-			for (var y = 0; y < yoloHeight; y++)
-			for (var x = 0; x < yoloWidth; x++)
-			{
-				var imageX = x * colorData.Width / yoloWidth;
-				var imageY = y * colorData.Height / yoloHeight;
-				var color = colorData.Colors[imageX + imageY * colorData.Width];
-				*destination++ = channel switch
-				{
-					0 => color.RedValue,
-					1 => color.GreenValue,
-					_ => color.BlueValue
-				};
-			}
-			return floatArrayPointer;
-		}
-
-		public Image Byte2Image(byte[] imageData)
-		{
-			using var memoryStream = new MemoryStream(imageData);
-			return Image.FromStream(memoryStream);
 		}
 
 		public byte[] Image2Byte(Image image)
@@ -122,5 +86,32 @@ namespace FastYolo
 			image.Save(memoryStream, ImageFormat.Bmp);
 			return memoryStream.ToArray();
 		}
+
+		public Image Byte2Image(byte[] byteData) => Image.FromStream(new MemoryStream(byteData));
+
+		public unsafe Bitmap AsBitmap(ColorData data)
+		{
+			var bitmap = new Bitmap(data.Width, data.Height);
+			var bitmapData = bitmap.LockBits(new Rectangle(0, 0, data.Width, data.Height), ImageLockMode.WriteOnly,
+				PixelFormat.Format24bppRgb);
+			var bitmapPointer = (byte*)bitmapData.Scan0.ToPointer();
+			SwitchBgr2Rgb(data, bitmapPointer, bitmapData.Stride);
+			bitmap.UnlockBits(bitmapData);
+			return bitmap;
+		}
+
+		private static unsafe void SwitchBgr2Rgb(ColorData data, byte* bitmapPointer, int stride)
+		{
+			for (var y = 0; y < data.Height; ++y)
+			for (var x = 0; x < data.Width; ++x)
+			{
+				var targetIndex = y * stride + x * 3;
+				var sourceIndex = y * data.Width + x;
+				bitmapPointer[targetIndex] = data.Colors[sourceIndex].R;
+				bitmapPointer[targetIndex + 1] = data.Colors[sourceIndex].G;
+				bitmapPointer[targetIndex + 2] = data.Colors[sourceIndex].B;
+			}
+		}
+
 	}
 }

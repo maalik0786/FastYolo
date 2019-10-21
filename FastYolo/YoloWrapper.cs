@@ -75,6 +75,7 @@ namespace FastYolo
 
 		private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0)
 		{
+			//ncrunch: no coverage start
 			if (IntPtr.Size != 8)
 				throw new NotSupportedException("Only 64-bit processes are supported");
 
@@ -105,16 +106,15 @@ namespace FastYolo
 #else
 				throw new PlatformNotSupportedException();
 #endif
-			//ncrunch: no coverage start
 			if (!File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename))
 				throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " or " + YoloPThreadDllFilename);
-			//ncrunch: no coverage end
 			var deviceCount = GetDeviceCount();
 
 			if (deviceCount == 0)
 				throw new NotSupportedException("No graphic device is available");
 			if (gpu > deviceCount - 1)
-				throw new IndexOutOfRangeException("Graphic device index is out of range");
+				throw new IndexOutOfRangeException("Graphic device index is out of range"); //ncrunch: no coverage end
+
 			var deviceName = new StringBuilder(); //allocate memory for string
 			GetDeviceName(gpu, deviceName);
 			GraphicDeviceName = deviceName.ToString();
@@ -130,8 +130,7 @@ namespace FastYolo
 
 		public IEnumerable<YoloItem> Detect(string filepath)
 		{
-			if (!File.Exists(filepath))
-				throw new FileNotFoundException("Cannot find the file", filepath);
+			if (!File.Exists(filepath)) throw new FileNotFoundException("Cannot find the file", filepath);
 			var container = new BboxContainer();
 			DetectImageGpu(filepath, ref container);
 			return imageConverter.Convert(container);
@@ -140,54 +139,36 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(ColorData imageData,
 			int channels = 3, bool track = false)
 		{
-			return track ? Track(imageConverter.ToYoloRgbFormat(imageData)) : Detect(imageConverter.ToYoloRgbFormat(imageData));
+			return track ? Track(imageConverter.ColorData2YoloFormat(imageData,  channels), imageData.Width, imageData.Height, channels) : Detect(imageConverter.ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height, channels);
 		}
 
-		public IEnumerable<YoloItem> Detect(byte[] byteData, int width, int height,
-			int channels = 3, bool track = false)
+		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
 		{
-			if (!imageAnalyzer.IsValidImageFormat(byteData))
-				throw new Exception("Invalid image data, wrong image format");
+			if (!imageAnalyzer.IsValidImageFormat(byteData)) throw new Exception("Invalid image data, wrong image format");
 
-			var imageData = imageConverter.BitmapToColorData((Bitmap) Image.FromStream(new MemoryStream(byteData)));
+			var imageData = imageConverter.BitmapToColorData((Bitmap) imageConverter.Byte2Image(byteData));
 			return track
-				? Track(imageConverter.ColorDataToYoloRgbFormat(imageData, channels), imageData.Width, imageData.Height,
+				? Track(imageConverter.ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels)
-				: Detect(imageConverter.ColorDataToYoloRgbFormat(imageData, channels), imageData.Width, imageData.Height,
+				: Detect(imageConverter.ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels);
 		}
 
 		// ReSharper disable once TooManyArguments
-		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width = 416, int height = 416,
-			int channels = 3)
+		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height, int channels = 3)
 		{
 			var container = new BboxContainer();
-			try
-			{
-				DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container);
-			}
-			finally
-			{
-				Marshal.FreeHGlobal(floatArrayPointer);
-			}
-
+			try { DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container); }
+			finally { Marshal.FreeHGlobal(floatArrayPointer); }
 			return imageConverter.Convert(container);
 		}
 
 		// ReSharper disable once TooManyArguments
-		public IEnumerable<YoloItem> Track(IntPtr floatArrayPointer, int width = 416, int height = 416,
-			int channel = 3)
+		public IEnumerable<YoloItem> Track(IntPtr floatArrayPointer, int width, int height, int channel = 3)
 		{
 			var container = new BboxContainer();
-			try
-			{
-				TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container);
-			}
-			finally
-			{
-				Marshal.FreeHGlobal(floatArrayPointer);
-			}
-
+			try { TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container); }
+			finally { Marshal.FreeHGlobal(floatArrayPointer); }
 			return imageConverter.Convert(container);
 		}
 	}

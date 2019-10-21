@@ -49,8 +49,6 @@
 		<None Remove="libdarknet_amd.so" />
 		<None Remove="libpthread_amd.so" />
 		<None Remove="nuget.exe" />
-		<None Remove="x64\pthreadVC2.dll" />
-		<None Remove="x64\yolo_cpp_dll.dll" />
 	</ItemGroup>
 
 	<ItemGroup>

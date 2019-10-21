@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace FastYolo.Model
+﻿namespace FastYolo.Model
 {
 	public class YoloItem
 	{
@@ -24,10 +22,5 @@ namespace FastYolo.Model
 		public int TrackId { get; set; }
 		public int FrameId { get; set; }
 		public ShapeType Shape { get; set; }
-
-		public Point Center()
-		{
-			return new Point(X + Width / 2, Y + Height / 2);
-		}
 	}
 }

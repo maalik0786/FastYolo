@@ -11,7 +11,7 @@ namespace FastYolo
 		/// <param name="path"></param>
 		/// <returns></returns>
 		/// <exception cref="FileNotFoundException">Thrown when cannot found one of the required yolo files</exception>
-		public YoloConfiguration Detect(string path = ".")
+		public YoloConfiguration CheckConfiguration(string path = ".")
 		{
 			var files = GetYoloFiles(path);
 			var yoloConfiguration = MapFiles(files);
