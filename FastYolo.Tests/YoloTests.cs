@@ -4,6 +4,7 @@ using System.Linq;
 using FastYolo.Model;
 using NUnit.Framework;
 using static FastYolo.ImageConverter;
+using static FastYolo.DrawSquare;
 
 namespace FastYolo.Tests
 {
@@ -76,7 +77,7 @@ namespace FastYolo.Tests
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
 				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
-			new DrawSquare().DrawBoundingBox(colorData, yoloItems);
+			DrawBoundingBox(colorData, yoloItems);
 			SaveAsBitmap(colorData).Save(DummyImageOutputFilename);
 		}
 

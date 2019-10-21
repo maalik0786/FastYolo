@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using FastYolo.Model;
 using NUnit.Framework;
+using static FastYolo.DrawSquare;
 
 namespace FastYolo.Tests
 {
@@ -32,7 +33,7 @@ namespace FastYolo.Tests
 			var colorData = CreateTestColorData();
 			var simpleDrawings = new DrawSquare();
 			simpleDrawings.SetColor(Color.Red);
-			simpleDrawings.DrawObjectFrame(colorData, 5,5,3,3);
+			DrawObjectFrame(colorData, 5,5,3,3);
 			Assert.That(colorData.Colors[55].R, Is.EqualTo(255));
 		}
 
@@ -40,8 +41,7 @@ namespace FastYolo.Tests
 		public void DrawObjectFrameTest2()
 		{
 			var colorData = CreateTestColorData();
-			var simpleDrawings = new DrawSquare();
-			simpleDrawings.DrawObjectFrame(colorData, 0,0,1,1);
+			DrawObjectFrame(colorData, 0,0,1,1);
 			Assert.That(colorData.Colors[55].R, Is.EqualTo(0));
 		}
 
@@ -52,7 +52,7 @@ namespace FastYolo.Tests
 			items.Append(new YoloItem { Width = 4, Height = 3, X = 7, Y = 2, Type = "Walnut"});
 			items.Append(new YoloItem { Width = 3, Height = 4, X = 5, Y = 5, Type = "Walnut"});
 			Assert.That(items, Is.Not.Null);
-			new DrawSquare().DrawBoundingBox(CreateTestColorData(), items);
+			DrawBoundingBox(CreateTestColorData(), items);
 		}
 	}
 }

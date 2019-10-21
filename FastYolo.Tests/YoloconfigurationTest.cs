@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using static FastYolo.ConfigurationDetector;
 
 namespace FastYolo.Tests
 {
@@ -19,7 +20,7 @@ namespace FastYolo.Tests
 		[Test]
 		public void ConfigurationFilesExists()
 		{
-			var yoloConfig = new ConfigurationDetector().CheckConfiguration(YoloServerDirectory);
+			var yoloConfig = CheckConfiguration(YoloServerDirectory);
 			Assert.That(Directory.Exists(YoloServerDirectory), Is.True);
 			Assert.That(yoloConfig.ConfigFile, Is.EqualTo(YoloConfigFilename));
 			Assert.That(yoloConfig.NamesFile, Is.EqualTo(YoloClassesFilename));
