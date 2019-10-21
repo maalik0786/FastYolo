@@ -8,7 +8,6 @@ namespace FastYolo.Tests
 {
 	public class YoloTests
 	{
-
 #if WIN64
 		private const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\";
 #else
@@ -24,7 +23,7 @@ namespace FastYolo.Tests
 		private YoloWrapper yoloWrapper;
 		private ImageConverter imageConverter;
 
-			[SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			imageConverter = new ImageConverter(new YoloObjectTypeResolver(YoloClassesFilename));
@@ -81,10 +80,7 @@ namespace FastYolo.Tests
 		}
 
 		[Test]
-		public void DisposeYoloWrapper()
-		{
-			yoloWrapper.Dispose();
-		}
+		public void DisposeYoloWrapper() => yoloWrapper.Dispose();
 
 		[Test]
 		public void LoadJpegFromRaspberryCamera()

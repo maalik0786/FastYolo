@@ -16,8 +16,7 @@ namespace FastYolo
 		public string GraphicDeviceName { get; private set; }
 		public const int MaxObjects = 100;
 
-		public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename,
-			int gpu = 0)
+		public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0)
 		{
 			imageAnalyzer = new ImageAnalyzer();
 			imageConverter = new ImageConverter(new YoloObjectTypeResolver(namesFilename));
