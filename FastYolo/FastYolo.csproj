@@ -38,6 +38,18 @@
 		<None Remove="libpthread_arm.so" />
 		<None Remove="libdarknet_amd.so" />
 		<None Remove="libpthread_amd.so" />
+		<None Remove="nuget.exe" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>pthreadVC2.dll</TargetPath>
+	  </ContentWithTargetPath>
+		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>yolo_cpp_dll.dll</TargetPath>
+	  </ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>

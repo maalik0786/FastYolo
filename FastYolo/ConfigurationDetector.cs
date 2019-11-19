@@ -3,15 +3,9 @@ using System.Linq;
 
 namespace FastYolo
 {
-	public class ConfigurationDetector
+	public static class ConfigurationDetector
 	{
-		/// <summary>
-		///   Automatict detect the yolo configuration on the given path
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
-		/// <exception cref="FileNotFoundException">Thrown when cannot found one of the required yolo files</exception>
-		public YoloConfiguration Detect(string path = ".")
+		public static YoloConfiguration CheckConfiguration(string path = ".")
 		{
 			var files = GetYoloFiles(path);
 			var yoloConfiguration = MapFiles(files);
@@ -23,13 +17,13 @@ namespace FastYolo
 				"Cannot found pre-trained model, check all config files available (.cfg, .weights, .names)"); //ncrunch: no coverage end
 		}
 
-		private string[] GetYoloFiles(string path)
+		private static string[] GetYoloFiles(string path)
 		{
 			return Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Where(o =>
 				o.EndsWith(".names") || o.EndsWith(".cfg") || o.EndsWith(".weights")).ToArray();
 		}
 
-		private YoloConfiguration MapFiles(string[] files)
+		private static YoloConfiguration MapFiles(string[] files)
 		{
 			var configurationFile = files.FirstOrDefault(o => o.EndsWith(".cfg"));
 			var weightsFile = files.FirstOrDefault(o => o.EndsWith(".weights"));
@@ -38,7 +32,8 @@ namespace FastYolo
 			return new YoloConfiguration(configurationFile, weightsFile, namesFile);
 		}
 
-		private bool AreValidYoloFiles(YoloConfiguration config) =>
+		private static bool AreValidYoloFiles(YoloConfiguration config) =>
+
 			!string.IsNullOrEmpty(config.ConfigFile) && !string.IsNullOrEmpty(config.WeightsFile) && !string.IsNullOrEmpty(config.NamesFile);
 	}
 }

@@ -4,25 +4,25 @@ using System.Text;
 
 namespace FastYolo
 {
-	public class ImageAnalyzer
+	public static class ImageAnalyzer
 	{
-		private readonly Dictionary<string, byte[]> imageFormats = new Dictionary<string, byte[]>();
+		private static readonly Dictionary<string, byte[]> ImageFormats = new Dictionary<string, byte[]>();
 
-		public ImageAnalyzer()
+		static ImageAnalyzer()
 		{
 			var bmp = Encoding.ASCII.GetBytes("BM"); //BMP
 			var png = new byte[] {137, 80, 78, 71}; //PNG
 			var jpeg = new byte[] {255, 216, 255}; //JPEG
 
-			imageFormats.Add("bmp", bmp);
-			imageFormats.Add("png", png);
-			imageFormats.Add("jpeg", jpeg);
+			ImageFormats.Add("bmp", bmp);
+			ImageFormats.Add("png", png);
+			ImageFormats.Add("jpeg", jpeg);
 		}
 
-		public bool IsValidImageFormat(byte[] imageData)
+		public static bool IsValidImageFormat(byte[] imageData)
 		{
 			if (imageData == null) return false;
-			return imageData.Length > 3 && imageFormats.Any(imageFormat => imageData.Take(imageFormat.Value.Length).SequenceEqual(imageFormat.Value));
+			return imageData.Length > 3 && ImageFormats.Any(imageFormat => imageData.Take(imageFormat.Value.Length).SequenceEqual(imageFormat.Value));
 		}
 	}
 }

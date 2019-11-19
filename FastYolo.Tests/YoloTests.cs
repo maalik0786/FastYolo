@@ -1,9 +1,10 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using FastYolo.Model;
 using NUnit.Framework;
+using static FastYolo.ImageConverter;
+using static FastYolo.DrawSquare;
 
 namespace FastYolo.Tests
 {
@@ -15,25 +16,23 @@ namespace FastYolo.Tests
 		private const string YoloServerDirectory = "/home/dev/Documents/yolo-v3-tiny/";
 #endif
 		private const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
+		private const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.jpg";
 		private const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny_walnut.weights";
 		private const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny_walnut.cfg";
 		private const string YoloClassesFilename = YoloServerDirectory + "classes.names";
 
-		// ReSharper disable once InconsistentNaming
-		private YoloWrapper yoloWrapper;
-		private ImageConverter imageConverter;
+		private YoloWrapper _yoloWrapper;
 
 		[SetUp]
 		public void Setup()
 		{
-			imageConverter = new ImageConverter(new YoloObjectTypeResolver(YoloClassesFilename));
-			yoloWrapper = new YoloWrapper(YoloConfigFilename, YoloWeightsFilename, YoloClassesFilename);
+			_yoloWrapper = new YoloWrapper(YoloConfigFilename, YoloWeightsFilename, YoloClassesFilename);
 		}
 
 		[Test]
 		public void LoadDummyImageForObjectDetection()
 		{
-			var items = yoloWrapper.Detect(DummyImageFilename);
+			var items = _yoloWrapper.Detect(DummyImageFilename);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -44,8 +43,8 @@ namespace FastYolo.Tests
 		public void ByteArrayForObjectDetection()
 		{
 			var image = Image.FromFile(DummyImageFilename);
-			var array = imageConverter.Image2Byte(image);
-			var items = yoloWrapper.Detect(array, image.Width, image.Height, 4,true);
+			var array = Image2Byte(image);
+			var items = _yoloWrapper.Detect(array, 4,true);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -55,9 +54,9 @@ namespace FastYolo.Tests
 		[Test]
 		public void PassIntPtrForObjectTracking()
 		{
-			var colorData = imageConverter.BitmapToColorData(new Bitmap(DummyImageFilename));
+			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
 			const int Channels = 4;
-			var items = yoloWrapper.Track(imageConverter.ColorDataToYoloRgbFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
+			var items = _yoloWrapper.Track(ColorData2YoloFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -69,13 +68,18 @@ namespace FastYolo.Tests
 		[Test]
 		public void LoadColorDataForObjectDetection()
 		{
-			var colorData = imageConverter.BitmapToColorData(new Bitmap(DummyImageFilename));
-			var items = yoloWrapper.Detect(colorData, 4);
+			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
+			var items = _yoloWrapper.Detect(colorData, 4);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
-				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);		
+				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
+			DrawBoundingBox(colorData, yoloItems);
+			SaveAsBitmap(colorData).Save(DummyImageOutputFilename);
 		}
+
+		[Test]
+		public void DisposeYoloWrapper() => _yoloWrapper.Dispose();
 
 		[Test]
 		public void LoadJpegFromRaspberryCamera()
@@ -85,13 +89,14 @@ namespace FastYolo.Tests
 			const int DisWidth = 1280;
 			const int DisHeight = 720;
 			const int FrameRate = 30;
-			var ptr = yoloWrapper.GetRaspberryCameraImage(Width,Height,DisWidth,DisHeight, FrameRate);
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-				Assert.That(ptr, Is.EqualTo((IntPtr) 0));
-			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-				Assert.That(ptr, Is.Not.EqualTo(0));
-			else
-				throw new PlatformNotSupportedException();
+			var ptr = _yoloWrapper.GetRaspberryCameraImage(Width,Height,DisWidth,DisHeight, FrameRate);
+#if WIN64
+			Assert.That(ptr, Is.EqualTo((IntPtr) 0));
+#elif LINUX64
+			Assert.That(ptr, Is.Not.EqualTo(0));
+#else
+			throw new PlatformNotSupportedException();
+#endif
 		}
 	}
 }
