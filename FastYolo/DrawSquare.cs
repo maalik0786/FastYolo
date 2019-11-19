@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using FastYolo.Model;
-using Color = FastYolo.Color;
-using ColorData = FastYolo.Model.ColorData;
 
 namespace FastYolo
 {

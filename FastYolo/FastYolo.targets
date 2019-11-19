@@ -28,7 +28,7 @@
   		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   		<TargetPath>pthreadVC2.dll</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="x64\yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
   		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   		<TargetPath>yolo_cpp_dll.dll</TargetPath>
 		</ContentWithTargetPath>

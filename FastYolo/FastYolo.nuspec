@@ -15,7 +15,7 @@
 
 Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet)
 		</description>
-		<repository url="https://github.com/maalik0786/FastYolo" />
+		<repository url="https://github.com/DeltaEngine/FastYolo" />
 		<dependencies>
 			<group targetFramework=".NETCoreApp2.2">
 				<dependency id="System.Drawing.Common" version="4.6.0" exclude="Build,Analyzers" />
@@ -35,9 +35,9 @@ Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yo
 		<file src="libpthread_amd.so" target="build" />
 		<file src="libdarknet_arm.so" target="build" />
 		<file src="libpthread_arm.so" target="build" />
-		<file src="FastYoloWithCuda101GpuSupport.targets" target="build" />
-		<file src="bin\x64\net461\FastYolo.dll" target="lib/net461" />
-		<file src="bin\x64\netcoreapp2.2\FastYolo.dll" target="lib/netcoreapp2.2" />
-		<file src="bin\x64\netcoreapp3.0\FastYolo.dll" target="lib/netcoreapp3.0" />
+		<file src="FastYolo.targets" target="build" />
+		<file src="bin\x64\Release\net461\FastYolo.dll" target="lib/net461" />
+		<file src="bin\x64\Release\netcoreapp2.2\FastYolo.dll" target="lib/netcoreapp2.2" />
+		<file src="bin\x64\Release\netcoreapp3.0\FastYolo.dll" target="lib/netcoreapp3.0" />
 	</files>
 </package>

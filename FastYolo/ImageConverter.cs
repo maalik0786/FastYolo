@@ -66,22 +66,32 @@ namespace FastYolo
 			for (var x = 0; x < colorData.Width; x++)
 			{
 				var color = colorData.Colors[x + y * colorData.Width];
-				*destination++ = channel switch
+				switch (channel)
 				{
-					0 => color.RedValue,
-					1 => color.GreenValue,
-					2 => color.BlueValue,
-					_ => color.AlphaValue
-				};
+				case 0:
+					(*destination++) = color.RedValue;
+					break;
+				case 1:
+					(*destination++) = color.GreenValue;
+					break;
+				case 2:
+					(*destination++) = color.BlueValue;
+					break;
+				default:
+					(*destination++) = color.AlphaValue;
+					break;
+				}
 			}
 			return floatArrayPointer;
 		}
 
 		public static byte[] Image2Byte(Image image)
 		{
-			using var memoryStream = new MemoryStream();
-			image.Save(memoryStream, ImageFormat.Bmp);
-			return memoryStream.ToArray();
+			using (var memoryStream = new MemoryStream())
+			{
+				image.Save(memoryStream, ImageFormat.Bmp);
+				return memoryStream.ToArray();
+			}
 		}
 
 		public static Image Byte2Image(byte[] byteData) => Image.FromStream(new MemoryStream(byteData));

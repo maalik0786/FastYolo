@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+		<TargetFrameworks>netcoreapp3.0;netcoreapp2.2;net461</TargetFrameworks>
 		<Platforms>x64</Platforms>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
