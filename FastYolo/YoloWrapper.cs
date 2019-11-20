@@ -120,7 +120,10 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(ColorData imageData,
 			int channels = 3, bool track = false)
 		{
-			return track ? Track(ColorData2YoloFormat(imageData,  channels), imageData.Width, imageData.Height, channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height, channels);
+			return track
+				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
+					channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width,
+					imageData.Height, channels);
 		}
 
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
@@ -130,9 +133,8 @@ namespace FastYolo
 			var imageData = BitmapToColorData((Bitmap) Byte2Image(byteData));
 			return track
 				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
-					channels)
-				: Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
-					channels);
+					channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width,
+					imageData.Height, channels);
 		}
 
 		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height, int channels = 3)
