@@ -50,11 +50,19 @@
 		<None Remove="libdarknet_amd.so" />
 		<None Remove="libpthread_amd.so" />
 		<None Remove="nuget.exe" />
+		<None Remove="opencv_world412.dll" />
+		<None Remove="opencv_world412d.dll" />
 		<None Remove="pthreadVC2.dll" />
 		<None Remove="yolo_cpp_dll.dll" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="opencv_world412.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="opencv_world412d.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="pthreadVC2.dll">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
@@ -65,13 +73,17 @@
 
 	<ItemGroup>
 	  <ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>pthreadVC2.dll</TargetPath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+				<TargetPath>pthreadVC2.dll</TargetPath>
 	  </ContentWithTargetPath>
 		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>yolo_cpp_dll.dll</TargetPath>
-	  </ContentWithTargetPath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+				<TargetPath>yolo_cpp_dll.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="opencv_world412.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+				<TargetPath>opencv_world412.dll</TargetPath>
+		</ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>

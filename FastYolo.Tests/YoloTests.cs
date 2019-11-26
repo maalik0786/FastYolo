@@ -53,13 +53,17 @@ namespace FastYolo.Tests
 		{
 			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
 			const int Channels = 4;
-			var items = yoloWrapper.Track(ColorData2YoloFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
+			var items = yoloWrapper.Track(ColorData2YoloFormat(colorData, Channels),
+				colorData.Width, colorData.Height, Channels);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
-				Console.WriteLine("Frame: " + item.FrameId + " Found:" + item.Type + " ID: " +
-				                  item.TrackId + " BB: [" + item.X + "," +
-				                  item.Y + "," + item.Width + "," + item.Height + "]");
+			{
+				Assert.That(item.Type == "walnut" && item.Shape == YoloItem.ShapeType.Circle, Is.True);
+				Console.WriteLine("Frame: " + item.FrameId + " Shape: " + item.Shape + " Found:" +
+					item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," +
+					item.Width + "," + item.Height + "]");
+			}
 		}
 
 		[Test]

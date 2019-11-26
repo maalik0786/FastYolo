@@ -25,6 +25,7 @@ namespace FastYolo
 #if WIN64
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
+		private const string OpenCVWorldDllFilename = "opencv_world412d.dll";
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
 		private const string YoloPThreadDllFilename = "libpthread_amd.so";
@@ -91,7 +92,7 @@ namespace FastYolo
 #else
 				throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename)) throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " or " + YoloPThreadDllFilename);
+			if (!File.Exists(OpenCVWorldDllFilename)|| !File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename)) throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " Or " + YoloPThreadDllFilename + " Or " + OpenCVWorldDllFilename);
 			var deviceCount = GetDeviceCount();
 
 			if (deviceCount == 0) throw new NotSupportedException("No graphic device is available");
@@ -103,11 +104,9 @@ namespace FastYolo
 			InitializeYoloGpu(configurationFilename, weightsFilename, gpu);
 		}
 
-		public IntPtr GetRaspberryCameraImage(int capWidth, int capHeight,
-			int disWidth, int disHeight, int frameRate, int flip = 0)
-		{
-			return GetRaspberryCameraJpegImage(capWidth, capHeight, disWidth, disHeight, frameRate, flip);
-		}
+		public IntPtr GetRaspberryCameraImage(int capWidth, int capHeight, int disWidth,
+			int disHeight, int frameRate, int flip = 0) =>
+			GetRaspberryCameraJpegImage(capWidth, capHeight, disWidth, disHeight, frameRate, flip);
 
 		public IEnumerable<YoloItem> Detect(string filepath)
 		{

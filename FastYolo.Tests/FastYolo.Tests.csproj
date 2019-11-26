@@ -31,7 +31,26 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="opencv_world412.dll" />
+	  <None Remove="opencv_world412d.dll" />
+	  <None Remove="pthreadVC2.dll" />
+	  <None Remove="yolo_cpp_dll.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Content Include="..\FastYolo\pthreadVC2.dll" Link="pthreadVC2.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="opencv_world412.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="opencv_world412d.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="pthreadVC2.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="yolo_cpp_dll.dll">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	  <None Include="..\FastYolo\yolo_cpp_dll.dll" Link="yolo_cpp_dll.dll">
