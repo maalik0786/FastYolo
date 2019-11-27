@@ -33,9 +33,11 @@ namespace FastYolo
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
 		private const string YoloPThreadDllFilename = "libpthread_amd.so";
+		private const string OpenCVWorldDllFilename = "libopencv_world.so";
 #else
 		private const string YoloGpuDllFilename = "libdarknet_arm.so";
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
+		private const string OpenCVWorldDllFilename = "libopencv_world.so";
 		
 #endif
 
