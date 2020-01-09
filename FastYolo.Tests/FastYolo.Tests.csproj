@@ -31,6 +31,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Include="..\FastYolo\opencv_world420.dll" Link="opencv_world420.dll" />
 	  <None Include="..\FastYolo\pthreadVC2.dll" Link="pthreadVC2.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

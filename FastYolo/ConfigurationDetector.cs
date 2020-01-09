@@ -10,7 +10,6 @@ namespace FastYolo
 			var files = GetYoloFiles(path);
 			var yoloConfiguration = MapFiles(files);
 			var configValid = AreValidYoloFiles(yoloConfiguration);
-
 			if (configValid) return yoloConfiguration;
 			//ncrunch: no coverage start
 			throw new FileNotFoundException(
@@ -28,12 +27,10 @@ namespace FastYolo
 			var configurationFile = files.FirstOrDefault(o => o.EndsWith(".cfg"));
 			var weightsFile = files.FirstOrDefault(o => o.EndsWith(".weights"));
 			var namesFile = files.FirstOrDefault(o => o.EndsWith(".names"));
-
 			return new YoloConfiguration(configurationFile, weightsFile, namesFile);
 		}
 
 		private static bool AreValidYoloFiles(YoloConfiguration config) =>
-
 			!string.IsNullOrEmpty(config.ConfigFile) && !string.IsNullOrEmpty(config.WeightsFile) && !string.IsNullOrEmpty(config.NamesFile);
 	}
 }

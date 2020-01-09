@@ -28,6 +28,10 @@
   		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   		<TargetPath>pthreadVC2.dll</TargetPath>
 		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="opencv_world420.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>opencv_world420.dll</TargetPath>
+		</ContentWithTargetPath>
 		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
   		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   		<TargetPath>yolo_cpp_dll.dll</TargetPath>

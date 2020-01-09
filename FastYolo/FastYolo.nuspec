@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>FastYolo</id>
-		<version>1.0</version>
+		<version>1.0.1</version>
 		<authors>DeltaEngine</authors>
 		<owners>DeltaEngine</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,13 +13,10 @@
 		<description>
 			Improved version of Alturos Yolo library. This one requires Cuda 10.1 to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version that is disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 1.0.5 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
 
-Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet)
+Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), including opencv_world420.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
 		</description>
 		<repository url="https://github.com/DeltaEngine/FastYolo" />
 		<dependencies>
-			<group targetFramework=".NETCoreApp2.2">
-				<dependency id="System.Drawing.Common" version="4.6.0" exclude="Build,Analyzers" />
-			</group>
 			<group targetFramework=".NETCoreApp3.0">
 				<dependency id="System.Drawing.Common" version="4.6.0" exclude="Build,Analyzers" />
 			</group>
@@ -31,13 +28,13 @@ Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yo
 	<files>
 		<file src="yolo_cpp_dll.dll" target="build" />
 		<file src="pthreadVC2.dll" target="build" />
+		<file src="opencv_world420.dll" target="build" />
 		<file src="libdarknet_amd.so" target="build" />
 		<file src="libpthread_amd.so" target="build" />
 		<file src="libdarknet_arm.so" target="build" />
 		<file src="libpthread_arm.so" target="build" />
 		<file src="FastYolo.targets" target="build" />
 		<file src="bin\x64\Release\net461\FastYolo.dll" target="lib/net461" />
-		<file src="bin\x64\Release\netcoreapp2.2\FastYolo.dll" target="lib/netcoreapp2.2" />
 		<file src="bin\x64\Release\netcoreapp3.0\FastYolo.dll" target="lib/netcoreapp3.0" />
 	</files>
 </package>
