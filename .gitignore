@@ -363,11 +363,6 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-# dll & .so files
-*.dll
-*.so
-*.so.1
-
 # visual studio code files
 *.vscode\
 *.vscode/

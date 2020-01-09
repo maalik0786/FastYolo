@@ -8,6 +8,7 @@
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Optimize>true</Optimize>
+		<Version>1.0.1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
@@ -39,21 +40,36 @@
 		<None Remove="libdarknet_amd.so" />
 		<None Remove="libpthread_amd.so" />
 		<None Remove="nuget.exe" />
+		<None Remove="opencv_world420.dll" />
+		<None Remove="pthreadVC2.dll" />
+		<None Remove="yolo_cpp_dll.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="opencv_world420.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="pthreadVC2.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="yolo_cpp_dll.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>pthreadVC2.dll</TargetPath>
-	  </ContentWithTargetPath>
-		<ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>opencv_world420.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>yolo_cpp_dll.dll</TargetPath>
+				<TargetPath>pthreadVC2.dll</TargetPath>
 	  </ContentWithTargetPath>
+		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+				<TargetPath>yolo_cpp_dll.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="opencv_world420.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+				<TargetPath>opencv_world420.dll</TargetPath>
+		</ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -80,10 +96,12 @@
 
 	<ItemGroup>
 		<None Update="FastYoloWithCuda101GpuSupport.targets" />
+		<None Update="opencv_world420.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="pthreadVC2.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Readme.txt" />
 		<None Update="yolo_cpp_dll.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

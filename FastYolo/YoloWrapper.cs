@@ -25,12 +25,19 @@ namespace FastYolo
 #if WIN64
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
+#if Debug
+		private const string OpenCVWorldDllFilename = "opencv_world412d.dll";
+#else
+		private const string OpenCVWorldDllFilename = "opencv_world412.dll";
+#endif
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
 		private const string YoloPThreadDllFilename = "libpthread_amd.so";
+		private const string OpenCVWorldDllFilename = "libopencv_world.so";
 #else
 		private const string YoloGpuDllFilename = "libdarknet_arm.so";
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
+		private const string OpenCVWorldDllFilename = "libopencv_world.so";
 		
 #endif
 
@@ -91,7 +98,7 @@ namespace FastYolo
 #else
 				throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename)) throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " or " + YoloPThreadDllFilename);
+			if (!File.Exists(OpenCVWorldDllFilename)|| !File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename)) throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " Or " + YoloPThreadDllFilename + " Or " + OpenCVWorldDllFilename);
 			var deviceCount = GetDeviceCount();
 
 			if (deviceCount == 0) throw new NotSupportedException("No graphic device is available");
@@ -103,11 +110,9 @@ namespace FastYolo
 			InitializeYoloGpu(configurationFilename, weightsFilename, gpu);
 		}
 
-		public IntPtr GetRaspberryCameraImage(int capWidth, int capHeight,
-			int disWidth, int disHeight, int frameRate, int flip = 0)
-		{
-			return GetRaspberryCameraJpegImage(capWidth, capHeight, disWidth, disHeight, frameRate, flip);
-		}
+		public IntPtr GetRaspberryCameraImage(int capWidth, int capHeight, int disWidth,
+			int disHeight, int frameRate, int flip = 0) =>
+			GetRaspberryCameraJpegImage(capWidth, capHeight, disWidth, disHeight, frameRate, flip);
 
 		public IEnumerable<YoloItem> Detect(string filepath)
 		{
@@ -120,7 +125,10 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(ColorData imageData,
 			int channels = 3, bool track = false)
 		{
-			return track ? Track(ColorData2YoloFormat(imageData,  channels), imageData.Width, imageData.Height, channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height, channels);
+			return track
+				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
+					channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width,
+					imageData.Height, channels);
 		}
 
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
@@ -130,9 +138,8 @@ namespace FastYolo
 			var imageData = BitmapToColorData((Bitmap) Byte2Image(byteData));
 			return track
 				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
-					channels)
-				: Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
-					channels);
+					channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width,
+					imageData.Height, channels);
 		}
 
 		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height, int channels = 3)

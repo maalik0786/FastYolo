@@ -21,18 +21,15 @@ namespace FastYolo.Tests
 		private const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny_walnut.cfg";
 		private const string YoloClassesFilename = YoloServerDirectory + "classes.names";
 
-		private YoloWrapper _yoloWrapper;
+		private YoloWrapper yoloWrapper;
 
 		[SetUp]
-		public void Setup()
-		{
-			_yoloWrapper = new YoloWrapper(YoloConfigFilename, YoloWeightsFilename, YoloClassesFilename);
-		}
+		public void Setup() => yoloWrapper = new YoloWrapper(YoloConfigFilename, YoloWeightsFilename, YoloClassesFilename);
 
 		[Test]
 		public void LoadDummyImageForObjectDetection()
 		{
-			var items = _yoloWrapper.Detect(DummyImageFilename);
+			var items = yoloWrapper.Detect(DummyImageFilename);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -44,7 +41,7 @@ namespace FastYolo.Tests
 		{
 			var image = Image.FromFile(DummyImageFilename);
 			var array = Image2Byte(image);
-			var items = _yoloWrapper.Detect(array, 4,true);
+			var items = yoloWrapper.Detect(array, 4,true);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -56,20 +53,24 @@ namespace FastYolo.Tests
 		{
 			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
 			const int Channels = 4;
-			var items = _yoloWrapper.Track(ColorData2YoloFormat(colorData, Channels), colorData.Width, colorData.Height, Channels);
+			var items = yoloWrapper.Track(ColorData2YoloFormat(colorData, Channels),
+				colorData.Width, colorData.Height, Channels);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
-				Console.WriteLine("Frame: " + item.FrameId + " Found:" + item.Type + " ID: " +
-				                  item.TrackId + " BB: [" + item.X + "," +
-				                  item.Y + "," + item.Width + "," + item.Height + "]");
+			{
+				Assert.That(item.Type == "walnut" && item.Shape == YoloItem.ShapeType.Circle, Is.True);
+				Console.WriteLine("Frame: " + item.FrameId + " Shape: " + item.Shape + " Found:" +
+					item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," +
+					item.Width + "," + item.Height + "]");
+			}
 		}
 
 		[Test]
 		public void LoadColorDataForObjectDetection()
 		{
 			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
-			var items = _yoloWrapper.Detect(colorData, 4);
+			var items = yoloWrapper.Detect(colorData, 4);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -79,9 +80,9 @@ namespace FastYolo.Tests
 		}
 
 		[Test]
-		public void DisposeYoloWrapper() => _yoloWrapper.Dispose();
+		public void DisposeYoloWrapper() => yoloWrapper.Dispose();
 
-		[Test]
+		[Test, Category("Slow")]
 		public void LoadJpegFromRaspberryCamera()
 		{
 			const int Width = 1280;
@@ -89,7 +90,7 @@ namespace FastYolo.Tests
 			const int DisWidth = 1280;
 			const int DisHeight = 720;
 			const int FrameRate = 30;
-			var ptr = _yoloWrapper.GetRaspberryCameraImage(Width,Height,DisWidth,DisHeight, FrameRate);
+			var ptr = yoloWrapper.GetRaspberryCameraImage(Width,Height,DisWidth,DisHeight, FrameRate);
 #if WIN64
 			Assert.That(ptr, Is.EqualTo((IntPtr) 0));
 #elif LINUX64
