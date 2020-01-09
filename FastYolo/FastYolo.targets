@@ -2,28 +2,28 @@
 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		<None Include="$(MSBuildThisFileDirectory)\libdarknet.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread.so.0" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+		</None >
+		<None Include="$$(MSBuildThisFileDirectory)\libpthread.so.0" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread.so.0</TargetPath>
-		</ContentWithTargetPath>
+		</None >
 	</ItemGroup>
 
 	<ItemGroup>
-		<ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		<None Include="$(MSBuildThisFileDirectory)\pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>pthreadVC2.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="opencv_world420.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		</None >
+		<None Include="$(MSBuildThisFileDirectory)\opencv_world420.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>opencv_world420.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		</None >
+		<None  Include="$(MSBuildThisFileDirectory)\yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>yolo_cpp_dll.dll</TargetPath>
-		</ContentWithTargetPath>
+		</None>
 	</ItemGroup>
 </Project>
