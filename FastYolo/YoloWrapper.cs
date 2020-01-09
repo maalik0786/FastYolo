@@ -26,9 +26,9 @@ namespace FastYolo
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
 #if Debug
-		private const string OpenCVWorldDllFilename = "opencv_world412d.dll";
+		private const string OpenCVWorldDllFilename = "opencv_world420d.dll";
 #else
-		private const string OpenCVWorldDllFilename = "opencv_world412.dll";
+		private const string OpenCVWorldDllFilename = "opencv_world420.dll";
 #endif
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";

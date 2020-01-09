@@ -15,7 +15,7 @@
 
 Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), including opencv_world420.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
 		</description>
-		<repository url="https://github.com/DeltaEngine/FastYolo" />
+		<repository url="https://github.com/maalik0786/FastYolo" />
 		<dependencies>
 			<group targetFramework=".NETCoreApp3.0">
 				<dependency id="System.Drawing.Common" version="4.6.0" exclude="Build,Analyzers" />
