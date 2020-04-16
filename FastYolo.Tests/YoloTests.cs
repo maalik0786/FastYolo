@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FastYolo.Model;
 using NUnit.Framework;
 using static FastYolo.ImageConverter;
@@ -53,8 +54,10 @@ namespace FastYolo.Tests
 		{
 			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
 			const int Channels = 4;
-			var items = yoloWrapper.Track(ColorData2YoloFormat(colorData, Channels),
+			var floatArrayPointer = ColorData2YoloFormat(colorData, Channels);
+			var items = yoloWrapper.Track(floatArrayPointer,
 				colorData.Width, colorData.Height, Channels);
+			Marshal.FreeHGlobal(floatArrayPointer);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -82,7 +85,7 @@ namespace FastYolo.Tests
 		[Test]
 		public void DisposeYoloWrapper() => yoloWrapper.Dispose();
 
-		[Test, Category("Slow")]
+		[Test][Category("Slow")]
 		public void LoadJpegFromRaspberryCamera()
 		{
 			const int Width = 1280;

@@ -122,14 +122,13 @@ namespace FastYolo
 			return Convert(container, _objectTypeResolver);
 		}
 
-		public IEnumerable<YoloItem> Detect(ColorData imageData,
-			int channels = 3, bool track = false)
-		{
-			return track
+		public IEnumerable<YoloItem> Detect(ColorData imageData, int channels = 3,
+			bool track = false) =>
+			track
 				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
-					channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width,
-					imageData.Height, channels);
-		}
+					channels)
+				: Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
+					channels);
 
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
 		{
@@ -145,16 +144,14 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height, int channels = 3)
 		{
 			var container = new BboxContainer();
-			try { DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container); }
-			finally { Marshal.FreeHGlobal(floatArrayPointer); }
+			DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container); 
 			return Convert(container, _objectTypeResolver);
 		}
 
 		public IEnumerable<YoloItem> Track(IntPtr floatArrayPointer, int width, int height, int channel = 3)
 		{
 			var container = new BboxContainer();
-			try { TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container); }
-			finally { Marshal.FreeHGlobal(floatArrayPointer); }
+			TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container);
 			return Convert(container, _objectTypeResolver);
 		}
 	}
