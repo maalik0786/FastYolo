@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>FastYolo</id>
-		<version>1.0.3</version>
+		<version>1.0.4</version>
 		<authors>DeltaEngine</authors>
 		<owners>DeltaEngine</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,9 +11,11 @@
 		<projectUrl>https://github.com/maalik0786/FastYolo</projectUrl>
 		<iconUrl>https://res-5.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_120,w_120,f_auto,b_white,q_auto:eco/v1426438540/hacptxu3ali6vplrrhfy.png</iconUrl>
 		<description>
-			Improved version of Alturos Yolo library. This one requires Cuda 10.1 to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version that is disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 1.0.5 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
+			Fast .NET Yolo library, requires Cuda 10.1 to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 1.0.3 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
 
-Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), including opencv_world420.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
+Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (AlexeyAB/darknet with additions and fixes here: https://github.com/maalik0786/darknet), including opencv_world430.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
+
+v1.0.4 adds resize dectection and will output a warning in the console and allow to check via the CheckIfImageWasResized method if any resize happened. Resizing should not be done dynamically in the darknet library, extra memory would be required and it is obviously much slower than if we already have 416x416 data (or whatever the configuration defines).
 		</description>
 		<repository url="https://github.com/maalik0786/FastYolo" />
 		<dependencies>
@@ -28,13 +30,13 @@ Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yo
 	<files>
 		<file src="yolo_cpp_dll.dll" target="build" />
 		<file src="pthreadVC2.dll" target="build" />
-		<file src="opencv_world420.dll" target="build" />
+		<file src="opencv_world430.dll" target="build" />
 		<file src="libdarknet_amd.so" target="build" />
 		<file src="libpthread_amd.so" target="build" />
 		<file src="libdarknet_arm.so" target="build" />
 		<file src="libpthread_arm.so" target="build" />
 		<file src="FastYolo.targets" target="build" />
-		<file src="bin\x64\Release\net461\FastYolo.dll" target="lib/net461" />
-		<file src="bin\x64\Release\netcoreapp3.0\FastYolo.dll" target="lib/netcoreapp3.0" />
+		<file src="bin\Release\net461\FastYolo.dll" target="lib/net461" />
+		<file src="bin\Release\netcoreapp3.1\FastYolo.dll" target="lib/netcoreapp3.0" />
 	</files>
 </package>

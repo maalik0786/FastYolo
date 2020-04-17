@@ -10,8 +10,9 @@ namespace FastYolo
 
 		public static void DrawBoundingBox(ColorData colorData, IEnumerable<YoloItem> items)
 		{
-			if (items == null) return;
-			foreach (var item in items) DrawObjectFrame(colorData, item.X, item.Y, item.Width, item.Height);
+			if (items != null)
+				foreach (var item in items)
+					DrawObjectFrame(colorData, item.X, item.Y, item.Width, item.Height);
 		}
 
 		public static void DrawObjectFrame(ColorData vd, int x, int y, int width, int height)

@@ -26,9 +26,9 @@ namespace FastYolo
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
 #if Debug
-		private const string OpenCVWorldDllFilename = "opencv_world420d.dll";
+		private const string OpenCVWorldDllFilename = "opencv_world430d.dll";
 #else
-		private const string OpenCVWorldDllFilename = "opencv_world420.dll";
+		private const string OpenCVWorldDllFilename = "opencv_world430.dll";
 #endif
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
@@ -38,7 +38,6 @@ namespace FastYolo
 		private const string YoloGpuDllFilename = "libdarknet_arm.so";
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
 		private const string OpenCVWorldDllFilename = "libopencv_world.so";
-		
 #endif
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
@@ -60,6 +59,19 @@ namespace FastYolo
 		private static extern int TrackObjectsGpu(IntPtr pArray, int width, int height, int channel,
 				ref BboxContainer container);
 
+		/// <summary>
+		/// Resizing images every frame is VERY slow and should be avoided, use the given size from the
+		/// configuration file passed into the constructor here (usually 416x416), resizing should not be
+		/// done dynamically in the darknet library, extra memory would be required and it is obviously
+		/// slower than if we already have 416x416 data!
+		/// </summary>
+		[DllImport(YoloGpuDllFilename, EntryPoint = "CheckIfImageWasResized")]
+		public static extern bool CheckIfImageWasResized();
+		[DllImport(YoloGpuDllFilename, EntryPoint = "GetDetectorNetworkWidth")]
+		public static extern int GetDetectorNetworkWidth();
+		[DllImport(YoloGpuDllFilename, EntryPoint = "GetDetectorNetworkHeight")]
+		public static extern int GetDetectorNetworkHeight();
+
 		public void Dispose() => DisposeYoloGpu();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "dispose")]
@@ -74,21 +86,23 @@ namespace FastYolo
 		private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0)
 		{
 			if (IntPtr.Size != 8) throw new NotSupportedException("Only 64-bit processes are supported");
-
 			var cudaError =
 				"An Nvidia GPU and CUDA 10.1 need to be installed! Please install CUDA " +
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
-
 #if WIN64
-			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH"))) throw new DllNotFoundException(cudaError +
-				                               "CUDA_PATH environment variable is not available!");
-			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH"), "bin", "CUDART64_101.DLL"))) throw new DllNotFoundException(cudaError +
-				                               @"cudart64_101.dll wasn't found in the CUDA_PATH\bin folder " +
-				                               "(did you maybe install CUDA 10.0 last and not CUDA 10.1, " +
-				                               "please install it again or fix your CUDA_PATH)");
-			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL"))) throw new DllNotFoundException(cudaError +
-				                               "NVCUDA.DLL wasn't found in the windows system directory, " +
-				                               "is CUDA and your Nvidia graphics driver correctly installed?");
+			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
+				throw new DllNotFoundException(cudaError +
+					"CUDA_PATH environment variable is not available!");
+			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH"), "bin",
+				"CUDART64_101.DLL")))
+				throw new DllNotFoundException(cudaError +
+					@"cudart64_101.dll wasn't found in the CUDA_PATH\bin folder " +
+					"(did you maybe install CUDA 10.0 or 10.2+ last and not CUDA 10.1, " +
+					"please install it again or fix your CUDA_PATH)");
+			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
+				throw new DllNotFoundException(cudaError +
+					"NVCUDA.DLL wasn't found in the windows system directory, " +
+					"is CUDA and your Nvidia graphics driver correctly installed?");
 #elif LINUX64
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 			{
@@ -98,12 +112,15 @@ namespace FastYolo
 #else
 				throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(OpenCVWorldDllFilename)|| !File.Exists(YoloGpuDllFilename) || !File.Exists(YoloPThreadDllFilename)) throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " Or " + YoloPThreadDllFilename + " Or " + OpenCVWorldDllFilename);
+			if (!File.Exists(OpenCVWorldDllFilename) || !File.Exists(YoloGpuDllFilename) ||
+				!File.Exists(YoloPThreadDllFilename))
+				throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " Or " +
+					YoloPThreadDllFilename + " Or " + OpenCVWorldDllFilename);
 			var deviceCount = GetDeviceCount();
-
-			if (deviceCount == 0) throw new NotSupportedException("No graphic device is available");
-			if (gpu > deviceCount - 1) throw new IndexOutOfRangeException("Graphic device index is out of range");
-
+			if (deviceCount == 0)
+				throw new NotSupportedException("No graphic device is available");
+			if (gpu > deviceCount - 1)
+				throw new IndexOutOfRangeException("Graphic device index is out of range");
 			var deviceName = new StringBuilder();
 			GetDeviceName(gpu, deviceName);
 			GraphicDeviceName = deviceName.ToString();
@@ -116,7 +133,8 @@ namespace FastYolo
 
 		public IEnumerable<YoloItem> Detect(string filepath)
 		{
-			if (!File.Exists(filepath)) throw new FileNotFoundException("Cannot find the file", filepath);
+			if (!File.Exists(filepath))
+				throw new FileNotFoundException("Cannot find the file", filepath);
 			var container = new BboxContainer();
 			DetectImageGpu(filepath, ref container);
 			return Convert(container, _objectTypeResolver);
@@ -125,9 +143,9 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(ColorData imageData, int channels = 3,
 			bool track = false) =>
 			track
-				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
+				? Track(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels)
-				: Detect(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
+				: Detect(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels);
 
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
@@ -136,8 +154,8 @@ namespace FastYolo
 
 			var imageData = BitmapToColorData((Bitmap) Byte2Image(byteData));
 			return track
-				? Track(ColorData2YoloFormat(imageData, channels), imageData.Width, imageData.Height,
-					channels) : Detect(ColorData2YoloFormat(imageData, channels), imageData.Width,
+				? Track(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width, imageData.Height,
+					channels) : Detect(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width,
 					imageData.Height, channels);
 		}
 

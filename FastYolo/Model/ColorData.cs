@@ -7,8 +7,8 @@
 	/// </summary>
 	public class ColorData
 	{
-		public Color[] Colors;
-		public int Height;
 		public int Width;
+		public int Height;
+		public Color[] Colors;
 	}
 }

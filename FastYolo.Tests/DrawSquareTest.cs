@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FastYolo.Model;
 using NUnit.Framework;
 using static FastYolo.DrawSquare;
@@ -48,11 +49,27 @@ namespace FastYolo.Tests
 		[Test]
 		public void DrawBoundingBoxTest()
 		{
-			var items = Enumerable.Empty<YoloItem>().ToList();
-			items.Append(new YoloItem { Width = 4, Height = 3, X = 7, Y = 2, Type = "Walnut"});
-			items.Append(new YoloItem { Width = 3, Height = 4, X = 5, Y = 5, Type = "Walnut"});
-			Assert.That(items, Is.Not.Null);
+			var items = new List<YoloItem>
+			{
+				new YoloItem
+				{
+					Width = 4,
+					Height = 3,
+					X = 7,
+					Y = 2,
+					Type = "Apple"
+				},
+				new YoloItem
+				{
+					Width = 3,
+					Height = 4,
+					X = 5,
+					Y = 5,
+					Type = "Apple"
+				}
+			};
 			DrawBoundingBox(CreateTestColorData(), items);
+			Assert.That(items, Is.Not.Null);
 		}
 	}
 }

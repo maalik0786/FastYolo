@@ -15,15 +15,19 @@
 		<DefineConstants>LINUX64</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
 	<ItemGroup>
-	  <None Include="..\FastYolo\opencv_world420.dll" Link="opencv_world420.dll">
+	  <None Include="..\FastYolo\opencv_world430.dll" Link="opencv_world430.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Include="..\FastYolo\pthreadVC2.dll" Link="pthreadVC2.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Include="..\FastYolo\yolo_cpp_dll.dll" Link="yolo_cpp_dll.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 

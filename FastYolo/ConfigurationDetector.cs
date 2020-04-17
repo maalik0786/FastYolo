@@ -16,11 +16,9 @@ namespace FastYolo
 				"Cannot found pre-trained model, check all config files available (.cfg, .weights, .names)"); //ncrunch: no coverage end
 		}
 
-		private static string[] GetYoloFiles(string path)
-		{
-			return Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Where(o =>
+		private static string[] GetYoloFiles(string path) =>
+			Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Where(o =>
 				o.EndsWith(".names") || o.EndsWith(".cfg") || o.EndsWith(".weights")).ToArray();
-		}
 
 		private static YoloConfiguration MapFiles(string[] files)
 		{
@@ -31,6 +29,7 @@ namespace FastYolo
 		}
 
 		private static bool AreValidYoloFiles(YoloConfiguration config) =>
-			!string.IsNullOrEmpty(config.ConfigFile) && !string.IsNullOrEmpty(config.WeightsFile) && !string.IsNullOrEmpty(config.NamesFile);
+			!string.IsNullOrEmpty(config.ConfigFile) &&
+			!string.IsNullOrEmpty(config.WeightsFile) && !string.IsNullOrEmpty(config.NamesFile);
 	}
 }

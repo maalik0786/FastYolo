@@ -34,7 +34,6 @@ namespace FastYolo
 				Height = image.Height,
 				Colors = new Color[image.Width * image.Height]
 			};
-
 			var bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
 				ImageLockMode.ReadWrite, image.PixelFormat);
 			unsafe
@@ -48,19 +47,16 @@ namespace FastYolo
 					var a = *p++;
 					colorData.Colors[x] = new Color(r, g, b, a);
 				}
-
 				image.UnlockBits(bmpData);
 			}
-
 			return colorData;
 		}
 
-		public static unsafe IntPtr ColorData2YoloFormat(ColorData colorData, int channels = 3)
+		public static unsafe IntPtr ConvertColorDataToYoloFormat(ColorData colorData, int channels = 3)
 		{
 			var sizeInBytes = colorData.Width * colorData.Height * channels * sizeof(float);
 			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);
 			var destination = (float*) floatArrayPointer.ToPointer();
-
 			for (var channel = 0; channel < channels; channel++)
 			for (var y = 0; y < colorData.Height; y++)
 			for (var x = 0; x < colorData.Width; x++)

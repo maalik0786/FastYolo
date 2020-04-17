@@ -11,26 +11,18 @@ namespace FastYolo.Tests
 {
 	public class YoloTests
 	{
-#if WIN64
-		private const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\";
-#else
-		private const string YoloServerDirectory = "/home/dev/Documents/yolo-v3-tiny/";
-#endif
-		private const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
-		private const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.jpg";
-		private const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny_walnut.weights";
-		private const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny_walnut.cfg";
-		private const string YoloClassesFilename = YoloServerDirectory + "classes.names";
+		[SetUp]
+		public void Setup() => yoloWrapper = new YoloWrapper(YoloConfigurationTests.YoloConfigFilename, YoloConfigurationTests.YoloWeightsFilename, YoloConfigurationTests.YoloClassesFilename);
 
 		private YoloWrapper yoloWrapper;
-
-		[SetUp]
-		public void Setup() => yoloWrapper = new YoloWrapper(YoloConfigFilename, YoloWeightsFilename, YoloClassesFilename);
 
 		[Test]
 		public void LoadDummyImageForObjectDetection()
 		{
-			var items = yoloWrapper.Detect(DummyImageFilename);
+			var items = yoloWrapper.Detect(YoloConfigurationTests.DummyImageFilename);
+			var image = Image.FromFile(YoloConfigurationTests.DummyImageFilename);
+			width = image.Width;
+			height = image.Height;
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
@@ -40,7 +32,9 @@ namespace FastYolo.Tests
 		[Test]
 		public void ByteArrayForObjectDetection()
 		{
-			var image = Image.FromFile(DummyImageFilename);
+			var image = Image.FromFile(YoloConfigurationTests.DummyImageFilename);
+			width = image.Width;
+			height = image.Height;
 			var array = Image2Byte(image);
 			var items = yoloWrapper.Detect(array, 4,true);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
@@ -49,12 +43,16 @@ namespace FastYolo.Tests
 				Console.WriteLine("Frame: " + item.FrameId + " Found:" + item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," + item.Width + "," + item.Height + "]");
 		}
 
+		private int width;
+		private int height;
+
 		[Test]
 		public void PassIntPtrForObjectTracking()
 		{
-			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
-			const int Channels = 4;
-			var floatArrayPointer = ColorData2YoloFormat(colorData, Channels);
+			var colorData = BitmapToColorData(new Bitmap(YoloConfigurationTests.DummyImageFilename));
+			width = colorData.Width;
+			height = colorData.Height;
+			var floatArrayPointer = ConvertColorDataToYoloFormat(colorData, Channels);
 			var items = yoloWrapper.Track(floatArrayPointer,
 				colorData.Width, colorData.Height, Channels);
 			Marshal.FreeHGlobal(floatArrayPointer);
@@ -69,21 +67,33 @@ namespace FastYolo.Tests
 			}
 		}
 
+		private const int Channels = 4;
+
 		[Test]
 		public void LoadColorDataForObjectDetection()
 		{
-			var colorData = BitmapToColorData(new Bitmap(DummyImageFilename));
-			var items = yoloWrapper.Detect(colorData, 4);
+			var colorData = BitmapToColorData(new Bitmap(YoloConfigurationTests.DummyImageFilename));
+			width = colorData.Width;
+			height = colorData.Height;
+			var items = yoloWrapper.Detect(colorData, Channels);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
 				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
 			DrawBoundingBox(colorData, yoloItems);
-			SaveAsBitmap(colorData).Save(DummyImageOutputFilename);
+			SaveAsBitmap(colorData).Save(YoloConfigurationTests.DummyImageOutputFilename);
 		}
 
-		[Test]
-		public void DisposeYoloWrapper() => yoloWrapper.Dispose();
+		[TearDown]
+		public void DisposeYoloWrapper()
+		{
+			Assert.That(YoloWrapper.CheckIfImageWasResized(), Is.False,
+				"Slowdown because input image size: " + width + "x" + height +
+				" is not in the same size as the configuration: " +
+				YoloWrapper.GetDetectorNetworkWidth() + "x" +
+				YoloWrapper.GetDetectorNetworkHeight());
+			yoloWrapper.Dispose();
+		}
 
 		[Test][Category("Slow")]
 		public void LoadJpegFromRaspberryCamera()
