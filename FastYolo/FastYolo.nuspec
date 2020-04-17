@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>FastYolo</id>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 		<authors>DeltaEngine</authors>
 		<owners>DeltaEngine</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -37,6 +37,6 @@ v1.0.4 adds resize dectection and will output a warning in the console and allow
 		<file src="libpthread_arm.so" target="build" />
 		<file src="FastYolo.targets" target="build" />
 		<file src="bin\Release\net461\FastYolo.dll" target="lib/net461" />
-		<file src="bin\Release\netcoreapp3.1\FastYolo.dll" target="lib/netcoreapp3.0" />
+		<file src="bin\Release\netcoreapp3.1\FastYolo.dll" target="lib/netcoreapp3.1" />
 	</files>
 </package>
