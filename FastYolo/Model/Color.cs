@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace FastYolo.Model
 {
 	/// <summary>
-	///   Color with a byte per component (red, green, blue, alpha), also provides float properties.
+	/// Color with a byte per component (red, green, blue, alpha), also provides float properties.
 	/// </summary>
 	[DebuggerDisplay("Color(r={R}, g={G}, b={B}, a={A})")]
 	[StructLayout(LayoutKind.Sequential)]
@@ -27,8 +27,8 @@ namespace FastYolo.Model
 		public readonly byte A;
 
 		/// <summary>
-		///   Constructor when passing in integer values to make sure to not use the float version, but
-		///   instead threat them as byte values, which is what the caller intended. Does not clamp!
+		/// Constructor when passing in integer values to make sure to not use the float version, but
+		/// instead threat them as byte values, which is what the caller intended. Does not clamp!
 		/// </summary>
 		public Color(int r, int g, int b, int a = 255)
 		{

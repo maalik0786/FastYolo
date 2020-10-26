@@ -10,14 +10,9 @@ namespace FastYolo.TestApp
 		{
 			var tests = new YoloTests();
 			tests.Setup();
-			tests.LoadDummyImageForObjectDetection();
-			Console.WriteLine("LoadDummyImageForObjectDetection() Done\n");
-			tests.ByteArrayForObjectDetection();
-			Console.WriteLine("ByteArrayForObjectDetection() Done\n");
 			tests.PassIntPtrForObjectTracking();
 			Console.WriteLine("PassIntPtrForObjectTracking() Done\n");
-			tests.LoadColorDataForObjectDetection();
-			Console.WriteLine("LoadColorDataForObjectDetection() Done\n");
-		} //ncrunch: no coverage end
+			tests.DisposeYoloWrapper();
+		}
 	}
 }

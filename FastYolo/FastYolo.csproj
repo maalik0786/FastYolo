@@ -8,7 +8,8 @@
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Optimize>true</Optimize>
-		<Version>1.0.5</Version>
+		<Version>1.0.7</Version>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
@@ -28,6 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="cudnn64_8.dll" />
 		<None Remove="libdarknet_arm.so" />
 		<None Remove="libpthread_arm.so" />
 		<None Remove="libdarknet_amd.so" />
@@ -35,14 +37,29 @@
 		<None Remove="nuget.exe" />
 		<None Remove="pthreadVC2.dll" />
 		<None Remove="yolo_cpp_dll.dll" />
+		<None Remove="yolo_cpp_dll.ilk" />
+		<None Remove="yolo_cpp_dll.lib" />
+		<None Remove="yolo_cpp_dll.pdb" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="cudnn64_8.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="pthreadVC2.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="yolo_cpp_dll.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="yolo_cpp_dll.ilk">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="yolo_cpp_dll.lib">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="yolo_cpp_dll.pdb">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
 
@@ -54,10 +71,6 @@
 		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 				<TargetPath>yolo_cpp_dll.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="opencv_world430.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-				<TargetPath>opencv_world430.dll</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
@@ -85,10 +98,10 @@
 
 	<ItemGroup>
 		<None Update="FastYoloWithCuda101GpuSupport.targets" />
-		<None Update="opencv_world430.dll">
+		<None Update="opencv_world440.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="opencv_world430d.dll">
+		<None Update="opencv_world440d.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="pthreadVC2.dll">
@@ -96,6 +109,9 @@
 		</None>
 		<None Update="yolo_cpp_dll.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="yolo_cpp_dll.exp">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
