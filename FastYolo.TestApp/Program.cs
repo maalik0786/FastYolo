@@ -17,7 +17,7 @@ namespace FastYolo.TestApp
 				 var yoloItems = yoloWrapper.Detect(YoloConfigurationTests.DummyImageFilename);
 				if (yoloItems == null)
 					{
-						System.Console.WriteLine("No object Detected!");
+						Console.WriteLine("No object Detected!");
 						return;
 					}
 				foreach (var item in yoloItems)
@@ -26,7 +26,7 @@ namespace FastYolo.TestApp
 				//var tests = new YoloTests();
 				//tests.Setup();
 				//tests.LoadDummyImageForObjectDetection();
-				System.Console.WriteLine("LoadDummyImageForObjectDetection() Done\n");
+				Console.WriteLine("LoadDummyImageForObjectDetection() Done\n");
 				//tests.ByteArrayForObjectDetection();
 				//Console.WriteLine("ByteArrayForObjectDetection() Done\n");
 				//tests.PassIntPtrForObjectTracking();

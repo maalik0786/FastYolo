@@ -14,7 +14,7 @@ namespace FastYolo
 	public class YoloWrapper : IDisposable
 	{
 		private readonly YoloObjectTypeResolver objectTypeResolver;
-		public string? GraphicDeviceName { get; set; }
+		private string? GraphicDeviceName { get; set; }
 		public const int MaxObjects = 10;
 
 		public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0)
@@ -35,11 +35,11 @@ namespace FastYolo
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
 		private const string YoloPThreadDllFilename = "libpthread_amd.so";
-		private const string OpenCVWorldDllFilename = "libopencv_world.so";
+		private const string OpenCvWorldDllFilename = "libopencv_world.so";
 #else
 		private const string YoloGpuDllFilename = "libdarknet_arm.so";
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
-		private const string OpenCVWorldDllFilename = "libopencv_world_arm.so";
+		private const string OpenCvWorldDllFilename = "libopencv_world_arm.so";
 #endif
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
