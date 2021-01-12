@@ -83,6 +83,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_amd.so</TargetPath>
 		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="libopencv_world.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libopencv_world.so</TargetPath>
+		</ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>
