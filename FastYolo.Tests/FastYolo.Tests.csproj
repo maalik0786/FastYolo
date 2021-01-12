@@ -19,7 +19,7 @@
 	  <PlatformTarget>AnyCPU</PlatformTarget>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
 	  <None Remove="cudnn64_8.dll" />
 	  <None Remove="opencv_world440.dll" />
 	  <None Remove="opencv_world440d.dll" />
@@ -32,13 +32,13 @@
 	  <Content Include="..\FastYolo\yolo_cpp_dll.dll" Link="yolo_cpp_dll.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="cudnn64_8.dll">
+	  <Content Include="cudnn64_8.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="opencv_world440.dll">
+	  <Content Include="opencv_world440.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="opencv_world440d.dll">
+	  <Content Include="opencv_world440d.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
