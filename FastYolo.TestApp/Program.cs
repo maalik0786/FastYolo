@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using DeltaEngine.Logging;
 using FastYolo.Tests;
 
 namespace FastYolo.TestApp
@@ -8,16 +10,33 @@ namespace FastYolo.TestApp
 		//ncrunch: no coverage start
 		public static void Main()
 		{
-			var tests = new YoloTests();
-			tests.Setup();
-			tests.LoadDummyImageForObjectDetection();
-			Console.WriteLine("LoadDummyImageForObjectDetection() Done\n");
-			tests.ByteArrayForObjectDetection();
-			Console.WriteLine("ByteArrayForObjectDetection() Done\n");
-			tests.PassIntPtrForObjectTracking();
-			Console.WriteLine("PassIntPtrForObjectTracking() Done\n");
-			tests.LoadColorDataForObjectDetection();
-			Console.WriteLine("LoadColorDataForObjectDetection() Done\n");
+			var yoloWrapper = new YoloWrapper(YoloConfigurationTests.YoloConfigFilename, YoloConfigurationTests.YoloWeightsFilename, YoloConfigurationTests.YoloClassesFilename);
+			var floatArray = new FloatArray();
+			//string path = "/home/abdul/code/";
+			//string fileName = DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString() + "_Logs.txt";
+			try
+			{
+				 var yoloItems = yoloWrapper.Detect(YoloConfigurationTests.DummyImageFilename);
+				if (yoloItems == null)
+					{
+						System.Console.WriteLine("No object Detected!");
+						return;
+					}
+				foreach (var item in yoloItems)
+					System.Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
+        //using StreamWriter file = new StreamWriter(path + fileName);
+				//var tests = new YoloTests();
+				//tests.Setup();
+				//tests.LoadDummyImageForObjectDetection();
+				System.Console.WriteLine("LoadDummyImageForObjectDetection() Done\n");
+				//tests.ByteArrayForObjectDetection();
+				//Console.WriteLine("ByteArrayForObjectDetection() Done\n");
+				//tests.PassIntPtrForObjectTracking();
+				//System.Console.WriteLine("PassIntPtrForObjectTracking() Done\n");
+				//tests.LoadColorDataForObjectDetection();
+				//Console.WriteLine("LoadColorDataForObjectDetection() Done\n");
+				}
+    catch (Exception) { }
 		} //ncrunch: no coverage end
 	}
 }

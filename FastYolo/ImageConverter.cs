@@ -26,14 +26,9 @@ namespace FastYolo
 					Type = objectTypeResolver.Resolve((int) item.obj_id)
 				}).ToList();
 
-		public static ColorData BitmapToColorData(Bitmap image)
+		public static ColorImage BitmapToColorImage(Bitmap image)
 		{
-			var colorData = new ColorData
-			{
-				Width = image.Width,
-				Height = image.Height,
-				Colors = new Color[image.Width * image.Height]
-			};
+			var colorData = new ColorImage(image.Width,image.Height);
 			var bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
 				ImageLockMode.ReadWrite, image.PixelFormat);
 			unsafe
@@ -52,7 +47,7 @@ namespace FastYolo
 			return colorData;
 		}
 
-		public static unsafe IntPtr ConvertColorDataToYoloFormat(ColorData colorData, int channels = 3)
+		public static unsafe IntPtr ConvertColorDataToYoloFormat(ColorImage colorData, int channels = 3)
 		{
 			var sizeInBytes = colorData.Width * colorData.Height * channels * sizeof(float);
 			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);

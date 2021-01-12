@@ -2,13 +2,13 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
+		<TargetFrameworks>net5.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Optimize>true</Optimize>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
@@ -19,12 +19,12 @@
 		<DefineConstants>LINUX64</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
 	  <PlatformTarget>AnyCPU</PlatformTarget>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+		<PackageReference Include="System.Drawing.Common" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,6 +32,7 @@
 		<None Remove="libpthread_arm.so" />
 		<None Remove="libdarknet_amd.so" />
 		<None Remove="libpthread_amd.so" />
+		<None Remove="libopencv_world_arm.so" />
 		<None Remove="nuget.exe" />
 		<None Remove="pthreadVC2.dll" />
 		<None Remove="yolo_cpp_dll.dll" />
@@ -55,9 +56,9 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 				<TargetPath>yolo_cpp_dll.dll</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="opencv_world430.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		<ContentWithTargetPath Include="opencv_world440.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-				<TargetPath>opencv_world430.dll</TargetPath>
+				<TargetPath>opencv_world440.dll</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 
@@ -77,6 +78,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_arm.so</TargetPath>
 		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="libopencv_world_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libopencv_world_arm.so</TargetPath>
+		</ContentWithTargetPath>
 		<ContentWithTargetPath Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_arm.so</TargetPath>
@@ -85,10 +90,10 @@
 
 	<ItemGroup>
 		<None Update="FastYoloWithCuda101GpuSupport.targets" />
-		<None Update="opencv_world430.dll">
+		<None Update="opencv_world440.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="opencv_world430d.dll">
+		<None Update="opencv_world440d.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="pthreadVC2.dll">

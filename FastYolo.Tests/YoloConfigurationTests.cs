@@ -9,12 +9,12 @@ namespace FastYolo.Tests
 #if WIN64
 		public const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\";
 #else
-		public const string YoloServerDirectory = "/home/dev/Documents/yolo-v3-tiny/";
+		public const string YoloServerDirectory = "/home/abdul/Documents/yolo-v3-tiny/CurrentTraining/";
 #endif
 		public const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
-		public const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.jpg";
-		public const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny_walnut.weights";
-		public const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny_walnut.cfg";
+		public const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.png";
+		public const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny-prn-train_last.weights";
+		public const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny-prn-test.cfg";
 		public const string YoloClassesFilename = YoloServerDirectory + "classes.names";
 
 		[Test]

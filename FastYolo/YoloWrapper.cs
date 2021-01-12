@@ -37,7 +37,7 @@ namespace FastYolo
 #else
 		private const string YoloGpuDllFilename = "libdarknet_arm.so";
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
-		private const string OpenCVWorldDllFilename = "libopencv_world.so";
+		private const string OpenCVWorldDllFilename = "libopencv_world_arm.so";
 #endif
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
@@ -110,12 +110,16 @@ namespace FastYolo
 					throw new DllNotFoundException(cudaError + "CUDA is not available!");
 			}
 #else
-				throw new PlatformNotSupportedException();
+			if (!Directory.Exists("/usr/local/cuda"))
+				throw new DllNotFoundException(cudaError + "CUDA is not available!");
+				//throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(OpenCVWorldDllFilename) || !File.Exists(YoloGpuDllFilename) ||
-				!File.Exists(YoloPThreadDllFilename))
-				throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename + " Or " +
-					YoloPThreadDllFilename + " Or " + OpenCVWorldDllFilename);
+			if (!File.Exists(OpenCVWorldDllFilename))
+				throw new FileNotFoundException("Can't find the " + OpenCVWorldDllFilename);
+			if (!File.Exists(YoloGpuDllFilename))
+				throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename);
+			if (!File.Exists(YoloPThreadDllFilename))
+				throw new FileNotFoundException("Can't find the " + YoloPThreadDllFilename);
 			var deviceCount = GetDeviceCount();
 			if (deviceCount == 0)
 				throw new NotSupportedException("No graphic device is available");
@@ -140,7 +144,7 @@ namespace FastYolo
 			return Convert(container, _objectTypeResolver);
 		}
 
-		public IEnumerable<YoloItem> Detect(ColorData imageData, int channels = 3,
+		public IEnumerable<YoloItem> Detect(ColorImage imageData, int channels = 3,
 			bool track = false) =>
 			track
 				? Track(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width, imageData.Height,
@@ -152,7 +156,7 @@ namespace FastYolo
 		{
 			if (!IsValidImageFormat(byteData)) throw new Exception("Invalid image data, wrong image format");
 
-			var imageData = BitmapToColorData((Bitmap) Byte2Image(byteData));
+			var imageData = BitmapToColorImage((Bitmap) Byte2Image(byteData));
 			return track
 				? Track(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels) : Detect(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width,
