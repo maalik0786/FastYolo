@@ -30,16 +30,23 @@
 
 	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
 		<None Remove="cudnn64_8.dll" />
-		<None Remove="libdarknet_arm.so" />
-		<None Remove="libpthread_arm.so" />
-		<None Remove="libdarknet_amd.so" />
-		<None Remove="libpthread_amd.so" />
-		<None Remove="libopencv_world_arm.so" />
 		<None Remove="pthreadVC2.dll" />
 		<None Remove="yolo_cpp_dll.dll" />
 		<None Remove="yolo_cpp_dll.ilk" />
 		<None Remove="yolo_cpp_dll.lib" />
 		<None Remove="yolo_cpp_dll.pdb" />
+	</ItemGroup>
+
+	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+		<None Remove="libdarknet_arm.so" />
+		<None Remove="libpthread_arm.so" />
+		<None Remove="libopencv_world_arm.so" />
+	</ItemGroup>
+
+	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
+		<None Remove="libdarknet_amd.so" />
+		<None Remove="libpthread_amd.so" />
+		<None Remove="libopencv_world.so" />
 	</ItemGroup>
 
 	<ItemGroup>
