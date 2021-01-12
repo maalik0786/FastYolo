@@ -8,7 +8,7 @@
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Optimize>true</Optimize>
-		<Version>1.1.0</Version>
+		<Version>11.1.0</Version>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -20,8 +20,12 @@
 		<DefineConstants>LINUX64</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+	  <PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
-	  <PlatformTarget>AnyCPU</PlatformTarget>
+	  <PlatformTarget>x64</PlatformTarget>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -31,103 +35,50 @@
 	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
 		<None Remove="cudnn64_8.dll" />
 		<None Remove="pthreadVC2.dll" />
+		<None Remove="opencv_world440.dll" />
 		<None Remove="yolo_cpp_dll.dll" />
-		<None Remove="yolo_cpp_dll.ilk" />
-		<None Remove="yolo_cpp_dll.lib" />
-		<None Remove="yolo_cpp_dll.pdb" />
+	  <Content Include="cudnn64_8.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="pthreadVC2.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+		<Content Include="opencv_world440.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	  <Content Include="yolo_cpp_dll.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
-	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
-		<None Remove="libdarknet_arm.so" />
-		<None Remove="libpthread_arm.so" />
-		<None Remove="libopencv_world.so" />
-	</ItemGroup>
-
-	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
 		<None Remove="libdarknet_amd.so" />
 		<None Remove="libpthread_amd.so" />
 		<None Remove="libopencv_world.so" />
+		<Content Include="libpthread_amd.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="libopencv_world.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="libdarknet_amd.so"> 
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Content Include="cudnn64_8.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="yolo_cpp_dll.ilk" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="yolo_cpp_dll.lib" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="yolo_cpp_dll.pdb" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ContentWithTargetPath Include="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+		<None Remove="libdarknet_arm.so" />
+		<None Remove="libpthread_arm.so" />
+		<None Remove="libopencv_world.so" />
+		<Content Include="libpthread_arm.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-				<TargetPath>pthreadVC2.dll</TargetPath>
-	  </ContentWithTargetPath>
-		<ContentWithTargetPath Include="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		</Content>
+		<Content Include="libopencv_world.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-				<TargetPath>yolo_cpp_dll.dll</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'"> 
+		</Content>
+		<Content Include="libdarknet_arm.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libdarknet_amd.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libpthread_amd.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libopencv_world.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libopencv_world.so</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup>
-		<ContentWithTargetPath Include="libdarknet_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libdarknet_arm.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libopencv_world.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libopencv_world.so</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libpthread_arm.so</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="FastYoloWithCuda101GpuSupport.targets" />
-		<None Update="opencv_world440.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="opencv_world440d.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="yolo_cpp_dll.exp" Condition=" '$(OS)' == 'Windows_NT' ">
-		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</None>
+		</Content>
 	</ItemGroup>
 
 </Project>

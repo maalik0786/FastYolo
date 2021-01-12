@@ -5,10 +5,10 @@ namespace FastYolo
 {
 	public class YoloObjectTypeResolver
 	{
-		public Dictionary<int, string> ObjectType = new Dictionary<int, string>();
-
 		public YoloObjectTypeResolver(string namesFilename) =>
 			Initialize(File.ReadAllLines(namesFilename));
+
+		public Dictionary<int, string> ObjectType { get; } = new();
 
 		private void Initialize(string[] objectTypes)
 		{

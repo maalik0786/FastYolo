@@ -9,20 +9,14 @@ namespace FastYolo.TestApp
 		public static void Main()
 		{
 			var yoloWrapper = new YoloWrapper(YoloConfigurationTests.YoloConfigFilename, YoloConfigurationTests.YoloWeightsFilename, YoloConfigurationTests.YoloClassesFilename);
-			var floatArray = new FloatArray();
 			//string path = "/home/abdul/code/";
 			//string fileName = DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString() + "_Logs.txt";
 			try
 			{
-				 var yoloItems = yoloWrapper.Detect(YoloConfigurationTests.DummyImageFilename);
-				if (yoloItems == null)
-					{
-						Console.WriteLine("No object Detected!");
-						return;
-					}
+				var yoloItems = yoloWrapper.Detect(YoloConfigurationTests.DummyImageFilename);
 				foreach (var item in yoloItems)
 					Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
-        //using StreamWriter file = new StreamWriter(path + fileName);
+				//using StreamWriter file = new StreamWriter(path + fileName);
 				//var tests = new YoloTests();
 				//tests.Setup();
 				//tests.LoadDummyImageForObjectDetection();

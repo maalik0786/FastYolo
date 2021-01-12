@@ -12,23 +12,21 @@ namespace FastYolo.Tests
 	public class YoloTests
 	{
 		[SetUp]
-		public void Setup()
-		{
-			yoloWrapper = new YoloWrapper(YoloConfigurationTests.YoloConfigFilename, YoloConfigurationTests.YoloWeightsFilename, YoloConfigurationTests.YoloClassesFilename);
-			floatArray = new FloatArray();
-		}
+		public void Setup() =>
+			yolo = new YoloWrapper(YoloConfigurationTests.YoloConfigFilename,
+				YoloConfigurationTests.YoloWeightsFilename,
+				YoloConfigurationTests.YoloClassesFilename);
 
-		private YoloWrapper yoloWrapper;
-		private FloatArray floatArray;
+		private YoloWrapper yolo;
 
 		[Test]
 		public void LoadDummyImageForObjectDetection()
 		{
-			var items = yoloWrapper.Detect(YoloConfigurationTests.DummyImageFilename);
+			var items = yolo.Detect(YoloConfigurationTests.DummyImageFilename);
 			var yoloItems = items as YoloItem[] ?? items.ToArray();
 			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
 			foreach (var item in yoloItems)
-				Debug.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
+				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
 		}
 
 		//[Test]
@@ -56,11 +54,12 @@ namespace FastYolo.Tests
 		{
 			var image = new Bitmap(YoloConfigurationTests.DummyImageFilename, false);
 			var colorImage = BitmapToColorImage(image, new Model.Size(image.Width, image.Height));
+			var floatArray = new FloatArray();
 			var array = floatArray.GetYoloFloatArray(colorImage, Channels);
 			IEnumerable<YoloItem> yoloResponse;
 			fixed (float* floatArrayPointer = &array[0])
 			{
-				yoloResponse = yoloWrapper.Track(new IntPtr(floatArrayPointer), colorImage.Width,
+				yoloResponse = yolo.Track(new IntPtr(floatArrayPointer), colorImage.Width,
 					colorImage.Height, Channels);
 			}
 			foreach (var item in yoloResponse)
@@ -129,14 +128,14 @@ namespace FastYolo.Tests
 			const int DisWidth = 1280;
 			const int DisHeight = 720;
 			const int FrameRate = 30;
-			var ptr = yoloWrapper.GetRaspberryCameraImage(Width, Height, DisWidth, DisHeight, FrameRate);
+			var ptr = yolo.GetRaspberryCameraImage(Width, Height, DisWidth, DisHeight, FrameRate);
 #if WIN64
-				Assert.That(ptr, Is.EqualTo((IntPtr) 0));
+			Assert.That(ptr, Is.EqualTo((IntPtr)0));
 #elif LINUX64
 			Assert.That(ptr, Is.Not.EqualTo(0));
 #else
 			throw new PlatformNotSupportedException();
 #endif
-			}
 		}
+	}
 }

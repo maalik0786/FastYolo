@@ -15,38 +15,25 @@
 		<DefineConstants>LINUX64</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <PlatformTarget>AnyCPU</PlatformTarget>
-	</PropertyGroup>
-
-	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
-	  <None Remove="cudnn64_8.dll" />
-	  <None Remove="opencv_world440.dll" />
-	  <None Remove="opencv_world440d.dll" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="..\FastYolo\pthreadVC2.dll" Link="pthreadVC2.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="..\FastYolo\yolo_cpp_dll.dll" Link="yolo_cpp_dll.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="cudnn64_8.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="opencv_world440.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="opencv_world440d.dll" Condition=" '$(OS)' == 'Windows_NT' ">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="NUnit" Version="3.12.0" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+		<Content Include="..\FastYolo\cudnn64_8.dll" Link="cudnn64_8.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\FastYolo\opencv_world440d.dll" Link="opencv_world440d.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\FastYolo\yolo_cpp_dll.dll" Link="yolo_cpp_dll.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\FastYolo\pthreadVC2.dll" Link="pthreadVC2.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>

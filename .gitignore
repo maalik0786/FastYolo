@@ -375,3 +375,4 @@ FastYolo.TestApp/libpthread_arm.so
 FastYolo.Tests/libdarknet_arm.so
 FastYolo.Tests/libopencv_world_arm.so
 FastYolo.Tests/libpthread_arm.so
+*.so
