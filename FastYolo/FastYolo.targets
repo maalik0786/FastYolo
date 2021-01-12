@@ -25,9 +25,9 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_arm.so</TargetPath>
 		</None>
-		<None Include="libopencv_world_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+		<None Include="libopencv_world.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libopencv_world_arm.so</TargetPath>
+			<TargetPath>libopencv_world.so</TargetPath>
 		</None>
 	</ItemGroup>
 

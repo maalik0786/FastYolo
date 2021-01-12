@@ -116,6 +116,10 @@ namespace FastYolo
 				throw new DllNotFoundException(cudaError + "CUDA is not available!");
 				//throw new PlatformNotSupportedException();
 #endif
+#if WIN64
+			if (!File.Exists(CudnnDllFilename))
+				throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
+#endif
 			if (!File.Exists(OpenCvWorldDllFilename))
 				throw new FileNotFoundException("Can't find the " + OpenCvWorldDllFilename);
 			if (!File.Exists(YoloGpuDllFilename))

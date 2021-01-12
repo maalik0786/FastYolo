@@ -40,7 +40,7 @@
 	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
 		<None Remove="libdarknet_arm.so" />
 		<None Remove="libpthread_arm.so" />
-		<None Remove="libopencv_world_arm.so" />
+		<None Remove="libopencv_world.so" />
 	</ItemGroup>
 
 	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
@@ -101,9 +101,9 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_arm.so</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="libopencv_world_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+		<ContentWithTargetPath Include="libopencv_world.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libopencv_world_arm.so</TargetPath>
+			<TargetPath>libopencv_world.so</TargetPath>
 		</ContentWithTargetPath>
 		<ContentWithTargetPath Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
