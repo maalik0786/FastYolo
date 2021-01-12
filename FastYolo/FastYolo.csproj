@@ -102,19 +102,19 @@
 
 	<ItemGroup>
 		<None Update="FastYoloWithCuda101GpuSupport.targets" />
-		<None Update="opencv_world440.dll">
+		<None Update="opencv_world440.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="opencv_world440d.dll">
+		<None Update="opencv_world440d.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="pthreadVC2.dll">
+		<None Update="pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="yolo_cpp_dll.dll">
+		<None Update="yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="yolo_cpp_dll.exp">
+		<None Update="yolo_cpp_dll.exp" Condition=" '$(OS)' == 'Windows_NT' ">
 		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
