@@ -12,7 +12,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' ">
 		<DefineConstants>WIN64</DefineConstants>
 	</PropertyGroup>
 
