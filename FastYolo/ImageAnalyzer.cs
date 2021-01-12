@@ -19,10 +19,8 @@ namespace FastYolo
 			ImageFormats.Add("jpeg", jpeg);
 		}
 
-		public static bool IsValidImageFormat(byte[] imageData)
-		{
-			if (imageData == null) return false;
-			return imageData.Length > 3 && ImageFormats.Any(imageFormat => imageData.Take(imageFormat.Value.Length).SequenceEqual(imageFormat.Value));
-		}
+		public static bool IsValidImageFormat(byte[] imageData) =>
+			imageData.Length > 3 && ImageFormats.Any(imageFormat =>
+				imageData.Take(imageFormat.Value.Length).SequenceEqual(imageFormat.Value));
 	}
 }

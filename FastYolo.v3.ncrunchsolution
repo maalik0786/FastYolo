@@ -1,5 +1,8 @@
 ﻿<SolutionConfiguration>
   <Settings>
+    <MetricsExclusionList>
+      <Value>FastYolo\FastYolo.csproj:net461</Value>
+    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using FastYolo.Model;
 using Color = FastYolo.Model.Color;
+using Size = FastYolo.Model.Size;
 
 namespace FastYolo
 {
@@ -40,11 +41,11 @@ namespace FastYolo
 					var g = *p++;
 					var b = *p++;
 					var a = *p++;
-					colorData.Colors[x] = new Color(r, g, b, a);
+					colorImage.Colors[x] = new Color(r, g, b, a);
 				}
 				image.UnlockBits(bmpData);
 			}
-			return colorData;
+			return colorImage;
 		}
 
 		public static unsafe IntPtr ConvertColorDataToYoloFormat(ColorImage colorData, int channels = 3)
@@ -76,8 +77,9 @@ namespace FastYolo
 		}
 
 		public static Image Byte2Image(byte[] byteData) => Image.FromStream(new MemoryStream(byteData));
-
-		public static unsafe Bitmap SaveAsBitmap(ColorData data)
+		
+		/*unused code
+		public static unsafe Bitmap SaveAsBitmap(ColorImage data)
 		{
 			var bitmap = new Bitmap(data.Width, data.Height);
 			var bitmapData = bitmap.LockBits(new Rectangle(0, 0, data.Width, data.Height), ImageLockMode.WriteOnly,
@@ -88,7 +90,7 @@ namespace FastYolo
 			return bitmap;
 		}
 
-		private static unsafe void SwitchBgr2Rgb(ColorData data, byte* bitmapPointer, int stride)
+		private static unsafe void SwitchBgr2Rgb(ColorImage data, byte* bitmapPointer, int stride)
 		{
 			for (var y = 0; y < data.Height; ++y)
 			for (var x = 0; x < data.Width; ++x)
@@ -99,7 +101,6 @@ namespace FastYolo
 				bitmapPointer[targetIndex + 1] = data.Colors[sourceIndex].G;
 				bitmapPointer[targetIndex + 2] = data.Colors[sourceIndex].B;
 			}
-		}
-
+		}*/
 	}
 }

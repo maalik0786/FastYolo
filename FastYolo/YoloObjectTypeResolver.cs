@@ -7,17 +7,18 @@ namespace FastYolo
 	{
 		public Dictionary<int, string> ObjectType = new Dictionary<int, string>();
 
-		public YoloObjectTypeResolver(string namesFilename)
-		{
-			var lines = File.ReadAllLines(namesFilename);
-			Initialize(lines);
-		}
+		public YoloObjectTypeResolver(string namesFilename) =>
+			Initialize(File.ReadAllLines(namesFilename));
 
 		private void Initialize(string[] objectTypes)
 		{
-			for (var i = 0; i < objectTypes.Length; i++) ObjectType.Add(i, objectTypes[i]);
+			for (var i = 0; i < objectTypes.Length; i++)
+				ObjectType.Add(i, objectTypes[i]);
 		}
 
-		public string Resolve(int objectId) => !this.ObjectType.TryGetValue(objectId, out var objectType) ? "unknown key" : objectType;
+		public string Resolve(int objectId) =>
+			!ObjectType.TryGetValue(objectId, out var objectType)
+				? "unknown key"
+				: objectType;
 	}
 }

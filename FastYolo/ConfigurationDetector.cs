@@ -25,7 +25,7 @@ namespace FastYolo
 			var configurationFile = files.FirstOrDefault(o => o.EndsWith(".cfg"));
 			var weightsFile = files.FirstOrDefault(o => o.EndsWith(".weights"));
 			var namesFile = files.FirstOrDefault(o => o.EndsWith(".names"));
-			return new YoloConfiguration(configurationFile, weightsFile, namesFile);
+			return new YoloConfiguration(configurationFile!, weightsFile!, namesFile!);
 		}
 
 		private static bool AreValidYoloFiles(YoloConfiguration config) =>

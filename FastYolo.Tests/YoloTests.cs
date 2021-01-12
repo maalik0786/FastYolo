@@ -3,7 +3,6 @@ using System.Diagnostics;
 using DeltaEngine.Logging;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using FastYolo.Model;
 using NUnit.Framework;
 using static FastYolo.ImageConverter;
@@ -51,8 +50,7 @@ namespace FastYolo.Tests
 		//		Console.WriteLine("Frame: " + item.FrameId + " Found:" + item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," + item.Width + "," + item.Height + "]");
 		//}
 
-		private int width;
-		private int height;
+		private ColorImage colorImage;
 
 
 		[Test]
@@ -72,7 +70,7 @@ namespace FastYolo.Tests
 			}
 			foreach (var item in yoloResponse)
 			{
-				Assert.That(item.Type == "walnut" && item.Shape == YoloItem.ShapeType.Circle, Is.True);
+				Assert.That(item.Type == "walnut", Is.True);
 				Console.WriteLine("Frame: " + item.FrameId + " Shape: " + item.Shape + " Found:" +
 					item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," +
 					item.Width + "," + item.Height + "]");

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FastYolo.Model;
 using NUnit.Framework;
 using static FastYolo.DrawSquare;
@@ -8,11 +7,9 @@ namespace FastYolo.Tests
 {
 	public class DrawSquareTest
 	{
-		private static ColorData CreateTestColorData()
-		=> new ColorData
+		private static ColorImage CreateTestColorData()
+		=> new ColorImage(new Size(10,10))
 			{
-				Height = 10,
-				Width = 10,
 				Colors = new[]
 				{
 					Color.Black, Color.Black, Color.Black, Color.Black, Color.Black, Color.Black, Color.Black, Color.Black, Color.Black, Color.Black,

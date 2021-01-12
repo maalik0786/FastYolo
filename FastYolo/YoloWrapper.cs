@@ -12,23 +12,24 @@ namespace FastYolo
 {
 	public class YoloWrapper : IDisposable
 	{
-		private readonly YoloObjectTypeResolver _objectTypeResolver;
-		public string GraphicDeviceName { get; private set; }
-		public const int MaxObjects = 100;
+		private readonly YoloObjectTypeResolver objectTypeResolver;
+		public string? GraphicDeviceName { get; set; }
+		public const int MaxObjects = 10;
 
 		public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0)
 		{
-			_objectTypeResolver = new YoloObjectTypeResolver(namesFilename);
+			objectTypeResolver = new YoloObjectTypeResolver(namesFilename);
 			Initialize(configurationFilename, weightsFilename, gpu);
 		}
 
 #if WIN64
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
-#if Debug
-		private const string OpenCVWorldDllFilename = "opencv_world430d.dll";
+		private const string CudnnDllFilename = "cudnn64_8.dll";
+#if DEBUG
+		private const string OpenCvWorldDllFilename = "opencv_world440d.dll";
 #else
-		private const string OpenCVWorldDllFilename = "opencv_world430.dll";
+		private const string OpenCvWorldDllFilename = "opencv_world440.dll";
 #endif
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
@@ -87,20 +88,20 @@ namespace FastYolo
 		{
 			if (IntPtr.Size != 8) throw new NotSupportedException("Only 64-bit processes are supported");
 			var cudaError =
-				"An Nvidia GPU and CUDA 10.1 need to be installed! Please install CUDA " +
+				"An Nvidia GPU and CUDA 11.1 need to be installed! Please install CUDA " +
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
 #if WIN64
 			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
-				throw new DllNotFoundException(cudaError +
+				throw new DllNotFoundException(cudaError + //ncrunch: no coverage
 					"CUDA_PATH environment variable is not available!");
-			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH"), "bin",
-				"CUDART64_101.DLL")))
-				throw new DllNotFoundException(cudaError +
-					@"cudart64_101.dll wasn't found in the CUDA_PATH\bin folder " +
-					"(did you maybe install CUDA 10.0 or 10.2+ last and not CUDA 10.1, " +
+			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
+				"CUDART64_110.DLL")))
+				throw new DllNotFoundException(cudaError + //ncrunch: no coverage
+					@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
+					"(did you maybe install CUDA 10.* and not CUDA 11.1, " +
 					"please install it again or fix your CUDA_PATH)");
 			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
-				throw new DllNotFoundException(cudaError +
+				throw new DllNotFoundException(cudaError + //ncrunch: no coverage
 					"NVCUDA.DLL wasn't found in the windows system directory, " +
 					"is CUDA and your Nvidia graphics driver correctly installed?");
 #elif LINUX64
@@ -122,9 +123,9 @@ namespace FastYolo
 				throw new FileNotFoundException("Can't find the " + YoloPThreadDllFilename);
 			var deviceCount = GetDeviceCount();
 			if (deviceCount == 0)
-				throw new NotSupportedException("No graphic device is available");
+				throw new NotSupportedException("No graphic device is available"); //ncrunch: no coverage
 			if (gpu > deviceCount - 1)
-				throw new IndexOutOfRangeException("Graphic device index is out of range");
+				throw new IndexOutOfRangeException("Graphic device index is out of range"); //ncrunch: no coverage
 			var deviceName = new StringBuilder();
 			GetDeviceName(gpu, deviceName);
 			GraphicDeviceName = deviceName.ToString();
@@ -138,10 +139,10 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(string filepath)
 		{
 			if (!File.Exists(filepath))
-				throw new FileNotFoundException("Cannot find the file", filepath);
+				throw new FileNotFoundException("Cannot find the file", filepath); //ncrunch: no coverage
 			var container = new BboxContainer();
 			DetectImageGpu(filepath, ref container);
-			return Convert(container, _objectTypeResolver);
+			return Convert(container, objectTypeResolver);
 		}
 
 		public IEnumerable<YoloItem> Detect(ColorImage imageData, int channels = 3,
@@ -166,15 +167,15 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height, int channels = 3)
 		{
 			var container = new BboxContainer();
-			DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container); 
-			return Convert(container, _objectTypeResolver);
+			DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container);
+			return Convert(container, objectTypeResolver);
 		}
 
 		public IEnumerable<YoloItem> Track(IntPtr floatArrayPointer, int width, int height, int channel = 3)
 		{
 			var container = new BboxContainer();
 			TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container);
-			return Convert(container, _objectTypeResolver);
+			return Convert(container, objectTypeResolver);
 		}
 	}
 }

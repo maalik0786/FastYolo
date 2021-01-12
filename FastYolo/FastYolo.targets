@@ -28,13 +28,17 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>pthreadVC2.dll</TargetPath>
 		</None >
-		<None Include="$(MSBuildThisFileDirectory)\opencv_world430.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		<None Include="$(MSBuildThisFileDirectory)\opencv_world440.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>opencv_world430.dll</TargetPath>
+			<TargetPath>opencv_world440.dll</TargetPath>
 		</None >
 		<None  Include="$(MSBuildThisFileDirectory)\yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>yolo_cpp_dll.dll</TargetPath>
+		</None>
+		<None  Include="$(MSBuildThisFileDirectory)\cudnn64_8.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>cudnn64_8.dll</TargetPath>
 		</None>
 	</ItemGroup>
 </Project>
