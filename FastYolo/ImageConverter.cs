@@ -27,9 +27,9 @@ namespace FastYolo
 					Type = objectTypeResolver.Resolve((int) item.obj_id)
 				}).ToList();
 
-		public static ColorImage BitmapToColorImage(Bitmap image)
+		public static ColorImage BitmapToColorImage(Bitmap image, Size size)
 		{
-			var colorData = new ColorImage(image.Width,image.Height);
+			var colorImage = new ColorImage(size);
 			var bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
 				ImageLockMode.ReadWrite, image.PixelFormat);
 			unsafe

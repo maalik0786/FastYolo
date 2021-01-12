@@ -6,7 +6,7 @@ namespace FastYolo
 {
 	public static class ImageAnalyzer
 	{
-		private static readonly Dictionary<string, byte[]> ImageFormats = new Dictionary<string, byte[]>();
+		private static readonly Dictionary<string, byte[]> ImageFormats = new();
 
 		static ImageAnalyzer()
 		{

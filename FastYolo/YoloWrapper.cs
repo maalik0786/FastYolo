@@ -7,6 +7,7 @@ using System.Text;
 using FastYolo.Model;
 using static FastYolo.ImageAnalyzer;
 using static FastYolo.ImageConverter;
+using Size = FastYolo.Model.Size;
 
 namespace FastYolo
 {
@@ -115,8 +116,8 @@ namespace FastYolo
 				throw new DllNotFoundException(cudaError + "CUDA is not available!");
 				//throw new PlatformNotSupportedException();
 #endif
-			if (!File.Exists(OpenCVWorldDllFilename))
-				throw new FileNotFoundException("Can't find the " + OpenCVWorldDllFilename);
+			if (!File.Exists(OpenCvWorldDllFilename))
+				throw new FileNotFoundException("Can't find the " + OpenCvWorldDllFilename);
 			if (!File.Exists(YoloGpuDllFilename))
 				throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename);
 			if (!File.Exists(YoloPThreadDllFilename))
@@ -156,8 +157,8 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
 		{
 			if (!IsValidImageFormat(byteData)) throw new Exception("Invalid image data, wrong image format");
-
-			var imageData = BitmapToColorImage((Bitmap) Byte2Image(byteData));
+			var image = (Bitmap)Byte2Image(byteData);
+			var imageData = BitmapToColorImage(image, new Size(image.Width, image.Height));
 			return track
 				? Track(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width, imageData.Height,
 					channels) : Detect(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width,

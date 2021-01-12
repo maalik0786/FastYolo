@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using DeltaEngine.Logging;
 using FastYolo.Tests;
 
 namespace FastYolo.TestApp
@@ -23,7 +21,7 @@ namespace FastYolo.TestApp
 						return;
 					}
 				foreach (var item in yoloItems)
-					System.Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
+					Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
         //using StreamWriter file = new StreamWriter(path + fileName);
 				//var tests = new YoloTests();
 				//tests.Setup();
@@ -35,8 +33,8 @@ namespace FastYolo.TestApp
 				//System.Console.WriteLine("PassIntPtrForObjectTracking() Done\n");
 				//tests.LoadColorDataForObjectDetection();
 				//Console.WriteLine("LoadColorDataForObjectDetection() Done\n");
-				}
-    catch (Exception) { }
+			}
+			catch (Exception) { }
 		} //ncrunch: no coverage end
 	}
 }
