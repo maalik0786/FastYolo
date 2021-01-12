@@ -27,6 +27,7 @@ namespace FastYolo
 		private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 		private const string YoloPThreadDllFilename = "pthreadVC2.dll";
 		private const string CudnnDllFilename = "cudnn64_8.dll";
+		private const string CudnnRequiredDependencyFilename = "cudnn_ops_infer64_8.dll";
 #if DEBUG
 		private const string OpenCvWorldDllFilename = "opencv_world440d.dll";
 #else
@@ -93,32 +94,32 @@ namespace FastYolo
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
 #if WIN64
 			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
-				throw new DllNotFoundException(cudaError + //ncrunch: no coverage
+				throw new DllNotFoundException(cudaError +
 					"CUDA_PATH environment variable is not available!");
 			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
 				"CUDART64_110.DLL")))
-				throw new DllNotFoundException(cudaError + //ncrunch: no coverage
+				throw new DllNotFoundException(cudaError +
 					@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
 					"(did you maybe install CUDA 10.* and not CUDA 11.1, " +
 					"please install it again or fix your CUDA_PATH)");
 			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
-				throw new DllNotFoundException(cudaError + //ncrunch: no coverage
+				throw new DllNotFoundException(cudaError +
 					"NVCUDA.DLL wasn't found in the windows system directory, " +
 					"is CUDA and your Nvidia graphics driver correctly installed?");
+			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin", CudnnRequiredDependencyFilename)) &&
+				(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDNN")) ||
+				!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDNN")!, "bin", CudnnRequiredDependencyFilename))))
+				throw new DllNotFoundException(cudaError +
+					"CudNN dependencies not in CUDA_PATH and CUDNN environment variable is not available, make " +
+					"sure CudNN 8 for Cuda 11.1+ is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
+			if (!File.Exists(CudnnDllFilename))
+				throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
 #elif LINUX64
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-			{
-				if (!Directory.Exists("/usr/local/cuda"))
-					throw new DllNotFoundException(cudaError + "CUDA is not available!");
-			}
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && !Directory.Exists("/usr/local/cuda"))
+				throw new DllNotFoundException(cudaError + "CUDA is not available!");
 #else
 			if (!Directory.Exists("/usr/local/cuda"))
 				throw new DllNotFoundException(cudaError + "CUDA is not available!");
-				//throw new PlatformNotSupportedException();
-#endif
-#if WIN64
-			if (!File.Exists(CudnnDllFilename))
-				throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
 #endif
 			if (!File.Exists(OpenCvWorldDllFilename))
 				throw new FileNotFoundException("Can't find the " + OpenCvWorldDllFilename);
@@ -128,9 +129,9 @@ namespace FastYolo
 				throw new FileNotFoundException("Can't find the " + YoloPThreadDllFilename);
 			var deviceCount = GetDeviceCount();
 			if (deviceCount == 0)
-				throw new NotSupportedException("No graphic device is available"); //ncrunch: no coverage
+				throw new NotSupportedException("No graphic device is available");
 			if (gpu > deviceCount - 1)
-				throw new IndexOutOfRangeException("Graphic device index is out of range"); //ncrunch: no coverage
+				throw new IndexOutOfRangeException("Graphic device index is out of range");
 			var deviceName = new StringBuilder();
 			GetDeviceName(gpu, deviceName);
 			GraphicDeviceName = deviceName.ToString();
@@ -144,7 +145,7 @@ namespace FastYolo
 		public IEnumerable<YoloItem> Detect(string filepath)
 		{
 			if (!File.Exists(filepath))
-				throw new FileNotFoundException("Cannot find the file", filepath); //ncrunch: no coverage
+				throw new FileNotFoundException("Cannot find the file", filepath);
 			var container = new BboxContainer();
 			DetectImageGpu(filepath, ref container);
 			return Convert(container, objectTypeResolver);

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using FastYolo.Model;
@@ -9,6 +8,10 @@ using System.Collections.Generic;
 
 namespace FastYolo.Tests
 {
+	/// <summary>
+	/// If these tests are failing, first make sure the runtime is all in order by running FastYolo.TestApp,
+	/// debug and fix all issues you see there before running these with NCrunch!
+	/// </summary>
 	public class YoloTests
 	{
 		[SetUp]

@@ -25,6 +25,9 @@
 		<Content Include="..\FastYolo\cudnn64_8.dll" Link="cudnn64_8.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+		<Content Include="..\FastYolo\opencv_world440.dll" Link="opencv_world440.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="..\FastYolo\opencv_world440d.dll" Link="opencv_world440d.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
