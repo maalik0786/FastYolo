@@ -5,6 +5,7 @@ using FastYolo.Model;
 using NUnit.Framework;
 using static FastYolo.ImageConverter;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace FastYolo.Tests
 {
@@ -31,6 +32,9 @@ namespace FastYolo.Tests
 			foreach (var item in yoloItems)
 				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
 		}
+
+		[TearDown]
+		public void KillYolo() => yolo.Dispose();
 
 		//[Test]
 		//public void ByteArrayForObjectDetection()
