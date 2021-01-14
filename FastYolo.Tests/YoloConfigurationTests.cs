@@ -13,7 +13,7 @@ namespace FastYolo.Tests
 #endif
 		public const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
 		public const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.png";
-		public const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny-prn-train_1000.weights";
+		public const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny-prn-train_last.weights";
 		public const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny-prn-test.cfg";
 		public const string YoloClassesFilename = YoloServerDirectory + "classes.names";
 
