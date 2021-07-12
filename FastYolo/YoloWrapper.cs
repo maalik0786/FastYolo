@@ -16,7 +16,7 @@ namespace FastYolo
 	{
 		private readonly YoloObjectTypeResolver objectTypeResolver;
 		// ReSharper disable once UnusedAutoPropertyAccessor.Local
-		private string? GraphicDeviceName { get; set; }
+		public string? GraphicDeviceName { get; set; }
 		public const int MaxObjects = 10;
 
 		public YoloWrapper(string configurationFilename, string weightsFilename,
