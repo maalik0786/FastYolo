@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 
 namespace FastYolo.Model
@@ -15,18 +14,17 @@ namespace FastYolo.Model
 	[Serializable]
 	public readonly struct Size : IEquatable<Size>
 	{
-
 		public Size(float width, float height)
 		{
 			Width = width;
 			Height = height;
 		}
 
-		[Pure]
 		public float Width { get; }
-		[Pure]
 		public float Height { get; }
-		
-		public bool Equals(Size other) => throw new NotImplementedException(); //ncrunch: no coverage 
+
+		public bool Equals(Size other) =>
+			// ReSharper disable once ThrowExceptionInUnexpectedLocation
+			throw new NotImplementedException(); //ncrunch: no coverage
 	}
 }

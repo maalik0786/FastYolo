@@ -1,6 +1,7 @@
 ﻿namespace FastYolo.Model
 {
-	public class YoloItem
+	// ReSharper disable once HollowTypeName
+	public sealed class YoloItem
 	{
 		public enum ShapeType
 		{

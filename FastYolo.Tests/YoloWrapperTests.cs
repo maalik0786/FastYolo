@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using FastYolo.Model;
 using NUnit.Framework;
 using static FastYolo.ImageConverter;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Size = FastYolo.Model.Size;
 
 namespace FastYolo.Tests
 {
@@ -13,7 +13,7 @@ namespace FastYolo.Tests
 	/// If these tests are failing, first make sure the runtime is all in order by running FastYolo.TestApp,
 	/// debug and fix all issues you see there before running these with NCrunch!
 	/// </summary>
-	public class YoloTests
+	public sealed class YoloWrapperTests
 	{
 		[SetUp]
 		public void Setup() =>
@@ -55,12 +55,11 @@ namespace FastYolo.Tests
 
 		//private ColorImage colorImage;
 
-
 		[Test]
 		public unsafe void PassIntPtrForObjectTracking()
 		{
 			var image = new Bitmap(YoloConfigurationTests.DummyImageFilename, false);
-			var colorImage = BitmapToColorImage(image, new Model.Size(image.Width, image.Height));
+			var colorImage = BitmapToColorImage(image, new Size(image.Width, image.Height));
 			var floatArray = new FloatArray();
 			var array = floatArray.GetYoloFloatArray(colorImage, Channels);
 			IEnumerable<YoloItem> yoloResponse;

@@ -15,9 +15,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NUnit" Version="3.12.0" />
-		<PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+	  <None Remove="yolo_cpp_dll.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="yolo_cpp_dll.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="NUnit" Version="3.13.2" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
@@ -40,6 +48,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\FastYolo\FastYolo.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="YoloConfigurationTests.cs">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

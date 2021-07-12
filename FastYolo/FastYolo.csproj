@@ -7,7 +7,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<Version>11.1.0</Version>
+		<Version>11.4.0</Version>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -24,10 +24,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' ">
 		<None Remove="cudnn64_8.dll" />
 		<None Remove="pthreadVC2.dll" />
 		<None Remove="opencv_world440.dll" />

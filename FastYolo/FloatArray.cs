@@ -1,4 +1,5 @@
-﻿using FastYolo.Model;
+﻿using System;
+using FastYolo.Model;
 
 namespace FastYolo
 {
@@ -13,7 +14,7 @@ namespace FastYolo
 			return floatArray;
 		}
 
-		private float[] floatArray = new float[0];
+		private float[] floatArray = Array.Empty<float>();
 		private int counter;
 
 		private void ForLoops(ColorImage imageData, int channels)

@@ -1,6 +1,6 @@
 ﻿namespace FastYolo
 {
-	public class YoloConfiguration
+	public sealed class YoloConfiguration
 	{
 		public YoloConfiguration(string configFile, string weightsFile, string namesFile)
 		{
@@ -9,8 +9,8 @@
 			NamesFile = namesFile;
 		}
 
-		public string ConfigFile { get; set; }
-		public string WeightsFile { get; set; }
-		public string NamesFile { get; set; }
+		public string ConfigFile { get; }
+		public string WeightsFile { get; }
+		public string NamesFile { get; }
 	}
 }

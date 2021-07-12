@@ -4,16 +4,16 @@ using static FastYolo.ConfigurationDetector;
 
 namespace FastYolo.Tests
 {
-	public class YoloConfigurationTests
+	public sealed class YoloConfigurationTests
 	{
 #if WIN64
-		public const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\CurrentTraining\";
+		private const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\CurrentTraining\";
 #else
 		public const string YoloServerDirectory = "/home/abdul/Documents/yolo-v3-tiny/CurrentTraining/";
 #endif
 		public const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
 		public const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.png";
-		public const string YoloWeightsFilename = YoloServerDirectory + "yolov3-tiny-prn-train_last.weights";
+		public const string YoloWeightsFilename = YoloServerDirectory + @"yolov3-tiny-prn-train_last.weights";
 		public const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny-prn-test.cfg";
 		public const string YoloClassesFilename = YoloServerDirectory + "classes.names";
 

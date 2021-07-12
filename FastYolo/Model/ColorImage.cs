@@ -6,9 +6,8 @@
 	/// Performance is better with plain arrays opposed to using multidimensional or nested arrays.
 	/// Access is faster with 4 instead of 3 bytes (which is more compact, but not 32bit boundaries).
 	/// </summary>
-	public class ColorImage
+	public sealed class ColorImage
 	{
-
 		public ColorImage(in Size size)
 		{
 			Size = size;

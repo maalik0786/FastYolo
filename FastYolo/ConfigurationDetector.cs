@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace FastYolo
@@ -10,7 +11,8 @@ namespace FastYolo
 			var files = GetYoloFiles(path);
 			var yoloConfiguration = MapFiles(files);
 			var configValid = AreValidYoloFiles(yoloConfiguration);
-			if (configValid) return yoloConfiguration;
+			if (configValid)
+				return yoloConfiguration;
 			//ncrunch: no coverage start
 			throw new FileNotFoundException(
 				"Cannot found pre-trained model, check all config files available (.cfg, .weights, .names)"); //ncrunch: no coverage end
@@ -18,13 +20,14 @@ namespace FastYolo
 
 		private static string[] GetYoloFiles(string path) =>
 			Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Where(o =>
-				o.EndsWith(".names") || o.EndsWith(".cfg") || o.EndsWith(".weights")).ToArray();
+				o.EndsWith(".names", StringComparison.Ordinal) || o.EndsWith(".cfg", StringComparison.Ordinal) || o.EndsWith(".weights", StringComparison.Ordinal)).ToArray();
 
+		// ReSharper disable once TooManyDeclarations
 		private static YoloConfiguration MapFiles(string[] files)
 		{
-			var configurationFile = files.FirstOrDefault(o => o.EndsWith(".cfg"));
-			var weightsFile = files.FirstOrDefault(o => o.EndsWith(".weights"));
-			var namesFile = files.FirstOrDefault(o => o.EndsWith(".names"));
+			var configurationFile = files.FirstOrDefault(o => o.EndsWith(".cfg", StringComparison.Ordinal));
+			var weightsFile = files.FirstOrDefault(o => o.EndsWith(".weights", StringComparison.Ordinal));
+			var namesFile = files.FirstOrDefault(o => o.EndsWith(".names", StringComparison.Ordinal));
 			return new YoloConfiguration(configurationFile!, weightsFile!, namesFile!);
 		}
 

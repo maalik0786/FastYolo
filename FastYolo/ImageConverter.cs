@@ -13,19 +13,20 @@ namespace FastYolo
 {
 	public static class ImageConverter
 	{
-		public static IEnumerable<YoloItem> Convert(BboxContainer container, YoloObjectTypeResolver objectTypeResolver) => container.candidates.Where(o => o.h > 0 || o.w > 0)
-				.Select(item => new YoloItem
-				{
-					X = (int) item.x,
-					Y = (int) item.y,
-					Height = (int) item.h,
-					Width = (int) item.w,
-					Confidence = item.prob,
-					FrameId = (int) item.frames_counter,
-					TrackId = (int) item.track_id,
-					Shape = (YoloItem.ShapeType) item.shape,
-					Type = objectTypeResolver.Resolve((int) item.obj_id)
-				}).ToList();
+		public static IEnumerable<YoloItem>
+			Convert(BboxContainer container, YoloObjectTypeResolver objectTypeResolver) =>
+			container.candidates.Where(o => o.h > 0 || o.w > 0).Select(item => new YoloItem
+			{
+				X = (int)item.x,
+				Y = (int)item.y,
+				Height = (int)item.h,
+				Width = (int)item.w,
+				Confidence = item.prob,
+				FrameId = (int)item.frames_counter,
+				TrackId = (int)item.track_id,
+				Shape = (YoloItem.ShapeType)item.shape,
+				Type = objectTypeResolver.Resolve((int)item.obj_id)
+			}).ToList();
 
 		public static ColorImage BitmapToColorImage(Bitmap image, Size size)
 		{
@@ -34,7 +35,7 @@ namespace FastYolo
 				ImageLockMode.ReadWrite, image.PixelFormat);
 			unsafe
 			{
-				var p = (byte*) bmpData.Scan0.ToPointer();
+				var p = (byte*)bmpData.Scan0.ToPointer();
 				for (var x = 0; x < image.Width * image.Height; x++)
 				{
 					var r = *p++;
@@ -48,11 +49,12 @@ namespace FastYolo
 			return colorImage;
 		}
 
-		public static unsafe IntPtr ConvertColorDataToYoloFormat(ColorImage colorData, int channels = 3)
+		public static unsafe IntPtr ConvertColorDataToYoloFormat(ColorImage colorData,
+			int channels = 3)
 		{
 			var sizeInBytes = colorData.Width * colorData.Height * channels * sizeof(float);
 			var floatArrayPointer = Marshal.AllocHGlobal(sizeInBytes);
-			var destination = (float*) floatArrayPointer.ToPointer();
+			var destination = (float*)floatArrayPointer.ToPointer();
 			for (var channel = 0; channel < channels; channel++)
 			for (var y = 0; y < colorData.Height; y++)
 			for (var x = 0; x < colorData.Width; x++)
@@ -76,8 +78,9 @@ namespace FastYolo
 			return memoryStream.ToArray();
 		}
 
-		public static Image Byte2Image(byte[] byteData) => Image.FromStream(new MemoryStream(byteData));
-		
+		public static Image Byte2Image(byte[] byteData) =>
+			Image.FromStream(new MemoryStream(byteData));
+
 		/*unused code
 		public static unsafe Bitmap SaveAsBitmap(ColorImage data)
 		{
