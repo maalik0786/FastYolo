@@ -82,6 +82,9 @@ namespace FastYolo
 		[DllImport(YoloGpuDllFilename, EntryPoint = "GetDetectorNetworkHeight")]
 		public static extern int GetDetectorNetworkHeight();
 
+		[DllImport(YoloGpuDllFilename, EntryPoint = "GetCudaContext")]
+		public static extern IntPtr GetCudaContext();
+
 		public void Dispose() => DisposeYoloGpu();
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "dispose")]
@@ -200,5 +203,7 @@ namespace FastYolo
 			TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container);
 			return Convert(container, objectTypeResolver);
 		}
+
+		public IntPtr GetCurrentCudaContext() => GetCudaContext();
 	}
 }

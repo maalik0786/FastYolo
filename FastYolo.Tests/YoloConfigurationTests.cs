@@ -7,7 +7,7 @@ namespace FastYolo.Tests
 	public sealed class YoloConfigurationTests
 	{
 #if WIN64
-		private const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\CurrentTraining\";
+		private const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\CurrentTraining640x640\";
 #else
 		public const string YoloServerDirectory = "/home/abdul/Documents/yolo-v3-tiny/CurrentTraining/";
 #endif

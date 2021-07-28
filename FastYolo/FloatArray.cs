@@ -3,7 +3,7 @@ using FastYolo.Model;
 
 namespace FastYolo
 {
-	public class FloatArray
+	public sealed class FloatArray
 	{
 		public float[] GetYoloFloatArray(ColorImage imageData, in int channels)
 		{

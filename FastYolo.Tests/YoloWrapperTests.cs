@@ -36,24 +36,18 @@ namespace FastYolo.Tests
 		[TearDown]
 		public void KillYolo() => yolo.Dispose();
 
-		//[Test]
-		//public void ByteArrayForObjectDetection()
-		//{
-		//	var image = Image.FromFile(YoloConfigurationTests.DummyImageFilename);
-		//	width = image.Width;
-		//	height = image.Height;
-		//	var resizeImage = new ColorImage(width, height);
-		//	resizeImage.Resize(416,416);
-		//	Console.WriteLine("Width: "+ image.Width);
-		//	var array = Image2Byte(resizeImage);
-		//	var items = yoloWrapper.Detect(array, 4,true);
-		//	var yoloItems = items as YoloItem[] ?? items.ToArray();
-		//	Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
-		//	foreach (var item in yoloItems)
-		//		Console.WriteLine("Frame: " + item.FrameId + " Found:" + item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," + item.Width + "," + item.Height + "]");
-		//}
-
-		//private ColorImage colorImage;
+		[Test]
+		public void ByteArrayForObjectDetection()
+		{
+			var image = Image.FromFile(YoloConfigurationTests.DummyImageFilename);
+			Console.WriteLine("Width: " + image.Width);
+			var array = Image2Byte(image);
+			var items = yolo.Detect(array, 4, true);
+			var yoloItems = items as YoloItem[] ?? items.ToArray();
+			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
+			foreach (var item in yoloItems)
+				Console.WriteLine("Frame: " + item.FrameId + " Found:" + item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," + item.Width + "," + item.Height + "]");
+		}
 
 		[Test]
 		public unsafe void PassIntPtrForObjectTracking()
@@ -77,54 +71,27 @@ namespace FastYolo.Tests
 			}
 		}
 
-		//[Test]
-		//public void PassIntPtrForObjectTracking()
-		//{
-		//	var image = new Bitmap(YoloConfigurationTests.DummyImageFilename);
-		//	var size = new Size(image.Width, image.Height);
-		//	var colorImage = BitmapToColorImage(image, size);
-		//	var floatArrayPointer = ConvertColorDataToYoloFormat(colorImage, Channels);
-		//	var items = yoloWrapper.Track(floatArrayPointer,
-		//		colorImage.Width, colorImage.Height, Channels);
-		//	Marshal.FreeHGlobal(floatArrayPointer);
-		//	var yoloItems = items as YoloItem[] ?? items.ToArray();
-		//	Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
-		//	foreach (var item in yoloItems)
-		//	{
-		//		Assert.That(item.Type == "walnut" && item.Shape == YoloItem.ShapeType.Circle, Is.True);
-		//		Console.WriteLine("Frame: " + item.FrameId + " Shape: " + item.Shape + " Found:" +
-		//			item.Type + " ID: " + item.TrackId + " BB: [" + item.X + "," + item.Y + "," +
-		//			item.Width + "," + item.Height + "]");
-		//	}
-		//}
-
 		private const int Channels = 4;
 
-		//[Test]
-		//public void LoadColorDataForObjectDetection()
-		//{
-		//	var colorImage = BitmapToColorImage(new Bitmap(YoloConfigurationTests.DummyImageFilename));
-		//	width = colorImage.Width;
-		//	height = colorImage.Height;
-		//	var items = yoloWrapper.Detect(colorImage, Channels);
-		//	var yoloItems = items as YoloItem[] ?? items.ToArray();
-		//	Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
-		//	foreach (var item in yoloItems)
-		//		Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
-		//	//DrawBoundingBox(colorImage, yoloItems);
-		//	//SaveAsBitmap(colorImage).Save(YoloConfigurationTests.DummyImageOutputFilename);
-		//}
+		[Test]
+		public void LoadColorDataForObjectDetection()
+		{
+			var image = new Bitmap(YoloConfigurationTests.DummyImageFilename);
+			var colorImage = BitmapToColorImage(image, new Size(image.Width, image.Height));
+			var items = yolo.Detect(colorImage, Channels);
+			var yoloItems = items as YoloItem[] ?? items.ToArray();
+			Assert.That(yoloItems, Is.Not.Null.Or.InnerException);
+			foreach (var item in yoloItems)
+				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
+		}
 
-		//[TearDown]
-		//public void DisposeYoloWrapper()
-		//{
-		//	Assert.That(YoloWrapper.CheckIfImageWasResized(), Is.False,
-		//		"Slowdown because input image size: " + width + "x" + height +
-		//		" is not in the same size as the configuration: " +
-		//		YoloWrapper.GetDetectorNetworkWidth() + "x" +
-		//		YoloWrapper.GetDetectorNetworkHeight());
-		//	yoloWrapper.Dispose();
-		//}
+		[Test]
+		public void GetCudaContext()
+		{
+			var context = yolo.GetCurrentCudaContext();
+			Console.WriteLine("Current Cuda Context pointer: " + context);
+			Assert.That(context, Is.Not.Null);
+		}
 
 		[Test]
 		public void LoadJpegFromRaspberryCamera()
