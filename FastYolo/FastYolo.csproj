@@ -61,7 +61,7 @@
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='ARM64'">
 		<None Remove="libdarknet_arm.so" />
 		<None Remove="libpthread_arm.so" />
 		<None Remove="libopencv_world.so" />
