@@ -43,7 +43,7 @@ namespace FastYolo
 #else
 		private const string YoloGpuDllFilename = "libdarknet_arm.so";
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
-		private const string OpenCvWorldDllFilename = "libopencv_world_arm.so";
+		private const string OpenCvWorldDllFilename = "libopencv_world.so";
 #endif
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
@@ -100,9 +100,7 @@ namespace FastYolo
 				throw new NotSupportedException("Only 64-bit processes are supported");
 			const string CudaError = "An Nvidia GPU and CUDA 11.1 need to be installed! Please install CUDA " +
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
-				RuntimeInformation.OSArchitecture == Architecture.X64)
-			{
+#if WIN64
 				if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
 					throw new DllNotFoundException(CudaError +
 						"CUDA_PATH environment variable is not available!");
@@ -126,15 +124,10 @@ namespace FastYolo
 						"sure CudNN 8 for Cuda 11.1+ is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
 				if (!File.Exists(CudnnDllFilename))
 					throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
-			}
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
-				RuntimeInformation.OSArchitecture == Architecture.X64 &&
-				!Directory.Exists("/usr/local/cuda"))
+#else
+			if (!Directory.Exists("/usr/local/cuda"))
 				throw new DllNotFoundException(CudaError + "CUDA is not available!");
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
-				RuntimeInformation.OSArchitecture == Architecture.Arm64 &&
-				!Directory.Exists("/usr/local/cuda"))
-				throw new DllNotFoundException(CudaError + "CUDA is not available!");
+#endif
 			if (!File.Exists(OpenCvWorldDllFilename))
 				throw new FileNotFoundException("Can't find the " + OpenCvWorldDllFilename);
 			if (!File.Exists(YoloGpuDllFilename))
