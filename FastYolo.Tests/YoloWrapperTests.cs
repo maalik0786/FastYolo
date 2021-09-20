@@ -86,14 +86,6 @@ namespace FastYolo.Tests
 		}
 
 		[Test]
-		public void GetCudaContext()
-		{
-			var context = yolo.GetCurrentCudaContext();
-			Console.WriteLine("Current Cuda Context pointer: " + context);
-			Assert.That(context, Is.Not.Null);
-		}
-
-		[Test]
 		public void LoadJpegFromRaspberryCamera()
 		{
 			const int Width = 1280;
