@@ -80,30 +80,5 @@ namespace FastYolo
 
 		public static Image Byte2Image(byte[] byteData) =>
 			Image.FromStream(new MemoryStream(byteData));
-
-		/*unused code
-		public static unsafe Bitmap SaveAsBitmap(ColorImage data)
-		{
-			var bitmap = new Bitmap(data.Width, data.Height);
-			var bitmapData = bitmap.LockBits(new Rectangle(0, 0, data.Width, data.Height), ImageLockMode.WriteOnly,
-				PixelFormat.Format24bppRgb);
-			var bitmapPointer = (byte*)bitmapData.Scan0.ToPointer();
-			SwitchBgr2Rgb(data, bitmapPointer, bitmapData.Stride);
-			bitmap.UnlockBits(bitmapData);
-			return bitmap;
-		}
-
-		private static unsafe void SwitchBgr2Rgb(ColorImage data, byte* bitmapPointer, int stride)
-		{
-			for (var y = 0; y < data.Height; ++y)
-			for (var x = 0; x < data.Width; ++x)
-			{
-				var targetIndex = y * stride + x * 3;
-				var sourceIndex = y * data.Width + x;
-				bitmapPointer[targetIndex] = data.Colors[sourceIndex].R;
-				bitmapPointer[targetIndex + 1] = data.Colors[sourceIndex].G;
-				bitmapPointer[targetIndex + 2] = data.Colors[sourceIndex].B;
-			}
-		}*/
 	}
 }
