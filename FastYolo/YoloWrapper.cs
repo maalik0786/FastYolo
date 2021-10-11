@@ -48,7 +48,7 @@ namespace FastYolo
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
 		private static extern int InitializeYoloGpu(string configurationFilename,
-			string weightsFilename, int gpu);
+			string weightsFilename, int gpu, int batchSize = 1);
 
 		[DllImport(YoloGpuDllFilename, EntryPoint = "detect_image")]
 		private static extern int DetectImageGpu(string filename, ref BboxContainer container);
@@ -101,29 +101,29 @@ namespace FastYolo
 			const string CudaError = "An Nvidia GPU and CUDA 11.1 need to be installed! Please install CUDA " +
 				"https://developer.nvidia.com/cuda-downloads\nError details: ";
 #if WIN64
-				if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
-					throw new DllNotFoundException(CudaError +
-						"CUDA_PATH environment variable is not available!");
-				if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
-					"CUDART64_110.DLL")))
-					throw new DllNotFoundException(CudaError +
-						@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
-						"(did you maybe install CUDA 10.* and not CUDA 11.1, " +
-						"please install it again or fix your CUDA_PATH)");
-				if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
-					throw new DllNotFoundException(CudaError +
-						"NVCUDA.DLL wasn't found in the windows system directory, " +
-						"is CUDA and your Nvidia graphics driver correctly installed?");
-				if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
-						CudnnRequiredDependencyFilename)) &&
-					(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDNN")) || !File.Exists(
-						Path.Combine(Environment.GetEnvironmentVariable("CUDNN")!, "bin",
-							CudnnRequiredDependencyFilename))))
-					throw new DllNotFoundException(CudaError +
-						"CudNN dependencies not in CUDA_PATH and CUDNN environment variable is not available, make " +
-						"sure CudNN 8 for Cuda 11.1+ is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
-				if (!File.Exists(CudnnDllFilename))
-					throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
+			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
+				throw new DllNotFoundException(CudaError +
+					"CUDA_PATH environment variable is not available!");
+			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
+				"CUDART64_110.DLL")))
+				throw new DllNotFoundException(CudaError +
+					@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
+					"(did you maybe install CUDA 10.* and not CUDA 11.1, " +
+					"please install it again or fix your CUDA_PATH)");
+			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
+				throw new DllNotFoundException(CudaError +
+					"NVCUDA.DLL wasn't found in the windows system directory, " +
+					"is CUDA and your Nvidia graphics driver correctly installed?");
+			if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
+					CudnnRequiredDependencyFilename)) &&
+				(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDNN")) || !File.Exists(
+					Path.Combine(Environment.GetEnvironmentVariable("CUDNN")!, "bin",
+						CudnnRequiredDependencyFilename))))
+				throw new DllNotFoundException(CudaError +
+					"CudNN dependencies not in CUDA_PATH and CUDNN environment variable is not available, make " +
+					"sure CudNN 8 for Cuda 11.1+ is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
+			if (!File.Exists(CudnnDllFilename))
+				throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
 #else
 			if (!Directory.Exists("/usr/local/cuda"))
 				throw new DllNotFoundException(CudaError + "CUDA is not available!");
@@ -158,31 +158,32 @@ namespace FastYolo
 			return Convert(container, objectTypeResolver);
 		}
 
-		public IEnumerable<YoloItem> Detect(ColorImage imageData, int channels = 3,
+		public IEnumerable<YoloItem> Detect(ColorImage colorImage, int channels = 3,
 			bool track = false) =>
 			track
-				? Track(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width,
-					imageData.Height, channels)
-				: Detect(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width,
-					imageData.Height, channels);
+				? Track(ConvertColorImageToYoloFormat(colorImage, channels), colorImage.Width,
+					colorImage.Height, channels)
+				: Detect(ConvertColorImageToYoloFormat(colorImage, channels), colorImage.Width,
+					colorImage.Height, channels);
 
 		public IEnumerable<YoloItem> Detect(byte[] byteData, int channels = 3, bool track = false)
 		{
 			if (!IsValidImageFormat(byteData))
 				throw new Exception("Invalid image data, wrong image format");
-			var image = (Bitmap)Byte2Image(byteData);
+			using var image = (Bitmap) Byte2Image(byteData);
 			var imageData = BitmapToColorImage(image, new Size(image.Width, image.Height));
-			return track
-				? Track(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width,
-					imageData.Height, channels)
-				: Detect(ConvertColorDataToYoloFormat(imageData, channels), imageData.Width,
+			if (track)
+				return Track(ConvertColorImageToYoloFormat(imageData, channels), imageData.Width,
 					imageData.Height, channels);
+			return Detect(ConvertColorImageToYoloFormat(imageData, channels), imageData.Width,
+				imageData.Height, channels);
 		}
 
 		public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height, int channels = 3)
 		{
 			var container = new BboxContainer();
 			DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container);
+			Marshal.FreeHGlobal(floatArrayPointer);
 			return Convert(container, objectTypeResolver);
 		}
 
@@ -191,6 +192,7 @@ namespace FastYolo
 		{
 			var container = new BboxContainer();
 			TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container);
+			Marshal.FreeHGlobal(floatArrayPointer);
 			return Convert(container, objectTypeResolver);
 		}
 	}
