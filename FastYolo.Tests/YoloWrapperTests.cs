@@ -95,7 +95,7 @@ namespace FastYolo.Tests
 			const int FrameRate = 30;
 			var ptr = yolo.GetRaspberryCameraImage(Width, Height, DisWidth, DisHeight, FrameRate);
 #if WIN64
-			Assert.That(ptr, Is.EqualTo((IntPtr)0));
+			Assert.That(ptr, Is.EqualTo((IntPtr) 0));
 #elif LINUX64
 			Assert.That(ptr, Is.Not.EqualTo(0));
 #else

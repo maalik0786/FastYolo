@@ -31,14 +31,13 @@ namespace FastYolo.Model
 		/// </summary>
 		public Color(int r, int g, int b, int a = 255)
 		{
-			R = (byte)r;
-			G = (byte)g;
-			B = (byte)b;
-			A = (byte)a;
+			R = (byte) r;
+			G = (byte) g;
+			B = (byte) b;
+			A = (byte) a;
 		}
 
 		public Color(Color color, byte a) : this(color.R, color.G, color.B, a) { }
-
 		public float RedValue => R / 255.0f;
 		public float GreenValue => G / 255.0f;
 		public float BlueValue => B / 255.0f;
@@ -67,7 +66,6 @@ namespace FastYolo.Model
 		public static readonly Color Gold = new(255, 215, 0);
 		public static readonly Color PaleGreen = new(152, 251, 152);
 		public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Color));
-
 		public static Color CreateTransparent(Color color) => new(color, 0);
 	}
 }

@@ -16,7 +16,7 @@
 
 		private Size Size { get; }
 		public Color[] Colors { get; set; }
-		public int Width => (int)Size.Width;
-		public int Height => (int)Size.Height;
+		public int Width => (int) Size.Width;
+		public int Height => (int) Size.Height;
 	}
 }

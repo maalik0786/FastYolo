@@ -11,8 +11,8 @@ namespace FastYolo
 		static ImageAnalyzer()
 		{
 			var bmp = Encoding.ASCII.GetBytes("BM"); //BMP
-			var png = new byte[] { 137, 80, 78, 71 }; //PNG
-			var jpeg = new byte[] { 255, 216, 255 }; //JPEG
+			var png = new byte[] {137, 80, 78, 71}; //PNG
+			var jpeg = new byte[] {255, 216, 255}; //JPEG
 			ImageFormats.Add("bmp", bmp);
 			ImageFormats.Add("png", png);
 			ImageFormats.Add("jpeg", jpeg);
