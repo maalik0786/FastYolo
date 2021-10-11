@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>FastYolo</id>
-		<version>11.1.0</version>
+		<version>11.4.2</version>
 		<authors>DeltaEngine</authors>
 		<owners>DeltaEngine</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,7 +11,7 @@
 		<projectUrl>https://github.com/maalik0786/FastYolo</projectUrl>
 		<iconUrl>https://res-5.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_120,w_120,f_auto,b_white,q_auto:eco/v1426438540/hacptxu3ali6vplrrhfy.png</iconUrl>
 		<description>
-			Fast .NET Yolo library, requires Cuda 11.1+ to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 1.0.3 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
+			Fast .NET Yolo library, requires Cuda 11.4+ to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 1.0.3 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
 
 Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (AlexeyAB/darknet with additions and fixes here: https://github.com/maalik0786/darknet), including cudnn64_8.dll, opencv_world440.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation. Tested on Windows x64, Linux AMD64 and ARM64 (Jetson/Raspi4).
 
