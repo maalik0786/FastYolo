@@ -17,7 +17,8 @@ The nuget installer includes all other needed files, for compiling it yourself, 
 
 Current version is for .NET 6, you can check older releases for .NET 5, .NET Core 3.1, .NET 4.6 and lower.
 
-How to use: 
+How to use:
+
 YoloConfigFile is available [here](https://github.com/maalik0786/FastYolo/blob/master/FastYolo.Tests/Assets/yolov3-tiny.cfg)
 
 YoloWeightsFile is available [here](https://pjreddie.com/media/files/yolov3-tiny.weights)
