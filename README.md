@@ -7,11 +7,11 @@ Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yo
 Windows User: should have Cuda 11.5+ and CUDNN 8.3.2+ installed, if not an exception is thrown with detailed installation instructions.
 Environment path for cuda 11.5 must be set (installer does this), e.g. CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.5
 
-Linux x64 user:  should have Cuda 11.4 and CUDNN 8.3.2+ installed, if not an exception is thrown with detailed installation instructions.
+Linux x64 User:  should have Cuda 11.4 and CUDNN 8.3.2+ installed, if not an exception is thrown with detailed installation instructions.
 
-Jetson Nano Arm64 user:  should have Cuda 10.0 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
+Jetson Nano Arm64 User:  should have Cuda 10.0 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
 
-Jetson Xavier Arm64 user:  should have Cuda 10.2 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
+Jetson Xavier Arm64 User:  should have Cuda 10.2 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
 
 The nuget installer includes all other needed files, for compiling it yourself, copy cudnn64_8.dll, opencv_world440.dll, pthreadVC2.dll into the FastYolo folder and compile yolo_cpp_dll.dll into it as well.
 
