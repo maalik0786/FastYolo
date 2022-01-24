@@ -19,6 +19,16 @@ Current version is for .NET 6, you can check older releases for .NET 5, .NET Cor
 
 #### How to use:
 
+1. Create C# Console project
+2. add the Nuget Package as a reference in your project 
+ ```ini 
+ 	<ItemGroup>
+	  <PackageReference Include="FastYolo" Version="11.6.0" />
+	</ItemGroup>
+ ```
+3. open Program.cs file and paste the code below
+#### Required files to run the code below:
+
 1. YoloConfigFile is available [here](https://github.com/maalik0786/FastYolo/blob/master/FastYolo.Tests/Assets/yolov3-tiny.cfg)
 2. YoloWeightsFile is available [here](https://pjreddie.com/media/files/yolov3-tiny.weights)
 3. YoloClassesFile is available [here](https://github.com/maalik0786/FastYolo/blob/master/FastYolo.Tests/Assets/coco.names)
