@@ -22,8 +22,6 @@ How to use:
 YoloWrapper yoloWrapper = new YoloWrapper(YoloConfigFile, YoloWeightsFile, YoloClassesFile);
 IEnumerable<YoloItem> yoloItems yoloWrapper.Detect(byteArray);
 foreach (var item in yoloItems)
-{
   Console.WriteLine($"Object Found: {item.Name} with X: {item.X}, Y: {item.Y}, Width: {item.Width}, Height: {item.Height}"); 
-}
 ```
 For more examples please visit [here](https://github.com/maalik0786/FastYolo/blob/master/FastYolo.Tests/YoloWrapperTests.cs)
