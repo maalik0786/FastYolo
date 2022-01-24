@@ -4,8 +4,12 @@ Yolo library for .NET 6. This one requires Cuda 11.5+ and CudNN 8 to be installe
 			
 Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), including opencv_world440.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
 
-User should have Cuda 11.5+ and CUDNN 8.3.2+ installed, if not an exception is thrown with detailed installation instructions.
+Windows User: should have Cuda 11.5+ and CUDNN 8.3.2+ installed, if not an exception is thrown with detailed installation instructions.
 Environment path for cuda 11.5 must be set (installer does this), e.g. CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.5
+Linux x64 user:  should have Cuda 11.4 and CUDNN 8.3.2+ installed, if not an exception is thrown with detailed installation instructions.
+Jetson Nano Arm64 user:  should have Cuda 10.0 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
+Jetson Xavier Arm64 user:  should have Cuda 10.2 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
+
 The nuget installer includes all other needed files, for compiling it yourself, copy cudnn64_8.dll, opencv_world440.dll, pthreadVC2.dll into the FastYolo folder and compile yolo_cpp_dll.dll into it as well.
 
 Current version is for .NET 6, you can check older releases for .NET 5, .NET Core 3.1, .NET 4.6 and lower.
