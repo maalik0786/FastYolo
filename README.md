@@ -16,3 +16,14 @@ Jetson Xavier Arm64 User:  should have Cuda 10.2 and CUDNN 8 installed, if not a
 The nuget installer includes all other needed files, for compiling it yourself, copy cudnn64_8.dll, opencv_world440.dll, pthreadVC2.dll into the FastYolo folder and compile yolo_cpp_dll.dll into it as well.
 
 Current version is for .NET 6, you can check older releases for .NET 5, .NET Core 3.1, .NET 4.6 and lower.
+
+How to use: 
+```ini
+YoloWrapper yoloWrapper = new YoloWrapper(YoloConfigFile, YoloWeightsFile, YoloClassesFile);
+IEnumerable<YoloItem> yoloItems yoloWrapper.Detect(byteArray);
+foreach (var item in yoloItems)
+{
+	Console.WriteLine($"Object Found: {item.Name} with X: {item.X}, Y: {item.Y}, Width: {item.Width}, Height: {item.Height}"); 
+}
+```
+For more examples please visit 
