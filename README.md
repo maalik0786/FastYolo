@@ -23,7 +23,7 @@ Current version is for .NET 6, you can check older releases for .NET 5, .NET Cor
 2. add the Nuget Package as a reference in your project 
  ```ini 
  <ItemGroup>
-  <PackageReference Include="FastYolo" Version="11.6.0" />
+   <PackageReference Include="FastYolo" Version="11.6.0" />
  </ItemGroup>
  ```
 3. open Program.cs file and paste the code below
