@@ -21,10 +21,7 @@
 	  <None Remove="Assets\coco.names" />
 	  <None Remove="Assets\yolov3-tiny.cfg" />
 	  <None Remove="Assets\yolov3-tiny.weights" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="Assets\cars road.jpg">
+		<Content Include="Assets\cars road.jpg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="Assets\coco.names">
