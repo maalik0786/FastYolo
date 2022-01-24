@@ -2,12 +2,13 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>net5.0</TargetFrameworks>
+		<TargetFrameworks>net6.0</TargetFrameworks>
 		<PlatformTarget>AnyCPU</PlatformTarget>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<Version>11.4.2</Version>
+		<Version>11.6.0</Version>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -15,7 +16,7 @@
 	  <DefineConstants>DEBUG;TRACE</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' ">
+	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
 		<DefineConstants>WIN64</DefineConstants>
 	</PropertyGroup>
 
@@ -24,13 +25,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+		<PackageReference Include="System.Drawing.Common" Version="5.0.3" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' ">
 		<None Remove="cudnn64_8.dll" />
 		<None Remove="pthreadVC2.dll" />
 		<None Remove="opencv_world440.dll" />
+		<None Remove="opencv_world440d.dll" />
 		<None Remove="yolo_cpp_dll.dll" />
 	  <Content Include="cudnn64_8.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -39,6 +41,9 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 		<Content Include="opencv_world440.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="opencv_world440d.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	  <Content Include="yolo_cpp_dll.dll">

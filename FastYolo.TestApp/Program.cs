@@ -1,20 +1,16 @@
-﻿using System;
-using FastYolo.Tests;
+﻿using FastYolo.Tests;
 
-namespace FastYolo.TestApp
+namespace FastYolo.TestApp;
+
+public class Program
 {
-	public class Program
+	//ncrunch: no coverage start
+	public static void Main()
 	{
-		//ncrunch: no coverage start
-		public static void Main()
-		{
-			using var yoloWrapper = new YoloWrapper(YoloConfigurationTests.YoloConfigFilename,
-				YoloConfigurationTests.YoloWeightsFilename,
-				YoloConfigurationTests.YoloClassesFilename);
-			var yoloItems = yoloWrapper.Detect(YoloConfigurationTests.DummyImageFilename);
-			foreach (var item in yoloItems)
-				Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
-			Console.WriteLine("LoadDummyImageForObjectDetection() Done\n");
-		}
+		using var yoloWrapper = new YoloWrapper(YoloConfigurationTests.YoloConfigFilename,
+			YoloConfigurationTests.YoloWeightsFilename, YoloConfigurationTests.YoloClassesFilename);
+		var yoloItems = yoloWrapper.Detect(YoloConfigurationTests.ImageFilename);
+		foreach (var item in yoloItems)
+			Console.WriteLine("Found " + item.Type + " " + item.X + "," + item.Y);
 	}
 }

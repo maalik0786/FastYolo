@@ -1,32 +1,24 @@
-﻿using System.IO;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using static FastYolo.ConfigurationDetector;
 
-namespace FastYolo.Tests
-{
-	public sealed class YoloConfigurationTests
-	{
-#if WIN64
-		private const string YoloServerDirectory = @"\\DeltaServer\Shared\yolo-v3-tiny\CurrentTraining640x640\";
-#else
-		public const string YoloServerDirectory = "/home/abdul/Documents/yolo-v3-tiny/CurrentTraining/";
-#endif
-		public const string DummyImageFilename = YoloServerDirectory + "DummyNutInput.png";
-		public const string DummyImageOutputFilename = YoloServerDirectory + "DummyNutOutput.png";
-		public const string YoloWeightsFilename = YoloServerDirectory + @"yolov3-tiny-prn-train_last.weights";
-		public const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny-prn-test.cfg";
-		public const string YoloClassesFilename = YoloServerDirectory + "classes.names";
+namespace FastYolo.Tests;
 
-		[Test]
-		public void ConfigurationFilesExists()
-		{
-			var yoloConfig = CheckConfiguration(YoloServerDirectory);
-			Assert.That(Directory.Exists(YoloServerDirectory), Is.True);
-			Assert.That(yoloConfig.ConfigFile, Is.EqualTo(YoloConfigFilename));
-			Assert.That(yoloConfig.NamesFile, Is.EqualTo(YoloClassesFilename));
-			Assert.That(yoloConfig.WeightsFile, Is.EqualTo(YoloWeightsFilename));
-			Assert.That(File.Exists(DummyImageFilename), Is.True);
-			Assert.That(File.Exists(DummyImageOutputFilename), Is.True);
-		}
+public sealed class YoloConfigurationTests
+{
+	private const string YoloServerDirectory = @"Assets\";
+	public const string ImageFilename = YoloServerDirectory + "cars road.jpg";
+	public const string YoloWeightsFilename = YoloServerDirectory + @"yolov3-tiny.weights";
+	public const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny.cfg";
+	public const string YoloClassesFilename = YoloServerDirectory + "coco.names";
+
+	[Test]
+	public void ConfigurationFilesExists()
+	{
+		var yoloConfig = CheckConfiguration(YoloServerDirectory);
+		Assert.That(Directory.Exists(YoloServerDirectory), Is.True);
+		Assert.That(yoloConfig.ConfigFile, Is.EqualTo(YoloConfigFilename));
+		Assert.That(yoloConfig.NamesFile, Is.EqualTo(YoloClassesFilename));
+		Assert.That(yoloConfig.WeightsFile, Is.EqualTo(YoloWeightsFilename));
+		Assert.That(File.Exists(ImageFilename), Is.True);
 	}
 }

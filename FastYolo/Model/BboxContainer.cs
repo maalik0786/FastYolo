@@ -1,11 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace FastYolo.Model
+namespace FastYolo.Model;
+
+[StructLayout(LayoutKind.Sequential)]
+public struct BboxContainer
 {
-	[StructLayout(LayoutKind.Sequential)]
-	public struct BboxContainer
-	{
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = YoloWrapper.MaxObjects)]
-		internal BboxT[] candidates;
-	}
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = YoloWrapper.MaxObjects)]
+	internal BboxT[] candidates;
 }

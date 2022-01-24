@@ -1,13 +1,12 @@
 ﻿using NUnit.Framework;
 
-namespace FastYolo.Tests
+namespace FastYolo.Tests;
+
+public sealed class YoloObjectTypeResolverTests
 {
-	public class YoloObjectTypeResolverTests
-	{
-		[Test]
-		public void ResolveObjectType() =>
-			Assert.That(
-				new YoloObjectTypeResolver(YoloConfigurationTests.YoloClassesFilename).Resolve(0),
-				Is.EqualTo("CrushedNut"));
-	}
+	[Test]
+	public void ResolveObjectType() =>
+		Assert.That(
+			new YoloObjectTypeResolver(YoloConfigurationTests.YoloClassesFilename).Resolve(0),
+			Is.EqualTo("person"));
 }
