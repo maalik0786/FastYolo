@@ -72,10 +72,6 @@ public sealed class YoloWrapper : IDisposable
 	/// done dynamically in the darknet library, extra memory would be required and it is obviously
 	/// slower than if we already have 416x416 data!
 	/// </summary>
-	// ReSharper disable UnthrowableException
-	[DllImport(YoloGpuDllFilename, EntryPoint = "check_if_image_was_resized")]
-	public static extern bool CheckIfImageWasResized();
-
 	[DllImport(YoloGpuDllFilename, EntryPoint = "get_detector_network_width")]
 	public static extern int GetDetectorNetworkWidth();
 
@@ -146,6 +142,7 @@ public sealed class YoloWrapper : IDisposable
 	{
 		if (!File.Exists(filepath))
 			throw new FileNotFoundException("Cannot find the file", filepath);
+		container.candidates = new BboxT[MaxObjects];
 		DetectImageGpu(filepath, ref container);
 		return Convert(container, objectTypeResolver);
 	}
@@ -162,6 +159,7 @@ public sealed class YoloWrapper : IDisposable
 		{
 			// Copy array to unmanaged memory.
 			Marshal.Copy(imageData, 0, pnt, imageData.Length);
+			container.candidates = new BboxT[MaxObjects];
 			var count = DetectImage(pnt, imageData.Length, ref container);
 			if (count == -1)
 				throw new NotSupportedException($"{YoloGpuDllFilename} has no OpenCV support");
@@ -184,6 +182,7 @@ public sealed class YoloWrapper : IDisposable
 	public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height,
 		int channels = 3)
 	{
+		container.candidates = new BboxT[MaxObjects];
 		DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container);
 		return Convert(container, objectTypeResolver);
 	}
@@ -200,6 +199,7 @@ public sealed class YoloWrapper : IDisposable
 	{
 		try
 		{
+			container.candidates = new BboxT[MaxObjects];
 			DetectObjectsCuda(sizeTPointer, width, height, channels, ref container);
 		}
 		catch (Exception)
@@ -222,6 +222,7 @@ public sealed class YoloWrapper : IDisposable
 	public IEnumerable<YoloItem> Track(IntPtr floatArrayPointer, int width, int height,
 		int channel = 3)
 	{
+		container.candidates = new BboxT[MaxObjects];
 		TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container);
 		return Convert(container, objectTypeResolver);
 	}
