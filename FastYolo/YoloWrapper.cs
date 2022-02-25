@@ -12,7 +12,7 @@ public sealed class YoloWrapper : IDisposable
 	private BboxContainer container;
 	// ReSharper disable once UnusedAutoPropertyAccessor.Local
 	public string? GraphicDeviceName { get; set; }
-	public const int MaxObjects = 10;
+	public const int MaxObjects = 20;
 
 	public YoloWrapper(string configurationFilename, string weightsFilename,
 		string namesFilename, int gpu = 0)
