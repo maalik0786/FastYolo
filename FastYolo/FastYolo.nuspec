@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>FastYolo</id>
-		<version>11.6.1</version>
+		<version>11.6.2</version>
 		<authors>DeltaEngine</authors>
 		<owners>DeltaEngine</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,7 +13,7 @@
 		<description>
 			Fast .NET Yolo library, requires Cuda 11.6+ to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 1.0.3 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
 
-Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (AlexeyAB/darknet with additions and fixes here: https://github.com/maalik0786/darknet), including cudnn64_8.dll, opencv_world440.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation. Tested on Windows x64, Linux AMD64 and ARM64 (Jetson Nano/Xavier).
+Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (AlexeyAB/darknet with additions and fixes here: https://github.com/maalik0786/darknet), including cudnn64_8.dll, opencv_world455.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation. Tested on Windows x64, Linux AMD64 and ARM64 (Jetson Nano/Xavier).
 
 v1.0.4 adds resize detection and will output a warning in the console and allow to check via the CheckIfImageWasResized method if any resize happened. Resizing should not be done dynamically in the darknet library, extra memory would be required and it is obviously much slower than if we already have 416x416 data (or whatever the configuration defines).
 		</description>
@@ -30,7 +30,7 @@ v1.0.4 adds resize detection and will output a warning in the console and allow 
 	<files>
 		<file src="cudnn64_8.dll" target="build" />
 		<file src="pthreadVC2.dll" target="build" />
-		<file src="opencv_world440.dll" target="build" />
+		<file src="opencv_world455.dll" target="build" />
 		<file src="yolo_cpp_dll.dll" target="build" />
 		<file src="libdarknet_amd.so" target="build" />
 		<file src="libpthread_amd.so" target="build" />

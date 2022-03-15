@@ -2,7 +2,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using FastYolo.Model;
-using ManagedCuda;
 using NUnit.Framework;
 using static FastYolo.ImageConverter;
 using static FastYolo.Tests.YoloConfigurationTests;
@@ -13,7 +12,6 @@ namespace FastYolo.Tests;
 /// If these tests are failing, first make sure the runtime is all in order by running FastYolo.TestApp,
 /// debug and fix all issues you see there before running these with NCrunch!
 /// </summary>
-[Category("Slow")]
 public sealed class YoloWrapperTests
 {
 	[SetUp]
@@ -87,11 +85,13 @@ public sealed class YoloWrapperTests
 	[Test]
 	public void GpuCudaDevicePointer()
 	{
-		CudaDeviceVariable<float>
-			gpuPointer = new float[colorImage.Width * colorImage.Height * 3];
+		var bitmap = Image.FromFile(ImageFilename.Replace(".jpg", " out.jpg"));
+		var image = BitmapToColorImage((Bitmap) bitmap, channels);
+		ManagedCuda.CudaDeviceVariable<float>
+			gpuPointer = new float[image.Width * image.Height * 3];
 		gpuPointer.CopyToDevice(floatYoloFormatArray);
-		var yoloItems = yolo.DetectCuda(gpuPointer.DevicePointer.Pointer, colorImage.Width,
-			colorImage.Height);
+		var yoloItems = yolo.DetectCuda(gpuPointer.DevicePointer.Pointer, image.Width,
+			image.Height);
 		WriteDetectedObjectsOnConsole(yoloItems);
 		gpuPointer.Dispose();
 	}
@@ -106,10 +106,4 @@ public sealed class YoloWrapperTests
 
 	[TearDown]
 	public void KillYolo() => yolo.Dispose();
-}
-
-public sealed class ImageSizeIsNotSameAsYoloConfiguration : Exception
-{
-	public ImageSizeIsNotSameAsYoloConfiguration(string info) =>
-		Console.WriteLine(info);
 }

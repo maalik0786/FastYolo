@@ -15,6 +15,12 @@ public sealed class ColorImage
 		Colors = new Color[width * height];
 	}
 
+	public ColorImage SetColors(Color[] colors)
+	{
+		Colors = colors;
+		return this;
+	}
+
 	public Color[] Colors { get; set; }
 	public int Width { get; }
 	public int Height { get; }

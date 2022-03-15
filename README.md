@@ -1,8 +1,8 @@
 # FastYolo
 
-Yolo library for .NET 6. This one requires Cuda 11.6 and CudNN 8 to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version that is disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 11.1 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
+Yolo library for .NET 6. This one requires Cuda 11.6 and CudNN 8.3.2 to be installed to work, it will use the GPU for processing (which is many times faster than using the CPU version that is disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 11.1 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
 			
-Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), including opencv_world440.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
+Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), including opencv_world455.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
 
 #### Different operating systems should have different cuda versions:
 1. Windows: should have Cuda 11.6 and CUDNN 8.3.2+ installed, if not an exception is thrown with detailed installation instructions.
@@ -13,7 +13,7 @@ Please follow [this link](https://docs.nvidia.com/deeplearning/cudnn/install-gui
 4. Jetson Nano Arm64:  should have Cuda 10.0 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
 5. Jetson Xavier Arm64:  should have Cuda 10.2 and CUDNN 8 installed, if not an exception is thrown with detailed installation instructions.
 
-The nuget installer includes all other needed files, for compiling it yourself, copy cudnn64_8.dll, opencv_world440.dll, pthreadVC2.dll into the FastYolo folder and compile yolo_cpp_dll.dll into it as well.
+The nuget installer includes all other needed files, for compiling it yourself, copy cudnn64_8.dll, opencv_world455.dll, pthreadVC2.dll into the FastYolo folder and compile yolo_cpp_dll.dll into it as well.
 
 Current version is for .NET 6, you can check older releases for .NET 5, .NET Core 3.1, .NET 4.6 and lower.
 
@@ -23,7 +23,7 @@ Current version is for .NET 6, you can check older releases for .NET 5, .NET Cor
 2. add the Nuget Package as a reference in your project 
  ```ini 
  <ItemGroup>
-   <PackageReference Include="FastYolo" Version="11.6.1" />
+   <PackageReference Include="FastYolo" Version="11.6.2" />
  </ItemGroup>
  ```
 3. open Program.cs file and paste the code below

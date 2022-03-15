@@ -1,6 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Text;
 using FastYolo.Model;
+using System.Runtime.InteropServices;
 using static FastYolo.ImageConverter;
 
 namespace FastYolo;
@@ -9,17 +9,21 @@ namespace FastYolo;
 public sealed class YoloWrapper : IDisposable
 {
 	private readonly YoloObjectTypeResolver objectTypeResolver;
-	private BboxContainer container;
 	// ReSharper disable once UnusedAutoPropertyAccessor.Local
 	public string? GraphicDeviceName { get; set; }
-	public const int MaxObjects = 20;
+	public const int MaxObjects = 30;
 
 	public YoloWrapper(string configurationFilename, string weightsFilename,
 		string namesFilename, int gpu = 0)
 	{
+		if (!File.Exists(configurationFilename))
+			throw new FileNotFoundException(configurationFilename);
+		if (!File.Exists(weightsFilename))
+			throw new FileNotFoundException(weightsFilename);
+		if (!File.Exists(namesFilename))
+			throw new FileNotFoundException(namesFilename);
 		objectTypeResolver = new YoloObjectTypeResolver(namesFilename);
 		Initialize(configurationFilename, weightsFilename, gpu);
-		container = new BboxContainer();
 	}
 
 #if WIN64
@@ -28,9 +32,9 @@ public sealed class YoloWrapper : IDisposable
 	private const string CudnnDllFilename = "cudnn64_8.dll";
 	private const string CudnnRequiredDependencyFilename = "cudnn_ops_infer64_8.dll";
 #if DEBUG
-	private const string OpenCvWorldDllFilename = "opencv_world440d.dll";
+	private const string OpenCvWorldDllFilename = "opencv_world455d.dll";
 #else
-	private const string OpenCvWorldDllFilename = "opencv_world440.dll";
+	private const string OpenCvWorldDllFilename = "opencv_world455.dll";
 #endif
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";
@@ -113,7 +117,7 @@ public sealed class YoloWrapper : IDisposable
 			CudnnRequiredDependencyFilename)))
 			throw new DllNotFoundException(CudaError +
 				"Cudnn dependencies not in CUDA_PATH and CUDNN environment variable is not available, make " +
-				"sure Cudnn 8 for Cuda 11.6 is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
+				"sure Cudnn 8.3.2 for Cuda 11.6 is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
 		if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
 			CudnnDllFilename)))
 			throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
@@ -142,7 +146,7 @@ public sealed class YoloWrapper : IDisposable
 	{
 		if (!File.Exists(filepath))
 			throw new FileNotFoundException("Cannot find the file", filepath);
-		container.candidates = new BboxT[MaxObjects];
+		var container = new BboxContainer();
 		DetectImageGpu(filepath, ref container);
 		return Convert(container, objectTypeResolver);
 	}
@@ -155,11 +159,11 @@ public sealed class YoloWrapper : IDisposable
 	{
 		var size = Marshal.SizeOf(imageData[0]) * imageData.Length;
 		var pnt = Marshal.AllocHGlobal(size);
+		var container = new BboxContainer();
 		try
 		{
 			// Copy array to unmanaged memory.
 			Marshal.Copy(imageData, 0, pnt, imageData.Length);
-			container.candidates = new BboxT[MaxObjects];
 			var count = DetectImage(pnt, imageData.Length, ref container);
 			if (count == -1)
 				throw new NotSupportedException($"{YoloGpuDllFilename} has no OpenCV support");
@@ -182,7 +186,7 @@ public sealed class YoloWrapper : IDisposable
 	public IEnumerable<YoloItem> Detect(IntPtr floatArrayPointer, int width, int height,
 		int channels = 3)
 	{
-		container.candidates = new BboxT[MaxObjects];
+		var container = new BboxContainer();
 		DetectObjectsGpu(floatArrayPointer, width, height, channels, ref container);
 		return Convert(container, objectTypeResolver);
 	}
@@ -197,9 +201,9 @@ public sealed class YoloWrapper : IDisposable
 	public IEnumerable<YoloItem> DetectCuda(IntPtr sizeTPointer, int width, int height,
 		int channels = 3)
 	{
+		var container = new BboxContainer();
 		try
 		{
-			container.candidates = new BboxT[MaxObjects];
 			DetectObjectsCuda(sizeTPointer, width, height, channels, ref container);
 		}
 		catch (Exception)
@@ -222,7 +226,7 @@ public sealed class YoloWrapper : IDisposable
 	public IEnumerable<YoloItem> Track(IntPtr floatArrayPointer, int width, int height,
 		int channel = 3)
 	{
-		container.candidates = new BboxT[MaxObjects];
+		var container = new BboxContainer();
 		TrackObjectsGpu(floatArrayPointer, width, height, channel, ref container);
 		return Convert(container, objectTypeResolver);
 	}
