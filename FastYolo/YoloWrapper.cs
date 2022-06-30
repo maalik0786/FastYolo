@@ -32,9 +32,9 @@ public sealed class YoloWrapper : IDisposable
 	private const string CudnnDllFilename = "cudnn64_8.dll";
 	private const string CudnnRequiredDependencyFilename = "cudnn_ops_infer64_8.dll";
 #if DEBUG
-	private const string OpenCvWorldDllFilename = "opencv_world455d.dll";
+	private const string OpenCvWorldDllFilename = "opencv_world460d.dll";
 #else
-	private const string OpenCvWorldDllFilename = "opencv_world455.dll";
+	private const string OpenCvWorldDllFilename = "opencv_world460.dll";
 #endif
 #elif LINUX64
 		private const string YoloGpuDllFilename = "libdarknet_amd.so";

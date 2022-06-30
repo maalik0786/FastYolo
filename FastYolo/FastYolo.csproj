@@ -5,11 +5,11 @@
 		<TargetFrameworks>net6.0</TargetFrameworks>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<Version>11.6.2</Version>
-		<Nullable>enable</Nullable>
+		<Version>11.7</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
@@ -27,8 +27,8 @@
 	<ItemGroup>
 	  <None Remove="cudnn64_8.dll" />
 	  <None Remove="cudnn_ops_infer64_8.dll" />
-	  <None Remove="opencv_world455.dll" />
-	  <None Remove="opencv_world455d.dll" />
+	  <None Remove="opencv_world460.dll" />
+	  <None Remove="opencv_world460d.dll" />
 	  <None Remove="pthreadVC2.dll" />
 	</ItemGroup>
 
@@ -36,7 +36,7 @@
 	  <Content Include="cudnn64_8.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="opencv_world455.dll">
+	  <Content Include="opencv_world460.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="pthreadVC2.dll">
