@@ -31,6 +31,8 @@ public sealed class YoloWrapper : IDisposable
 	private const string YoloPThreadDllFilename = "pthreadVC2.dll";
 	private const string CudnnDllFilename = "cudnn64_8.dll";
 	private const string CudnnRequiredDependencyFilename = "cudnn_ops_infer64_8.dll";
+	private const string CudaVersion = "11.7";
+	private const string CudnnVersion = "8.4.1";
 #if DEBUG
 	private const string OpenCvWorldDllFilename = "opencv_world460d.dll";
 #else
@@ -96,31 +98,39 @@ public sealed class YoloWrapper : IDisposable
 	{
 		if (IntPtr.Size != 8)
 			throw new NotSupportedException("Only 64-bit processes are supported");
-		const string CudaError =
-			"An Nvidia GPU and CUDA 11.6 need to be installed! Please install CUDA " +
+		const string CudaError = "An Nvidia GPU and CUDA " + CudaVersion +
+			" need to be installed! Please install CUDA " +
 			"https://developer.nvidia.com/cuda-downloads\nError details: ";
 #if WIN64
 		if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
 			throw new DllNotFoundException(CudaError +
 				"CUDA_PATH environment variable is not available!");
-		if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
-			"CUDART64_110.DLL")))
+		var cudaBinPath = Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin");
+		if (!File.Exists(Path.Combine(cudaBinPath, "CUBLAS64_11.DLL")))
 			throw new DllNotFoundException(CudaError +
 				@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
-				"(did you maybe install CUDA 10.* and not CUDA 11.5+, " +
+				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
+				"please install it again or fix your CUDA_PATH)");
+		if (!File.Exists(Path.Combine(cudaBinPath, "CUDART64_110.DLL")))
+			throw new DllNotFoundException(CudaError +
+				@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
+				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
 				"please install it again or fix your CUDA_PATH)");
 		if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
 			throw new DllNotFoundException(CudaError +
 				"NVCUDA.DLL wasn't found in the windows system directory, " +
 				"is CUDA and your Nvidia graphics driver correctly installed?");
-		if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
-			CudnnRequiredDependencyFilename)))
+		if (!File.Exists(Path.Combine(cudaBinPath, CudnnRequiredDependencyFilename)))
 			throw new DllNotFoundException(CudaError +
 				"Cudnn dependencies not in CUDA_PATH and CUDNN environment variable is not available, make " +
-				"sure Cudnn 8.3.2 for Cuda 11.6 is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
-		if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin",
-			CudnnDllFilename)))
+				"sure Cudnn " + CudnnVersion + " for Cuda " + CudaVersion +
+				" is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
+		if (!File.Exists(Path.Combine(cudaBinPath, CudnnDllFilename)))
 			throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
+		var path = Environment.GetEnvironmentVariable("PATH");
+		if (string.IsNullOrEmpty(path) || !path.Contains(cudaBinPath))
+			throw new DllNotFoundException(CudaError +
+				"PATH does not contain CUDA bin folder like this: " + cudaBinPath);
 #else
 			if (!Directory.Exists("/usr/local/cuda"))
 				throw new DllNotFoundException(CudaError + "CUDA is not available!");
