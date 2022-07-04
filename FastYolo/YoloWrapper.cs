@@ -98,22 +98,27 @@ public sealed class YoloWrapper : IDisposable
 	{
 		if (IntPtr.Size != 8)
 			throw new NotSupportedException("Only 64-bit processes are supported");
+#if WIN64
 		const string CudaError = "An Nvidia GPU and CUDA " + CudaVersion +
 			" need to be installed! Please install CUDA " +
 			"https://developer.nvidia.com/cuda-downloads\nError details: ";
-#if WIN64
 		if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
 			throw new DllNotFoundException(CudaError +
 				"CUDA_PATH environment variable is not available!");
 		var cudaBinPath = Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin");
 		if (!File.Exists(Path.Combine(cudaBinPath, "CUBLAS64_11.DLL")))
 			throw new DllNotFoundException(CudaError +
-				@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
+				@"cublas64_11.dll wasn't found in the CUDA_PATH\bin folder " +
 				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
 				"please install it again or fix your CUDA_PATH)");
 		if (!File.Exists(Path.Combine(cudaBinPath, "CUDART64_110.DLL")))
 			throw new DllNotFoundException(CudaError +
 				@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
+				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
+				"please install it again or fix your CUDA_PATH)");
+		if (!File.Exists(Path.Combine(cudaBinPath, "CURAND64_10.DLL")))
+			throw new DllNotFoundException(CudaError +
+				@"curand64_10.dll wasn't found in the CUDA_PATH\bin folder " +
 				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
 				"please install it again or fix your CUDA_PATH)");
 		if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))

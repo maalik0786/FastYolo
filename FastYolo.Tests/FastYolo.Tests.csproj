@@ -15,38 +15,37 @@
 	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64' ">
 		<DefineConstants>LINUX64</DefineConstants>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
-	  <None Remove="Assets\cars road out.jpg" />
-	  <None Remove="Assets\cars road.jpg" />
-	  <None Remove="Assets\coco.names" />
-	  <None Remove="Assets\yolov3-tiny.cfg" />
-	  <None Remove="Assets\yolov3-tiny.weights" />
-	  <None Remove="cudnn64_8.dll" />
-	  <None Remove="cudnn_ops_infer64_8.dll" />
+		<None Remove="Assets\cars road out.jpg" />
+		<None Remove="Assets\cars road.jpg" />
+		<None Remove="Assets\coco.names" />
+		<None Remove="Assets\yolov3-tiny.cfg" />
+		<None Remove="Assets\yolov3-tiny.weights" />
+		<Content Include="Assets\cars road out.jpg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\cars road.jpg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\coco.names">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\yolov3-tiny.cfg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Assets\yolov3-tiny.weights">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+		<None Remove="cudnn_ops_infer64_8.dll" />
 	  <None Remove="opencv_world460.dll" />
 	  <None Remove="opencv_world460d.dll" />
 	  <None Remove="pthreadVC2.dll" />
 	  <None Remove="yolo_cpp_dll.dll" />
-	  <Content Include="Assets\cars road out.jpg">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-		<Content Include="Assets\cars road.jpg">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\coco.names">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\yolov3-tiny.cfg">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Assets\yolov3-tiny.weights">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="cudnn64_8.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="opencv_world460.dll">
+		<Content Include="opencv_world460.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="opencv_world460d.dll">

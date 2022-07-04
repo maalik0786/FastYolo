@@ -9,18 +9,14 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="cudnn64_8.dll" />
+  <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <None Remove="cudnn_ops_infer64_8.dll" />
     <None Remove="opencv_world455.dll" />
     <None Remove="opencv_world455d.dll" />
     <None Remove="pthreadVC2.dll" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="cudnn64_8.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+  <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <Content Include="opencv_world455.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

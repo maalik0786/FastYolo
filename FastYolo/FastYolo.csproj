@@ -9,7 +9,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<Version>11.7</Version>
+		<Version>11.7.1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
@@ -24,22 +24,21 @@
 		<DefineConstants>LINUX64</DefineConstants>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <None Remove="cudnn64_8.dll" />
-	  <None Remove="cudnn_ops_infer64_8.dll" />
-	  <None Remove="opencv_world460.dll" />
+	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+		<None Remove="opencv_world460.dll" />
 	  <None Remove="opencv_world460d.dll" />
 	  <None Remove="pthreadVC2.dll" />
+	  <None Remove="yolo_cpp_dll.dll" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Content Include="cudnn64_8.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="opencv_world460.dll">
+	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+		<Content Include="opencv_world460.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="pthreadVC2.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="yolo_cpp_dll.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
