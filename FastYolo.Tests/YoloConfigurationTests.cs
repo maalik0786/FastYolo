@@ -5,7 +5,11 @@ namespace FastYolo.Tests;
 
 public sealed class YoloConfigurationTests
 {
-	private const string YoloServerDirectory = @"Assets\";
+#if WIN64
+	private const string YoloServerDirectory = @"Assets/";
+#else
+	private const string YoloServerDirectory = @"/home/abdul/Code/GitHub/FastYolo/FastYolo.Tests/Assets/";
+#endif
 	public const string ImageFilename = YoloServerDirectory + "cars road.jpg";
 	public const string YoloWeightsFilename = YoloServerDirectory + @"yolov3-tiny.weights";
 	public const string YoloConfigFilename = YoloServerDirectory + "yolov3-tiny.cfg";

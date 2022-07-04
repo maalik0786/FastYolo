@@ -31,8 +31,6 @@ public sealed class YoloWrapper : IDisposable
 	private const string YoloPThreadDllFilename = "pthreadVC2.dll";
 	private const string CudnnDllFilename = "cudnn64_8.dll";
 	private const string CudnnRequiredDependencyFilename = "cudnn_ops_infer64_8.dll";
-	private const string CudaVersion = "11.7";
-	private const string CudnnVersion = "8.4.1";
 #if DEBUG
 	private const string OpenCvWorldDllFilename = "opencv_world460d.dll";
 #else
@@ -47,6 +45,8 @@ public sealed class YoloWrapper : IDisposable
 		private const string YoloPThreadDllFilename = "libpthread_arm.so";
 		private const string OpenCvWorldDllFilename = "libopencv_world.so";
 #endif
+	private const string CudaVersion = "11.7";
+	private const string CudnnVersion = "8.4.1";
 
 	[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
 	private static extern int InitializeYoloGpu(string configurationFilename,
@@ -98,10 +98,10 @@ public sealed class YoloWrapper : IDisposable
 	{
 		if (IntPtr.Size != 8)
 			throw new NotSupportedException("Only 64-bit processes are supported");
-#if WIN64
 		const string CudaError = "An Nvidia GPU and CUDA " + CudaVersion +
 			" need to be installed! Please install CUDA " +
 			"https://developer.nvidia.com/cuda-downloads\nError details: ";
+#if WIN64
 		if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
 			throw new DllNotFoundException(CudaError +
 				"CUDA_PATH environment variable is not available!");
