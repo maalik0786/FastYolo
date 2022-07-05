@@ -23,7 +23,7 @@ Current version is for .NET 6, you can check older releases for .NET 5, .NET Cor
 2. add the Nuget Package as a reference in your project 
  ```ini 
  <ItemGroup>
-   <PackageReference Include="FastYolo" Version="11.7.0" />
+   <PackageReference Include="FastYolo" Version="11.7.2" />
  </ItemGroup>
  ```
 3. open Program.cs file and paste the code below
@@ -47,6 +47,6 @@ var byteArray = memoryStream.ToArray();
 IEnumerable<YoloItem> yoloItems yoloWrapper.Detect(byteArray);
 
 foreach (var item in yoloItems)
-  Console.WriteLine($"Object Found: {item.Name} with X: {item.X}, Y: {item.Y}, Width: {item.Width}, Height: {item.Height}"); 
+  Console.WriteLine($"Object Found: {item.Name} with Shape: {item.Shape}, X: {item.X}, Y: {item.Y}, Width: {item.Width}, Height: {item.Height}"); 
 ```
 For complete examples please visit [here](https://github.com/maalik0786/FastYolo/blob/master/FastYolo.Tests/YoloWrapperTests.cs)

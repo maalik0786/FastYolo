@@ -9,7 +9,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<Version>11.7.1</Version>
+		<Version>11.7.2</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
