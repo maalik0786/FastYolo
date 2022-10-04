@@ -1,6 +1,6 @@
 # FastYolo
 
-Yolo Object Detection library for .NET 6. This one requires Cuda 11.7 and CudNN 8.4.1 to be installed to work, it will use your NVidia GPU for processing (which is many times faster than using the CPU version that is disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 11.1 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
+Yolo Object Detection library for .NET 7. This one requires Cuda 11.7 and CudNN 8.4.1 to be installed to work, it will use your NVidia GPU for processing (which is many times faster than using the CPU version that is disabled in this release). Any GPU from Maxwell upwards is support (Cuda api 5.2+, Maxwell GPUs like GTX 750 and above). Since 11.1 it also supports OpenCV for more advanced features like tracking, shape detection, etc.
 			
 Includes the .dll files for Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), including opencv_world460.dll and pthreadVC2.dll as needed by the yolo_cpp_dll implementation.
 
@@ -15,7 +15,7 @@ Please follow [this link](https://docs.nvidia.com/deeplearning/cudnn/install-gui
 
 The nuget installer includes all other needed files, for compiling it yourself, copy cudnn64_8.dll, opencv_world460.dll, pthreadVC2.dll into the FastYolo folder and compile yolo_cpp_dll.dll into it as well.
 
-Current version is for .NET 6, you can check older releases for .NET 5, .NET Core 3.1, .NET 4.6 and lower.
+Current version is for .NET 7, you can check older releases for .NET6, .NET 5, .NET Core 3.1, .NET 4.6 and lower.
 
 #### How to use:
 
@@ -23,7 +23,7 @@ Current version is for .NET 6, you can check older releases for .NET 5, .NET Cor
 2. add the Nuget Package as a reference in your project 
  ```ini 
  <ItemGroup>
-   <PackageReference Include="FastYolo" Version="11.7.2" />
+   <PackageReference Include="FastYolo" Version="11.7.3" />
  </ItemGroup>
  ```
 3. open Program.cs file and paste the code below
