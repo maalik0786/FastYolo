@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using FastYolo.Model;
+using ManagedCuda;
 using NUnit.Framework;
 using static FastYolo.ImageConverter;
 using static FastYolo.Tests.YoloConfigurationTests;
@@ -61,10 +62,25 @@ public sealed class YoloWrapperTests
 		fixed (float* floatArrayPointer = &floatYoloFormatArray[0])
 		{
 			yoloItems = track
-				? yolo.Track(new IntPtr(floatArrayPointer), colorImage.Width, colorImage.Height, channels)
-				: yolo.Detect(new IntPtr(floatArrayPointer), colorImage.Width, colorImage.Height, channels);
+				? yolo.Track(new IntPtr(floatArrayPointer), colorImage.Width, colorImage.Height,
+					channels)
+				: yolo.Detect(new IntPtr(floatArrayPointer), colorImage.Width, colorImage.Height,
+					channels);
 		}
 		WriteDetectedObjectsOnConsole(yoloItems);
+	}
+
+	[Test]
+	//[Category("Slow")]
+	public unsafe void BenchmarkIntPtrMethod()
+	{
+		fixed (float* floatArrayPointer = &floatYoloFormatArray[0])
+		{
+			var arrayPointer = new IntPtr(floatArrayPointer);
+			for (var index = 0; index < 100; index++)
+				yolo.Detect(arrayPointer, colorImage.Width, colorImage.Height,
+					channels);
+		}
 	}
 
 	[TestCase(true)]
@@ -87,8 +103,7 @@ public sealed class YoloWrapperTests
 	{
 		var bitmap = Image.FromFile(ImageFilename.Replace(".jpg", " out.jpg"));
 		var image = BitmapToColorImage((Bitmap) bitmap, channels);
-		ManagedCuda.CudaDeviceVariable<float>
-			gpuPointer = new float[image.Width * image.Height * 3];
+		CudaDeviceVariable<float> gpuPointer = new float[image.Width * image.Height * 3];
 		gpuPointer.CopyToDevice(floatYoloFormatArray);
 		var yoloItems = yolo.DetectCuda(gpuPointer.DevicePointer.Pointer, image.Width,
 			image.Height);

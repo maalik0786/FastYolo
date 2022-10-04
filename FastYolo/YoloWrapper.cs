@@ -94,7 +94,7 @@ public sealed class YoloWrapper : IDisposable
 	private static extern int GetDeviceName(int gpu, StringBuilder deviceName);
 
 	// ReSharper disable once MethodTooLong
-	private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0)
+	private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0, int batchSize=1)
 	{
 		if (IntPtr.Size != 8)
 			throw new NotSupportedException("Only 64-bit processes are supported");
@@ -154,7 +154,7 @@ public sealed class YoloWrapper : IDisposable
 		var deviceName = new StringBuilder();
 		GetDeviceName(gpu, deviceName);
 		GraphicDeviceName = deviceName.ToString();
-		InitializeYoloGpu(configurationFilename, weightsFilename, gpu);
+		InitializeYoloGpu(configurationFilename, weightsFilename, gpu, batchSize);
 	}
 
 	public IEnumerable<YoloItem> Detect(string filepath)
@@ -183,9 +183,9 @@ public sealed class YoloWrapper : IDisposable
 			if (count == -1)
 				throw new NotSupportedException($"{YoloGpuDllFilename} has no OpenCV support");
 		}
-		catch (Exception)
+		catch
 		{
-			return null!;
+			return Array.Empty<YoloItem>();
 		}
 		finally
 		{
@@ -221,7 +221,7 @@ public sealed class YoloWrapper : IDisposable
 		{
 			DetectObjectsCuda(sizeTPointer, width, height, channels, ref container);
 		}
-		catch (Exception)
+		catch
 		{
 			var networkWidth = GetDetectorNetworkWidth();
 			var networkHeight = GetDetectorNetworkHeight();

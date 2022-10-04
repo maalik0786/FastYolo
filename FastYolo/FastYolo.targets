@@ -1,46 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-		<None Include="libdarknet_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'"> 
+	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
+		<None Include="libdarknet_amd.so"> 
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_amd.so</TargetPath>
 		</None>
-		<None Include="libpthread_amd.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
+		<None Include="libpthread_amd.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_amd.so</TargetPath>
 		</None>
-		<None Include="libopencv_world.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
+		<None Include="libopencv_world.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libopencv_world.so</TargetPath>
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Include="libdarknet_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+		<None Include="libdarknet_arm.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_arm.so</TargetPath>
 		</None>
-		<None Include="libpthread_arm.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+		<None Include="libpthread_arm.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libpthread_arm.so</TargetPath>
 		</None>
-		<None Include="libopencv_world.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
+		<None Include="libopencv_world.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libopencv_world.so</TargetPath>
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Include="$(MSBuildThisFileDirectory)\pthreadVC2.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+		<None Include="$(MSBuildThisFileDirectory)\pthreadVC2.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>pthreadVC2.dll</TargetPath>
 		</None >
-		<None Include="$(MSBuildThisFileDirectory)\opencv_world460.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		<None Include="$(MSBuildThisFileDirectory)\opencv_world460.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>opencv_world460.dll</TargetPath>
 		</None >
-		<None  Include="$(MSBuildThisFileDirectory)\yolo_cpp_dll.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+		<None  Include="$(MSBuildThisFileDirectory)\yolo_cpp_dll.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>yolo_cpp_dll.dll</TargetPath>
 		</None>
