@@ -366,14 +366,11 @@ ASALocalRun/
 # visual studio code files
 *.vscode\
 *.vscode/
-FastYolo/libdarknet_arm_old.so
-FastYolo/libopencv_world_arm.so
-FastYolo/libdarknet_arm.so
-FastYolo.TestApp/libdarknet_arm.so
-FastYolo.TestApp/libopencv_world_arm.so
-FastYolo.TestApp/libpthread_arm.so
-FastYolo.Tests/libdarknet_arm.so
-FastYolo.Tests/libopencv_world_arm.so
-FastYolo.Tests/libpthread_arm.so
 *.so
 *.txt
+
+# build packages
+**/package/**
+**/build/**
+**/_rels/**
+**/\[Content_Types\].xml

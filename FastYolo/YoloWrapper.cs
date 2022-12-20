@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 using FastYolo.Model;
 using System.Runtime.InteropServices;
 using static FastYolo.ImageConverter;
@@ -8,10 +9,34 @@ namespace FastYolo;
 // ReSharper disable once HollowTypeName
 public sealed class YoloWrapper : IDisposable
 {
-	private readonly YoloObjectTypeResolver objectTypeResolver;
-	// ReSharper disable once UnusedAutoPropertyAccessor.Local
-	public string? GraphicDeviceName { get; set; }
-	public const int MaxObjects = 30;
+	static YoloWrapper() => NativeLibrary.SetDllImportResolver(Assembly.GetExecutingAssembly(), MapAndLoad);
+
+	/// <summary>
+	/// https://github.com/dotnet/samples/blob/ffc5a518f65e3b92aa3c341e18cbf0622fb57ad0/core/extensions/DllMapDemo/Map.cs#L12
+	/// </summary>
+	private static IntPtr MapAndLoad(string libraryName, Assembly assembly, DllImportSearchPath? searchPath) =>
+		NativeLibrary.Load(ReplaceDll(libraryName), assembly, searchPath);
+
+	private static string ReplaceDll(string dllFileName)
+	{
+		if (OperatingSystem.IsLinux())
+			switch (dllFileName)
+			{
+				case YoloGpuDllFilename:
+					return RuntimeInformation.ProcessArchitecture == Architecture.Arm64
+						? YoloGpuDllFilenameArm64
+						: YoloGpuDllFilenameLinux64;
+				//case OpenCvWorldDllFilename:
+				//	return RuntimeInformation.ProcessArchitecture == Architecture.Arm64
+				//		? OpenCvWorldDllFilenameArm64
+				//		: OpenCvWorldDllFilenameLinux64;
+				//case YoloPThreadDllFilename:
+				//	return RuntimeInformation.ProcessArchitecture == Architecture.Arm64
+				//		? YoloPThreadDllFilenameArm64
+				//		: YoloPThreadDllFilenameLinux64;
+			}
+		return dllFileName;
+	}
 
 	public YoloWrapper(string configurationFilename, string weightsFilename,
 		string namesFilename, int gpu = 0)
@@ -26,7 +51,9 @@ public sealed class YoloWrapper : IDisposable
 		Initialize(configurationFilename, weightsFilename, gpu);
 	}
 
-#if WIN64
+	private readonly YoloObjectTypeResolver objectTypeResolver;
+	public string? GraphicDeviceName { get; set; }
+	public const int MaxObjects = 30;
 	private const string YoloGpuDllFilename = "yolo_cpp_dll.dll";
 	private const string YoloPThreadDllFilename = "pthreadVC2.dll";
 	private const string CudnnDllFilename = "cudnn64_8.dll";
@@ -36,17 +63,14 @@ public sealed class YoloWrapper : IDisposable
 #else
 	private const string OpenCvWorldDllFilename = "opencv_world460.dll";
 #endif
-#elif LINUX64
-		private const string YoloGpuDllFilename = "libdarknet_amd.so";
-		private const string YoloPThreadDllFilename = "libpthread_amd.so";
-		private const string OpenCvWorldDllFilename = "libopencv_world.so";
-#else
-		private const string YoloGpuDllFilename = "libdarknet_arm.so";
-		private const string YoloPThreadDllFilename = "libpthread_arm.so";
-		private const string OpenCvWorldDllFilename = "libopencv_world.so";
-#endif
-	private const string CudaVersion = "11.7";
-	private const string CudnnVersion = "8.4.1";
+	private const string YoloGpuDllFilenameLinux64 = "libdarknet_amd.so";
+	//private const string YoloPThreadDllFilenameLinux64 = "libpthread_amd.so";
+	//private const string OpenCvWorldDllFilenameLinux64 = "libopencv_world.so";
+	private const string YoloGpuDllFilenameArm64 = "libdarknet_arm.so";
+	//private const string YoloPThreadDllFilenameArm64 = "libpthread_arm.so";
+	//private const string OpenCvWorldDllFilenameArm64 = "libopencv_world.so";
+	private const string CudaVersion = "12.0";
+	private const string CudnnVersion = "8.7.0";
 
 	[DllImport(YoloGpuDllFilename, EntryPoint = "init")]
 	private static extern int InitializeYoloGpu(string configurationFilename,
@@ -93,59 +117,76 @@ public sealed class YoloWrapper : IDisposable
 	[DllImport(YoloGpuDllFilename, EntryPoint = "get_device_name")]
 	private static extern int GetDeviceName(int gpu, StringBuilder deviceName);
 
-	// ReSharper disable once MethodTooLong
-	private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0, int batchSize=1)
+	private void Initialize(string configurationFilename, string weightsFilename, int gpu = 0, int batchSize = 1)
 	{
-		if (IntPtr.Size != 8)
+		if (!Environment.Is64BitProcess)
 			throw new NotSupportedException("Only 64-bit processes are supported");
 		const string CudaError = "An Nvidia GPU and CUDA " + CudaVersion +
-			" need to be installed! Please install CUDA " +
-			"https://developer.nvidia.com/cuda-downloads\nError details: ";
-#if WIN64
-		if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
-			throw new DllNotFoundException(CudaError +
-				"CUDA_PATH environment variable is not available!");
-		var cudaBinPath = Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin");
-		if (!File.Exists(Path.Combine(cudaBinPath, "CUBLAS64_11.DLL")))
-			throw new DllNotFoundException(CudaError +
-				@"cublas64_11.dll wasn't found in the CUDA_PATH\bin folder " +
-				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
-				"please install it again or fix your CUDA_PATH)");
-		if (!File.Exists(Path.Combine(cudaBinPath, "CUDART64_110.DLL")))
-			throw new DllNotFoundException(CudaError +
-				@"cudart64_110.dll wasn't found in the CUDA_PATH\bin folder " +
-				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
-				"please install it again or fix your CUDA_PATH)");
-		if (!File.Exists(Path.Combine(cudaBinPath, "CURAND64_10.DLL")))
-			throw new DllNotFoundException(CudaError +
-				@"curand64_10.dll wasn't found in the CUDA_PATH\bin folder " +
-				"(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
-				"please install it again or fix your CUDA_PATH)");
-		if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
-			throw new DllNotFoundException(CudaError +
-				"NVCUDA.DLL wasn't found in the windows system directory, " +
-				"is CUDA and your Nvidia graphics driver correctly installed?");
-		if (!File.Exists(Path.Combine(cudaBinPath, CudnnRequiredDependencyFilename)))
-			throw new DllNotFoundException(CudaError +
-				"Cudnn dependencies not in CUDA_PATH and CUDNN environment variable is not available, make " +
-				"sure Cudnn " + CudnnVersion + " for Cuda " + CudaVersion +
-				" is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
-		if (!File.Exists(Path.Combine(cudaBinPath, CudnnDllFilename)))
-			throw new FileNotFoundException("Can't find the " + CudnnDllFilename);
-		var path = Environment.GetEnvironmentVariable("PATH");
-		if (string.IsNullOrEmpty(path) || !path.Contains(cudaBinPath))
-			throw new DllNotFoundException(CudaError +
-				"PATH does not contain CUDA bin folder like this: " + cudaBinPath);
-#else
+		                         " need to be installed! Please install CUDA " +
+		                         "https://developer.nvidia.com/cuda-downloads\nError details: ";
+		if (OperatingSystem.IsWindows())
+		{
+			if (!File.Exists(ReplaceDll(OpenCvWorldDllFilename)))
+				throw new FileNotFoundException("Can't find the " + ReplaceDll(OpenCvWorldDllFilename));
+			if (!File.Exists(ReplaceDll(YoloPThreadDllFilename)))
+				throw new FileNotFoundException("Can't find the " + ReplaceDll(YoloPThreadDllFilename));
+			if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CUDA_PATH")))
+				throw new DllNotFoundException(CudaError +
+				                               "CUDA_PATH environment variable is not available!");
+				var cudaBinPath = Path.Combine(Environment.GetEnvironmentVariable("CUDA_PATH")!, "bin");
+			if (!File.Exists(Path.Combine(cudaBinPath, "CUBLAS64_12.DLL")))
+				throw new DllNotFoundException(CudaError +
+				                               @"cublas64_12.dll wasn't found in the CUDA_PATH\bin folder " +
+				                               "(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
+				                               "please install it again or fix your CUDA_PATH)");
+			if (!File.Exists(Path.Combine(cudaBinPath, "CUDART64_12.DLL")))
+				throw new DllNotFoundException(CudaError +
+				                               @"cudart64_12.dll wasn't found in the CUDA_PATH\bin folder " +
+				                               "(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
+				                               "please install it again or fix your CUDA_PATH)");
+			if (!File.Exists(Path.Combine(cudaBinPath, "CURAND64_10.DLL")))
+				throw new DllNotFoundException(CudaError +
+				                               @"curand64_10.dll wasn't found in the CUDA_PATH\bin folder " +
+				                               "(did you maybe install CUDA 10.* and not CUDA " + CudaVersion + "+, " +
+				                               "please install it again or fix your CUDA_PATH)");
+			if (!File.Exists(Path.Combine(Environment.SystemDirectory, "NVCUDA.DLL")))
+				throw new DllNotFoundException(CudaError +
+				                               "NVCUDA.DLL wasn't found in the windows system directory, " +
+				                               "is CUDA and your Nvidia graphics driver correctly installed?");
+			if (!File.Exists(Path.Combine(cudaBinPath, CudnnDllFilename)))
+				throw new FileNotFoundException("Can't find the " + CudnnDllFilename + " Please install cudnn from  https://developer.nvidia.com/rdp/cudnn-download");
+			if (!File.Exists(Path.Combine(cudaBinPath, CudnnRequiredDependencyFilename)))
+				throw new DllNotFoundException(CudaError +
+				                               "Cudnn dependencies not in CUDA_PATH, make " +
+				                               "sure Cudnn " + CudnnVersion + " for Cuda " + CudaVersion +
+				                               " is installed as well: https://developer.nvidia.com/rdp/cudnn-download");
+			var path = Environment.GetEnvironmentVariable("PATH");
+			if (string.IsNullOrEmpty(path) || !path.Contains(cudaBinPath))
+				throw new DllNotFoundException(CudaError +
+				                               "PATH does not contain CUDA bin folder like this: " + cudaBinPath);
+		}
+		else
+		{
 			if (!Directory.Exists("/usr/local/cuda"))
 				throw new DllNotFoundException(CudaError + "CUDA is not available!");
-#endif
-		if (!File.Exists(OpenCvWorldDllFilename))
-			throw new FileNotFoundException("Can't find the " + OpenCvWorldDllFilename);
-		if (!File.Exists(YoloGpuDllFilename))
-			throw new FileNotFoundException("Can't find the " + YoloGpuDllFilename);
-		if (!File.Exists(YoloPThreadDllFilename))
-			throw new FileNotFoundException("Can't find the " + YoloPThreadDllFilename);
+			if (!File.Exists("/usr/lib/aarch64-linux-gnu/libcudnn.so"))
+				throw new DllNotFoundException("CUDNN is not available! Please install it via sudo apt-get install libcudnn8 and add PATH of this file in .bashrc file");
+			if (!File.Exists("/usr/lib/aarch64-linux-gnu/libpthread.so"))
+				throw new DllNotFoundException("libpthread.so is not available! Please install via sudo apt-get install libpthread-stubs0-dev");
+			const string OPENCV_ERROR = "is not available! Please install OPENCV again via sudo apt install libopencv libopencv-dev";
+			if (!File.Exists("/usr/lib/aarch64-linux-gnu/libopencv_highgui.so"))
+				throw new DllNotFoundException("OPENCV dependency => libopencv_highgui.so " + OPENCV_ERROR);
+			if (!File.Exists("/usr/lib/aarch64-linux-gnu/libopencv_videoio.so"))
+				throw new DllNotFoundException("OPENCV dependency => libopencv_videoio.so " + OPENCV_ERROR);
+			if (!File.Exists("/usr/lib/aarch64-linux-gnu/libopencv_imgcodecs.so"))
+				throw new DllNotFoundException("OPENCV dependency => libopencv_imgcodecs.so " + OPENCV_ERROR);
+			if (!File.Exists("/usr/lib/aarch64-linux-gnu/libopencv_imgproc.so"))
+				throw new DllNotFoundException("OPENCV dependency => libopencv_imgproc.so " + OPENCV_ERROR);
+			if (!File.Exists("/usr/lib/aarch64-linux-gnu/libopencv_core.so"))
+				throw new DllNotFoundException("OPENCV dependency => libopencv_core.so " + OPENCV_ERROR);
+		}
+		if (!File.Exists(ReplaceDll(YoloGpuDllFilename)))
+			throw new FileNotFoundException("Can't find the " + ReplaceDll(YoloGpuDllFilename));
 		var deviceCount = GetDeviceCount();
 		if (deviceCount == 0)
 			throw new NotSupportedException("No graphic device is available");
@@ -177,11 +218,10 @@ public sealed class YoloWrapper : IDisposable
 		var container = new BboxContainer();
 		try
 		{
-			// Copy array to unmanaged memory.
 			Marshal.Copy(imageData, 0, pnt, imageData.Length);
 			var count = DetectImage(pnt, imageData.Length, ref container);
 			if (count == -1)
-				throw new NotSupportedException($"{YoloGpuDllFilename} has no OpenCV support");
+				throw new NotSupportedException($"{ReplaceDll((YoloGpuDllFilename))} has no OpenCV support");
 		}
 		catch
 		{
@@ -189,7 +229,6 @@ public sealed class YoloWrapper : IDisposable
 		}
 		finally
 		{
-			// Free the unmanaged memory.
 			Marshal.FreeHGlobal(pnt);
 		}
 		return Convert(container, objectTypeResolver);

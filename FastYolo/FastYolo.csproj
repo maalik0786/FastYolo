@@ -8,38 +8,44 @@
 		<Configurations>Debug;Release</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<IsPackable>true</IsPackable>
-		<Version>11.7.3</Version>
+		<Version>12.0.0</Version>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
 	  <DefineConstants>DEBUG;TRACE</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-		<DefineConstants>WIN64</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64' ">
-		<DefineConstants>LINUX64</DefineConstants>
-	</PropertyGroup>
-
-	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
-		<None Remove="opencv_world460.dll" />
-	  <None Remove="opencv_world460d.dll" />
-	  <None Remove="pthreadVC2.dll" />
-	  <None Remove="yolo_cpp_dll.dll" />
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64' ">
+		<Content Include="libdarknet_amd.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<None Remove="libdarknet_amd.so" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64' ">
+		<Content Include="libdarknet_arm.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<None Remove="libdarknet_arm.so" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64' ">
 		<Content Include="opencv_world460.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+		<None Remove="opencv_world460.dll" />
+		<Content Include="opencv_world460d.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<None Remove="opencv_world460d.dll" />
 	  <Content Include="pthreadVC2.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+		<None Remove="pthreadVC2.dll" />
 	  <Content Include="yolo_cpp_dll.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+		<None Remove="yolo_cpp_dll.dll" />
 	</ItemGroup>
 
 	<ItemGroup>

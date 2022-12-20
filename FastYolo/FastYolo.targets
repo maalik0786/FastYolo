@@ -2,36 +2,20 @@
 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup  Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64'">
-		<None Include="libdarknet_amd.so"> 
+		<None Include="$(MSBuildThisFileDirectory)\libdarknet_amd.so"> 
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_amd.so</TargetPath>
-		</None>
-		<None Include="libpthread_amd.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libpthread_amd.so</TargetPath>
-		</None>
-		<None Include="libopencv_world.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libopencv_world.so</TargetPath>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='Arm64'">
-		<None Include="libdarknet_arm.so">
+		<None Include="$(MSBuildThisFileDirectory)\libdarknet_arm.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libdarknet_arm.so</TargetPath>
 		</None>
-		<None Include="libpthread_arm.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libpthread_arm.so</TargetPath>
-		</None>
-		<None Include="libopencv_world.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libopencv_world.so</TargetPath>
-		</None>
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+	<ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' and '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)'=='X64' ">
 		<None Include="$(MSBuildThisFileDirectory)\pthreadVC2.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>pthreadVC2.dll</TargetPath>
